@@ -1,0 +1,252 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+.pacifico{
+		font-family: 'Pacifico', cursive;;
+	}
+	.rubik{
+		font-family: 'Rubik', sans-serif;
+	}
+	.nunito{
+		font-family: 'Nunito', sans-serif;
+	}
+	.mono{
+		font-weight: bold;
+		font-family: 'Roboto Mono', monospace;
+	}
+	.fuente{
+		font-family: 'Karla', sans-serif;
+		/*font-family: 'Alfa Slab One', cursive;*/
+		/*font-family: 'Dancing Script', cursive;*/
+		/*font-family: 'Roboto', sans-serif;*/
+	}
+	.roboto{
+		font-family: 'Roboto', sans-serif;
+	}
+	.macondo{
+		font-family: 'Macondo', cursive;
+	}
+	.dancing{
+		font-family: 'Dancing Script', cursive;
+	}
+
+#map {
+    height: 50%;
+    width:  100%;
+}
+
+.marginless{
+  margin: 0 !important;
+}
+
+
+.content-table >tbody > tr:hover{
+    background-color: #ecf0f1 !important;
+}
+
+.content-table{
+  /*border-radius: 1em 1em 0 0 !important;*/
+  background-color: white;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: 'Rubik';
+  /*min-width: 400px;*/
+  border-radius: 2px 2px 00;
+  overflow: hidden;
+  box-shadow: 10px 10px 8px #0000007d;
+  border-top-width: 1px;
+  border-top-style: solid;
+}
+.content-table thead tr{
+  background-color: #009688 ;
+  color: #FFF;
+  text-align: left;
+}
+.content-table th, .content-table td{
+  /*padding: 12px 15px !important;*/
+}
+.content-table tbody tr td{
+  border-bottom: 1px solid #ddd;
+}
+.content-table tbody tr:last-of-type td{
+  border-bottom: 3px solid #009688  !important;
+}
+
+
+#div_tabla_pedidos{
+/*    position: absolute;
+    top: 0;*/
+}
+
+
+
+body {
+    margin: 0;
+
+}
+
+
+img {
+    display: block;
+    /*max-width: 100%;
+    max-height: 100%;*/
+}
+
+.galeria {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.galeria__item {
+    width: 80%;
+    cursor: pointer;
+    height: 13em;
+}
+
+.titulo {
+    font-size: 50px;
+}
+
+#cont_foto {
+    height: 15em;
+}
+
+.neon{
+    color: red; 
+    text-shadow: 0 0 0.2em #F87, 0 0 0.2em #F87;
+    /*font-weight: bold;*/
+    font-size: 1.5em;
+}
+
+#total_ped{
+    font-size: 1em;
+}
+@media (max-width: 600px) {
+    .titulo {
+        font-size: 40px;
+    }
+
+    .galeria__item {
+        width: 100%;
+        margin: 20px;
+
+    }
+
+    #modal_ubi{
+        top: 0% !important;
+        left: 0;
+        min-width: 100vw;
+        height: 100vh;
+        min-height: 90vh;
+    }
+    #modal_ubi_content {
+        height: 85%;
+    }
+    #modal2 {
+        /*top: 0% !important;*/
+        left: 0;
+        min-width: 100vw;
+        /*min-height: 100vh;*/
+    }
+
+}
+
+@media (min-width: 600px) {
+    .galeria__item {
+        width: 40%;
+        margin: 20px;
+        height: 10em;
+    }
+/*
+    #modal2 {
+        top: 0;
+        height: 100vh;
+    }*/
+
+}
+
+@media (min-width: 992px) {
+    .galeria__item {
+        width: 25%;
+        height: 9em;
+        margin: 30px;
+        font-size: 20px;
+    }
+
+}
+
+@media (min-width: 1200px) {
+    .galeria__item {
+        /*width: 20%;*/
+    }
+}
+
+
+
+
+.fuente_negra label {
+    color: black;
+}
+
+.number-container{
+   /* width: 450px;
+    height: 450px;*/
+    background-color: white;
+    color: black;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+}
+
+.number-container label{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.number-container input{
+    width: 40px;
+    font-size: 20px;
+    margin: 0 10px !important;
+    padding: 10px;
+    border: none;
+    outline: none !important;
+    color: black;
+}
+
+.number-container input:hover{
+    background: #c9c0a6 ;
+    color: #fff;
+}
+
+.nice-number button{
+    background-color: #26a69a;
+    width: 40px;
+    border: none;
+    outline: none !important;
+    border-radius: 8px;
+    font-size: 20px;
+    color: black;
+}
+
+.nice-number button:hover{
+    background: #489acc;
+    color: #fff;
+
+}
+
+header, main, body, footer {
+    padding-left: 300px;
+}
+@media only screen and (max-width : 992px) {
+      header, main, body, footer {
+          padding-left: 0;
+      }
+}

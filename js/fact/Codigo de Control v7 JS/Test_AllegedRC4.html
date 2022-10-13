@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test AllegedRC4</title>
+        <meta charset="UTF-8">
+        <script type='text/javascript' src='js/AllegedRC4.js'></script>
+    </head>
+    <body>
+        <script>
+        var a = encryptMessageRC4("d3Ir6","sesamo",false);
+        var b = encryptMessageRC4("piWCp", "Aa1-bb2-Cc3-Dd4",false);
+        var c = encryptMessageRC4("IUKYo", "XBCPY-GKGX4-PGK44-8B632-X9P33",false);
+        
+        document.write("<h2>Test AllegedRC4</h2>");
+        document.write("EB-06-AE-F8-92 Generado: " + a + " &rarr; " + (("EB-06-AE-F8-92"===a)?"IGUALES":"NO IGUALES") + "<br/>");        
+        document.write("37-71-2E-14-A0 Generado: " + b + " &rarr; " + (("37-71-2E-14-A0"===b)?"IGUALES":"NO IGUALES") + "<br/>");        
+        document.write("83-62-FC-B0-F0 Generado: " + c + " &rarr; " + (("83-62-FC-B0-F0"===c)?"IGUALES":"NO IGUALES") + "<br/>");        
+    </script>
+    </body>
+</html>

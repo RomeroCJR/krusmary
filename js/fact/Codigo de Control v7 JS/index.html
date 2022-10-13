@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test Código de Control</title>
+        <meta charset="UTF-8">                
+        <script type='text/javascript' src='js/AllegedRC4.js'></script>
+        <script type='text/javascript' src='js/Base64SIN.js'></script>
+        <script type='text/javascript' src='js/Verhoeff.js'></script>
+        <script type='text/javascript' src='js/ControlCode.js'></script>       
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    </head>
+    <body>
+    <script>        
+        var file = '5000CasosPruebaCCVer7.txt';
+        $.get(file, function(data) {
+            var lines = data.split("\n");
+            var count=0;
+            document.write('<h2>Codigo de Control en JavaScript</h2>'); 
+            document.write('Archivo <b>'+file+'</b><br/>');
+            document.write("<table>");
+            $.each(lines, function(n, elem) {
+                var data = elem.split("|");
+                c = generateControlCode(data[0],//Numero de autorizacion
+                                        data[1],//Numero de factura
+                                        data[2],//Número de Identificación Tributaria o Carnet de Identidad
+                                        data[3].replace(/[/]/g,''),//fecha de transaccion de la forma AAAAMMDD
+                                        data[4],//Monto de la transacción
+                                        data[5]//Llave de dosificación
+                        );
+                
+                if(data[10]===c){
+                    count = count + 1;
+                }          
+                if( ( Math.random() * 99 )>80){
+                    document.write("<tr><td>"+count + "</td><td>Codigo generado</td><td><b>" + c + "</b></td><td>Codigo SIN</td><td><b>"+ data[10] + "</b></td><td>"+ ((data[10]===c)?"IGUALES":"NO IGUALES") +"</td></tr>");    
+                }
+            });                        
+            document.write("</table>");  
+            document.write('Total registros testeados <b>'+count+'</b><br/>');                    
+        });
+        
+    </script>      
+    </body>
+</html>

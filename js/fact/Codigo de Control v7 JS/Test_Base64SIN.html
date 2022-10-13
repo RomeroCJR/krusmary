@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test Base64</title>
+        <meta charset="UTF-8">      
+        <script type='text/javascript' src='js/Base64SIN.js'></script>
+    </head>
+    <body>
+        <script>
+            var a = convertBase64("934598591");
+            var b = convertBase64("434376710");
+            var c = convertBase64("204986118");
+            document.write("<h2>Test Base64</h2>");
+            document.write("Palabra = ObtenerBase64(934598591) &rarr; Resultado: Palabra = tjDU/ &rarr; " + a + "<br/>");
+            document.write("Palabra = ObtenerBase64(434376710) &rarr; Resultado: Palabra = Pv106 &rarr; " + b + "<br/>");
+            document.write("Palabra = ObtenerBase64(204986118) &rarr; Resultado: Palabra = CDzS6 &rarr; " + c);
+        </script>
+    </body>
+</html>
