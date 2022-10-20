@@ -1,21 +1,15 @@
  <?php
 require('../../recursos/conexion.php');
 session_start();
-$Sql = "SELECT a.Codv, a.Ciusu, b.Ci, a.idcli, a.Fecha, a.Total, b.Nombre, b.Apellidos FROM venta a, cliente b WHERE a.idcli = b.id AND a.Estado = 1"; 
+$Sql = "SELECT a.cod_venta, c.nombre_usuario, a.cod_usuario, b.ci_cliente, a.cod_cliente, a.fecha_venta, a.total_venta, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1"; 
 $Busq = $conexion->query($Sql); 
-while($arr = $Busq->fetch_array()) 
-    { 
-        $fila[] = array('codv'=>$arr['Codv'], 'usuario'=>$arr['Ciusu'], 'cicli'=>$arr['Ci'],'cliente'=>$arr['idcli'], 'nombrecli'=>$arr['Nombre'], 'apcli'=>$arr['Apellidos'], 'fecha'=>$arr['Fecha'], 'total'=>$arr['Total']); 
-    } 
+$fila = $Busq->fetch_all(MYSQLI_ASSOC);
 
-$Sql2 = "SELECT a.Codv, a.Codpla, a.Cantidad, a.Precio, b.Nombre FROM det_plato a, plato b WHERE a.Codpla = b.Codpla;";
+$Sql2 = "SELECT a.cod_venta, a.cod_producto, a.cant_producto, a.precio_det_venta, b.nombre_producto FROM detalle_venta a, producto b WHERE a.cod_producto = b.cod_producto;";
 $Busq2 = $conexion->query($Sql2);
-while($arr2 = $Busq2->fetch_array())
-{
-$fila2[] = array('cod'=>$arr2['Codv'], 'codpla'=>$arr2['Codpla'], 'cant'=>$arr2['Cantidad'], 'precio'=>$arr2['Precio'], 'nombre'=>$arr2['Nombre']);
-}
+$fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
 
-$res = $conexion->query("SELECT * FROM talonario WHERE Estado = 1");
+$res = $conexion->query("SELECT * FROM talonario WHERE estado_talonario = 1");
 $res = $res->fetch_all();
 
 ?>
@@ -44,10 +38,11 @@ overflow-x: hidden;*/
 
 }
 </style>
-
-<span class="fuente"><h3>Ventas
-  <a href="#" class="waves-effect waves-light btn-floating btn-large red" id="nv_venta"><i class="material-icons-outlined left">add</i></a></h3>
-</span>
+<div class="row" style="margin-top:20px;">
+  <div class="col s4">
+        <a class="waves-effect waves-light btn-large orange darken-4 rubik" id="nv_venta"><i class="material-icons left">add</i><b>Venta</b></a>
+  </div>
+</div>
 
 <div class="row">
   <div class="col s12 m12 l12">
@@ -65,11 +60,11 @@ overflow-x: hidden;*/
   <tbody>
   	 <?php foreach($fila as $a  => $valor){ ?>
      <tr>
-        <td align="center"><?php echo $valor["codv"] ?></td>
-        <td align="center"><?php echo $valor["usuario"] ?></td>
-        <td align="center"><?php echo $valor["nombrecli"]." ".$valor["apcli"] ?></td>
-        <td align="center"><?php echo $valor["total"] ?> Bs.</td>
-        <td align="center"><?php echo date('d-m-Y', strtotime($valor['fecha'])) ?></td>
+        <td align="center"><?php echo $valor["cod_venta"] ?></td>
+        <td align="center"><?php echo $valor["nombre_usuario"] ?></td>
+        <td align="center"><?php echo $valor["nombre_cliente"]." ".$valor["apellidos"] ?></td>
+        <td align="center"><?php echo $valor["total_venta"] ?> Bs.</td>
+        <td align="center"><?php echo date('d-m-Y', strtotime($valor['fecha_venta'])) ?></td>
         <td align="center">
           <a href="#!" onclick="eliminar_venta('<?php echo $valor['codv'] ?>')" class="btn-floating"><i class="material-icons">delete</i></a>
           <a href="#" class="btn-floating" onclick="ver_ped('<?php echo $valor['codv'] ?>','<?php echo $valor["cliente"] ?>','<?php echo $valor["cicli"] ?>','<?php echo $valor['nombrecli'] ?>', '<?php echo $valor['apcli'] ?>');"><i class="material-icons">search</i></a>
@@ -159,8 +154,10 @@ $(document).ready(function() {
       }
     });
     $('.modal').modal();
+    document.getElementById('div_regresar').hidden = true;
 });
 $( "#nv_venta" ).click(function() {
+  document.getElementById('div_regresar').hidden = false;
   $("#cuerpo").load("templates/ventas/nueva_venta.php");
 });
 

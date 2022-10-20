@@ -3,14 +3,14 @@ require('../../recursos/conexion.php');
 
 // $_SESSION['filas'] = array(); 
 //CONSULTA OBTENER DATOS DE USUARIOS
-$Sql = "SELECT a.ci_usuario as ci, a.nombre_usuario AS nombre, CONCAT(a.ap_paterno_usuario,' ',a.ap_materno_usuario) AS apellidos, a.nro_celular_usuario AS telefono, a.correo_usuario AS email, b.cod_rol AS codrol, c.nombre_rol AS rol, d.clave AS passw FROM `usuario` a, `usu_rol` b, `rol` c, `datos` d WHERE a.cod_usuario = b.cod_usuario AND c.cod_rol = b.cod_rol AND d.cod_usuario = a.cod_usuario AND a.estado_usuario = 1;"; 
+$Sql = "SELECT a.cod_usuario AS id, a.ci_usuario as ci, a.nombre_usuario AS nombre, a.ap_paterno_usuario AS ap_paterno, a.ap_materno_usuario AS ap_materno, CONCAT(a.ap_paterno_usuario,' ',a.ap_materno_usuario) AS apellidos, a.nro_celular_usuario AS telefono, a.correo_usuario AS email, b.cod_rol AS codrol, c.nombre_rol AS rol, d.login, d.clave AS passw FROM `usuario` a, `usu_rol` b, `rol` c, `datos` d WHERE a.cod_usuario = b.cod_usuario AND c.cod_rol = b.cod_rol AND d.cod_usuario = a.cod_usuario AND a.estado_usuario = 1;"; 
 $Busq = $conexion->query($Sql); 
 $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 
 //CONSULTA OBTENER ROLES
 $Sql2 = "SELECT cod_rol AS codrol, nombre_rol AS nombre FROM `rol` WHERE estado_rol = 1"; 
 $Busq2 = $conexion->query($Sql2); 
-$fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
+$fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
 
 ?>
 
@@ -32,7 +32,7 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
     width: 30%
   }
   .width_modal_ver{
-    width: 25%
+    width: 35%
   }
   #modal3{
     max-height: 90% !important;
@@ -41,12 +41,33 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
   #perf_f{
     height: 20em;
   }
+
 </style>
 
-<span class="fuente"><h3>
-  <!-- Modal Trigger -->
-  <a class="waves-effect waves-light btn-large orange darken-4 modal-trigger rubik" id="modal_nuevo_usuario" href="#modal1"><i class="material-icons left">add</i><b>Usuario</b></a></h3> 
-</span>
+
+<div class="row" style="margin-top:20px;">
+  <div class="col s4">
+      <a class="waves-effect waves-light btn-large orange darken-4 modal-trigger rubik" id="modal_nuevo_usuario" href="#modal1"><i class="material-icons left">add</i><b>Usuario</b></a>
+  </div>
+
+  <div class="col s4 offset-s4">
+    <div class="right">  
+      <p>
+        <label>
+          <input name="group1" class="radios" value="1" type="radio" checked />
+          <span>Altas</span>
+        </label>
+
+        <label>
+          <input name="group1"  class="radios" value="2" type="radio" />
+          <span>Bajas</span>
+        </label>
+      </p>
+    </div>
+  </div>
+</div>
+
+
 <div class="row">
   <div class="col s12 m12 l12">
    <table id="tabla1" class="content-table">
@@ -56,8 +77,8 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
             <th>Ci</th>
             <th>Nombre</th>
             <!-- <th>Dirección</th> -->
-            <th>Teléfono</th>
-            <th>Email</th>
+            <th>Nro Celular</th>
+            <th>Correo</th>
             <th>Rol</th>
             <th class="center" width="15%">Acciones</th>
 
@@ -73,9 +94,9 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
             <td><?php echo $valor["telefono"] ?></td>
             <td><?php echo $valor["email"] ?></td>
             <td align="center"><?php echo $valor["rol"] ?></td>
-            <td width="25%" class="center"><a href="#" onclick="mod_usuario('<?php echo $valor['ci'] ?>', '<?php echo $valor['nombre'] ?>', '<?php echo $valor['apellidos'] ?>', '<?php echo $valor['telefono'] ?>', '<?php echo $valor['email'] ?>', '<?php echo $valor['passw'] ?>', '<?php echo $valor['codrol'] ?>', '<?php echo $valor['rol'] ?>'" class="btn btn-small"><i class="material-icons">build</i></a>
-	          <a href="#modal4" onclick="$('#eliminar_ci').val('<?php echo $valor['ci'] ?>')" class="btn btn-small modal-trigger"><i class="material-icons">delete</i></a>
-	          <a href="#" onclick="vusu('<?php echo $valor['ci'] ?>');" class="btn btn-small"><i class="material-icons">search</i></a></td>
+            <td width="25%" class="center"><a href="#" onclick="mod_usuario('<?php echo $valor['id'] ?>', '<?php echo $valor['ci'] ?>', '<?php echo $valor['nombre'] ?>', '<?php echo $valor['ap_paterno'] ?>', '<?php echo $valor['ap_materno'] ?>', '<?php echo $valor['telefono'] ?>', '<?php echo $valor['email'] ?>', '<?php echo $valor['login'] ?>', '<?php echo $valor['passw'] ?>', '<?php echo $valor['codrol'] ?>', '<?php echo $valor['rol'] ?>')" class="btn-small btn-floating"><i class="material-icons">build</i></a>
+	          <a href="#modal4" onclick="$('#eliminar_ci').val('<?php echo $valor['id'] ?>')" class="btn-small btn-floating modal-trigger"><i class="material-icons">delete</i></a>
+	          <a href="#" onclick="vusu('<?php echo $valor['ci'] ?>', '<?php echo $valor['nombre'] ?>', '<?php echo $valor['apellidos'] ?>', '<?php echo $valor['telefono'] ?>', '<?php echo $valor['email'] ?>', '<?php echo $valor['rol'] ?>');" class="btn-small btn-floating"><i class="material-icons">search</i></a></td>
          </tr>
          <?php } ?>	
       </tbody>
@@ -88,7 +109,6 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
     <div class="modal-content">
       <h4 style="font-family: 'Segoe UI light';">Nuevo Usuario</h4>
       <form id="form_nuevo_usuario" accept-charset="utf-8">
-
         <div class="input-field col s12">
           <input id="ci" name="ci" type="text" onKeyPress="return checkIt(event)" minlength="7" maxlength="7" class="validate" required>
           <label for="ci"># Cédula (*)</label>
@@ -132,15 +152,12 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
           </select>
           <label>Selecciona un rol</label>
         </div>
-
-     
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn waves-effect waves-light right" type="submit" form="form_nuevo_usuario">Agregar</button>
-        <a href="#!" class=" modal-action modal-close waves-effect waves-red btn red left">Cancelar</a>
-      </div>
-      
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn waves-effect waves-light right" type="submit" form="form_nuevo_usuario">Agregar</button>
+      <div class="left"><a href="#!" class=" modal-action modal-close waves-effect waves-red btn red">Cancelar</a></div>
+    </div>
   </div>
 
 <!-- Modal modificar usuario -->
@@ -149,18 +166,9 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
       <h4 style="font-family: 'Segoe UI light';">Modificar Usuario</h4>
       <form id="form_mod_usuario" accept-charset="utf-8">
 
-        <div class="file-field input-field col s12">
-          <div class="btn">
-            <span>Foto</span>
-            <input type="file" id="mod_imagen" name="mod_imagen">
-          </div>
-          <div class="file-path-wrapper">
-            <input class="file-path validate" type="text">
-          </div>
-          <input type="text" id="old_pic" name="old_pic" hidden>
-        </div>
         <div class="input-field col s12">
-          <input type="text" id="old_ci" name="old_ci" hidden>
+          <input type="text" name="mod_id" id="mod_id" hidden>
+          <input type="text" name="old_ci" id="old_ci" hidden>
           <input id="mod_ci" name="mod_ci" type="text" onKeyPress="return checkIt(event)" class="validate" required>
           <label for="mod_ci"># Cédula (*)</label>
         </div>
@@ -170,13 +178,13 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
           <label for="mod_nombre">Nombre (*)</label>
         </div>
         <div class="input-field col s12">
-          <input id="mod_apellidos" name="mod_apellidos" type="text" onKeyPress="return checkText(event)" class="validate" required>
-          <label for="mod_apellidos">Apellidos (*)</label>
+          <input id="mod_ap_paterno" name="mod_ap_paterno" type="text" onKeyPress="return checkText(event)" class="validate" required>
+          <label for="mod_ap_paterno">Apellido paterno (*)</label>
         </div>
 
         <div class="input-field col s12">
-          <input id="mod_direccion" name="mod_direccion" type="text" class="validate" required>
-          <label for="mod_direccion">Dirección (*)</label>
+          <input id="mod_ap_materno" name="mod_ap_materno" type="text" class="validate" required>
+          <label for="mod_ap_materno">Apellido materno </label>
         </div>
         <div class="input-field col s12">
           <input id="mod_telefono" name="mod_telefono" type="text" onKeyPress="return checkIt(event)" class="validate" required>
@@ -186,7 +194,10 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
           <input id="mod_email" name="mod_email" type="email" class="validate">
           <label for="mod_email">E-mail</label>
         </div>
-
+        <div class="input-field col s12">
+          <input id="mod_login" name="mod_login" type="text" class="validate" required>
+          <label for="mod_login" class="active">Login (*)</label>
+        </div>
         <div class="input-field col s12">
           <input id="mod_passw" name="mod_passw" type="text">
           <label for="mod_passw">Contraseña de acceso al sistema (*)</label>
@@ -198,18 +209,15 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
           </select>
         </div>
 
-        <div class="input-field col s12">
-          <input id="mod_fnac" name="mod_fnac" type="date" class="validate" required>
-          <label for="mod_fnac" class="active">Fecha nacimiento (*)</label>
-        </div>
+        
 
         <div class="left">
-          <label style="color: red;">*La C.I. será Usada como Login para el acceso al sistema.</label>
+          <label style="color: red;">Los campos marcados con (*) son obligatorios.</label>
         </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn waves-effect waves-light right" type="submit" form="form_mod_usuario">Agregar</button>
+        <button class="btn waves-effect waves-light right" type="submit" form="form_mod_usuario">Modificar</button>
         <a href="#!" class=" modal-action modal-close waves-effect waves-red btn red left">Cancelar</a>
       </div>
       
@@ -218,7 +226,7 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
 <!-- Modal eliminar usuario -->
 <div class="modal centra_mod" id="modal4">
   <div class="modal-content">
-    <h4>Se dará de baja del sistema al usuario seleccionado</h4>
+    <h5>Se dará de baja del sistema al usuario seleccionado</h5>
     <input type="text" id="eliminar_ci" hidden>
   </div>
   <div class="modal-footer">
@@ -233,24 +241,20 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC)
   <div class="modal width_modal_ver" id="modal3">
   <div class="modal-content">
 
-    <div class="center" id="perf_f">
-      <img src="" id="foto_perf" class="card-image center" height="100%" width="100%;">
-    </div>
-
-    <div class="container">
-      <h6><p id="__ci"></p></h6>
-      <h6><p id="__nombre"></p></h6>
-      <h6><p id="__ap"></p></h6>
-      <h6><p id="__fnac"></p></h6>
-      <h6><p id="__dir"></p></h6>
-      <h6><p id="__telf"></p></h6>
-      <h6><p id="__email"></p></h6>
-      <h6><p id="__rol"></p></h6>
+    <div class="row">
+      <div class="col s12">
+        <h6><p id="__ci"></p></h6>
+        <h6><p id="__nombre"></p></h6>
+        <h6><p id="__ap"></p></h6>
+        <h6><p id="__telf"></p></h6>
+        <h6><p id="__email"></p></h6>
+        <h6><p id="__rol"></p></h6>
+      </div>
     </div>
     
   </div>
   <div class="modal-footer">
-    <a class="waves-effect modal-action modal-close waves-light btn right" onclick="datos_plato();" >Aceptar</a>
+    <a class="waves-effect modal-action modal-close waves-light btn right">Aceptar</a>
   </div>
 </div>
 
@@ -279,49 +283,53 @@ $(document).ready(function() {
     });
     $('.modal').modal();
     $('select').formSelect();
+    document.getElementById('div_regresar').hidden = true;
 });
 
 var mensaje = $("#mensaje");
 mensaje.hide();
 
 function eliminar_usuario() {
-  let ci = $("#eliminar_ci").val()
+  let id = document.getElementById('eliminar_ci').value
 
-  $.ajax({
-    url: "recursos/usuarios/eliminar_usuario.php?ci="+ci,
-    method: "GET",
-    success: function(response) {
-        console.log(response)
-        if (response == 1) {
-          M.toast({html: "¡Usuario eliminado!"});
-          $("#cuerpo").load("templates/usuarios/usuarios.php");
-        }
-    },
-    error: function(error) {
-        console.log(error)
+  fetch("recursos/usuarios/eliminar_usuario.php?id="+id)
+  .then(response => response.text())
+  .then(data =>{
+    if (data == 1) {
+      M.toast({html: "¡Usuario dado de baja!"});
+      $("#cuerpo").load("templates/usuarios/usuarios.php");
     }
   })
 
+
 }
 
-function mod_usuario(ci, nombre, apellidos, direccion, telefono, email, passw, fnac, codrol, nomrol, foto) {
+function mod_usuario(id, ci, nombre, ap_paterno, ap_materno, telefono, email, login, passw, codrol, nomrol) {
+  
+  $("#mod_id").val(id)
+  $("#old_ci").val(ci)
   $("#mod_ci").val(ci)
   $("#mod_nombre").val(nombre)
-  $("#mod_apellidos").val(apellidos)
-  $("#mod_direccion").val(direccion)
+  $("#mod_ap_paterno").val(ap_paterno)
+  $("#mod_ap_materno").val(ap_materno)
   $("#mod_telefono").val(telefono)
   $("#mod_email").val(email)
+  $("#mod_login").val(login)
   $("#mod_passw").val(passw)
-  $("#mod_fnac").val(fnac)
-  $("#old_ci").val(ci)
-  $("#old_pic").val(foto)
 
-  var myHtml = `<option value="${codrol}" selected>${nomrol}</option><?php foreach($fila2 as $a  => $valor){ ?><option value="<?php echo $valor['codrol'] ?>" ><?php echo $valor["nombre"] ?></option><?php } ?>`;
-
-  document.getElementById("mod_rol").innerHTML = myHtml;
-
-  M.updateTextFields()
-  $("#modal2").modal('open')
+  fetch('recursos/usuarios/get_rol.php?id='+codrol)
+  .then(response => response.json())
+  .then(data => {
+    var options = "";
+    data.forEach(element => {
+      options = options+`<option value="${element.codrol}">${element.nombre}</option>`;
+    });
+    var myHtml = `<option value="${codrol}" selected>${nomrol}</option>`+options;
+    document.getElementById("mod_rol").innerHTML = myHtml;
+    M.updateTextFields()
+    $("#modal2").modal('open')
+  })
+  
 }
 
 
@@ -349,7 +357,7 @@ document.getElementById('form_nuevo_usuario').addEventListener('submit', functio
 
 });
 
-$("#form_mod_usuario").on("submit", function(e){
+document.getElementById('form_mod_usuario').addEventListener('submit', function(e){
   e.preventDefault();
   var formData = new FormData(document.getElementById("form_mod_usuario"));
 
@@ -357,7 +365,7 @@ $("#form_mod_usuario").on("submit", function(e){
   .then(respuesta => respuesta.text())
   .then(data => {
     if (data == "existe") {
-      M.toast({html: "Ya existe otro usuario con la misma C.I."})
+      return M.toast({html: "Ya existe otro usuario con la misma C.I."})
     }
     if (data == '1') {
       M.toast({html: "Usuario modificado."});
@@ -370,21 +378,21 @@ $("#form_mod_usuario").on("submit", function(e){
 
 });
 
-function vusu (ci) {
-  '<?php foreach($fila as $a  => $valor){ ?>';
-    if (ci == "<?php echo $valor['ci'] ?>") {
-      $("#__ci").html(`<b>Cédula: </b>`+ci);
-      $("#__nombre").html(`<b>Nombre: </b><?php echo $valor['nombre'] ?>`);
-      $("#__ap").html(`<b>Apellidos: </b><?php echo $valor['apellidos'] ?>`);
-      $("#__email").html(`<b>Email: </b><?php echo $valor['email'] ?>`);
-      $("#__telf").html(`<b>Teléfono: </b><?php echo $valor['telefono'] ?>`);
-      $("#__rol").html(`<b>ROL: </b><?php echo $valor['rol'] ?>`);
+function vusu (ci, nombre, apellidos, telefono, email, rol) {
 
-    }
-
-  '<?php } ?>';
+      $("#__ci").html(`<b>Cédula: </b>${ci}`);
+      $("#__nombre").html(`<b>Nombre: </b>${nombre}`);
+      $("#__ap").html(`<b>Apellidos: </b>${apellidos}`);
+      $("#__email").html(`<b>Email: </b>${email}`);
+      $("#__telf").html(`<b>Teléfono: </b>${telefono}`);
+      $("#__rol").html(`<b>ROL: </b>${rol}`);
   $("#modal3").modal('open');
 }
 
+
+document.getElementsByClassName('radios')[1].addEventListener('click', ()=> {
+  console.log(document.getElementsByName('group1')[1].value)
+  $("#cuerpo").load("templates/usuarios/usuarios_bajas.php");
+})
 
 </script>

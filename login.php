@@ -28,7 +28,7 @@
 			}
 			body {
 				margin: 0;
-				background: #000;
+				background-color: aqua;
 				color: black;
 				font-family: 'Segoe UI Light';
 			}
@@ -68,7 +68,7 @@
 				<div class="formulario-acceso">
 					<div class="row">
 						<div class="col s10 offset-s1">
-							<h4 class="fuente">Accede al sistema</h4>
+						<h4 class="fuente rubik" style="text-align:center;"><b>Acceso al Sistema</b></h4>
 						</div>
 					</div>
 					<div class="row">

@@ -39,9 +39,11 @@ $Busq = $conexion->query($Sql);
     
     <!-- Compiled and minified JavaScript -->
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- <script src="js/jquery-3.0.0.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+
     <!-- <script src="js/materialize.js"></script> -->
     <!-- <script src="js/datatable.js"></script> -->
     <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css"/>
@@ -136,12 +138,12 @@ $Busq = $conexion->query($Sql);
     </style>
   </head>
   <body>
-  <div class="left_pos">
-    <a href="#modal_gasto" class="waves-effect waves-light btn modal-trigger light-blue darken-1"><i class="left"><img width="40px" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/000000/external-money-finance-kiranshastry-lineal-kiranshastry-3.png"/></i>Nuevo gasto</a>
-  </div>   
+  <!-- <div class="left_pos"> -->
+    <!-- </div>    -->
   <div class="nav_container ">
 	<nav class="teal lighten-2">
 		<div class="nav-wrapper">  
+      <div id="div_regresar" hidden><a href="#!" id="regresar" style="margin-left:15px" class="brand-logo left" ><i class="material-icons">keyboard_return</i></a></div>
 			<a href="#" id="menu" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 			<a href="#" id="titulo" class="brand-logo center fuente">Repostería Krusmary </a>
 			<ul class="right hide-on-med-and-down">
@@ -158,14 +160,16 @@ $Busq = $conexion->query($Sql);
 		        <img src="images/fondo1.jpg" height="100%" width="100%">
 		      </div>
 		      <div><center><a href="#user"><img class="circle" src="images/logo.png"></a></center></div>
-		      <a href="#name"><span class=" name"><b><?php echo $_SESSION['estado']?></b></span></a>
-		      <a href="#email"><span class=" email"><b><?php echo "CI: ".$_SESSION['Ci_Usuario']?></b></span></a>
-	    	</div>
+              <a href="#name"><span class=" name"><b><?php echo $_SESSION['estado']?></b></span></a>
+              <a href="#email"><span class=" email"><b><?php echo "CI: ".$_SESSION['Ci_Usuario']?></b></span></a>
+        </div>
+        
 	  	</li>
 	  	<div class="texto-blanco">
         <li><a href="#!" onclick="cargar('templates/inicio/inicio');" class="waves-effect waves-teal"><i class="material-icons-outlined">home</i>Inicio</a></li>
         <li><a href="#!" onclick="cargar('templates/ventas/ventas');" class="waves-effect waves-teal"><i class="material-icons-outlined">shopping_cart</i>Ventas</a></li>
-		    <li><a href="#!" onclick="cargar('templates/platos/platos');" class="waves-effect waves-teal"><i class="material-icons-outlined">fastfood</i>Platos</a></li>
+		    <li><a href="#!" onclick="cargar('templates/productos/productos');" class="waves-effect waves-teal"><i class="material-icons-outlined">cake</i>Productos</a></li>
+        <li><a href="#!" onclick="cargar('templates/categorias/categorias');" class="waves-effect waves-teal"><i class="material-icons-outlined">cake</i>Categorias</a></li>
         <li><a href="#!" onclick="cargar('templates/pedidos/pedidos');" class="waves-effect waves-teal"><i class="material-icons-outlined">receipt</i>Pedidos</a></li>
         <li><div class="divider grey darken-3"></div></li>
         
@@ -185,7 +189,10 @@ $Busq = $conexion->query($Sql);
         </ul>
 		    <!-- <li><a class="subheader"></a></li> -->
 		    <li><a class="waves-effect" href="recursos/catalogos/salir.php"><i class="material-icons">logout</i>Cerrar sesión</a></li>
-	    </div>
+        <li>
+          <a href="#modal_gasto" class="waves-effect waves-light btn modal-trigger light-blue darken-1"><i class=""><img width="50px" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/000000/external-money-finance-kiranshastry-lineal-kiranshastry-3.png"/></i>Nuevo gasto</a>
+        </li>
+      </div>
 	</ul>
 
 </div>
@@ -296,10 +303,18 @@ $Busq = $conexion->query($Sql);
       }
     }
 
+    //Funcion para validación de solo números.
     function checkIt(evt) {
+      console.log(evt.keyCode)
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
+      
+      if(charCode == 46){
+        status = "";
+        return true;
+      }
       if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+
         status = "Este campo acepta números solamente.";
         return false;
       }

@@ -3,12 +3,13 @@ require('../conexion.php');
 
 $ci = $_POST['ci'];
 $nombre = $_POST['nombre'];
-$apellidos = $_POST['apellidos'];
+$ap_paterno = $_POST['ap_paterno'];
+$ap_materno = $_POST['ap_materno'];
 $telefono = $_POST['telefono'];
 
-$consulta = "INSERT INTO cliente (Ci, Nombre, Apellidos, Telefono) VALUES ('".$ci."', '".$nombre."', '".$apellidos."', '".$telefono."')";
+$consulta = "INSERT INTO cliente (ci_cliente, nombre_cliente, ap_paterno_cliente, ap_materno_cliente, nro_celular_cliente) VALUES ('".$ci."', '".$nombre."', '".$ap_paterno."', '".$ap_materno."', '".$telefono."')";
 	if(mysqli_query($conexion, $consulta)){
-		die('<script>$("#modal1").modal("close"); M.toast({html: "Cliente agregado"});</script>');
+		die('1');
 	} else {
 		die(mysqli_error($conexion));
 	}

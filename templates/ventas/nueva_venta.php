@@ -2,42 +2,30 @@
 require('../../recursos/conexion.php');
 session_start();
 
-$Sql0 = "SELECT a.Codv, a.idcli, a.Total, b.Nombre, b.Apellidos, b.Telefono FROM venta a, cliente b WHERE a.idcli = b.id;";
+$Sql0 = "SELECT a.cod_venta AS cod, a.cod_cliente AS idcli, a.total_venta AS total, b.nombre_cliente AS nombre, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos, b.nro_celular_cliente AS telf FROM venta a, cliente b WHERE a.cod_cliente = b.cod_cliente;";
 $Busq0 = $conexion->query($Sql0);
-while($arr0 = $Busq0->fetch_array())
-{
-  $fila0[] = array('cod'=>$arr0['Codv'], 'idcli'=>$arr0['idcli'], 'total'=>$arr0['Total'], 'nombre'=>$arr0['Nombre'], 'apellidos'=>$arr0['Apellidos'], 'telf'=>$arr0['Telefono']);
-}
+$fila0 = $Busq0->fetch_all(MYSQLI_ASSOC);
 
 
-$Sql = "SELECT a.*, b.Stock FROM plato a, stock b WHERE a.Codpla = b.Codpla AND a.beb = 0 AND a.Estado = 1"; 
+$Sql = "SELECT a.cod_producto AS cod, a.nombre_producto AS nombre, a.precio_producto AS precio, a.descripcion_producto AS descripcion, a.foto_producto AS foto, b.stock FROM producto a, inventario b WHERE a.cod_producto = b.cod_producto AND a.estado_producto = 1"; 
 $Busq = $conexion->query($Sql); 
-while($arr = $Busq->fetch_array()) 
-    { 
-        $fila[] = array('cod'=>$arr['Codpla'], 'nombre'=>$arr['Nombre'], 'precio'=>$arr['Precio'], 'descripcion'=>$arr['Descripcion'], 'foto'=>$arr['Foto'], 'stock'=>$arr['Stock']);
-    } 
+$fila = $Busq->fetch_all(MYSQLI_ASSOC);
 
-$Sqlb = "SELECT a.*, b.Stock FROM plato a, stock b WHERE a.Codpla = b.Codpla AND a.beb = 1 AND a.Estado = 1"; 
-$Busqb = $conexion->query($Sqlb); 
-while($arr = $Busqb->fetch_array()) 
-    { 
-        $filab[] = array('cod'=>$arr['Codpla'], 'nombre'=>$arr['Nombre'], 'precio'=>$arr['Precio'], 'descripcion'=>$arr['Descripcion'], 'foto'=>$arr['Foto'], 'stock'=>$arr['Stock']);
-    }
+// $Sqlb = "SELECT a.*, b.Stock FROM plato a, stock b WHERE a.Codpla = b.Codpla AND a.beb = 1 AND a.Estado = 1"; 
+// $Busqb = $conexion->query($Sqlb); 
+// while($arr = $Busqb->fetch_array()) 
+//     { 
+//         $filab[] = array('cod'=>$arr['Codpla'], 'nombre'=>$arr['Nombre'], 'precio'=>$arr['Precio'], 'descripcion'=>$arr['Descripcion'], 'foto'=>$arr['Foto'], 'stock'=>$arr['Stock']);
+//     }
 
 
-$Sql2 = "SELECT * FROM cliente WHERE Estado = 1";
+$Sql2 = "SELECT cod_cliente, ci_cliente AS cicli, nombre_cliente AS nombrecli, CONCAT(ap_paterno_cliente,' ',ap_materno_cliente) AS apcli, nro_celular_cliente AS telfcli FROM cliente WHERE estado_cliente = 1";
 $Busq2 = $conexion->query($Sql2);
-while($arr2 = $Busq2->fetch_array())
-{
-$fila2[] = array('cicli'=>$arr2['Ci'], 'nombrecli'=>$arr2['Nombre'], 'apcli'=>$arr2['Apellidos'], 'telfcli'=>$arr2['Telefono']);
-}
+$fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
 
-$Sql3 = "SELECT * FROM talonario WHERE Estado = 1";
+$Sql3 = "SELECT autorizacion as aut, llave_dosificacion as llave, nit, fecha_emision as fecha_lim FROM talonario WHERE estado_talonario = 1";
 $Busq3 = $conexion->query($Sql3);
-while($arr3 = $Busq3->fetch_array())
-{
-$fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'nit'=>$arr3['Nit'], 'fecha_lim'=>$arr3['Fecha_emision']);
-}
+$fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
 
 
 ?>
@@ -60,48 +48,70 @@ $fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'n
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
   }
-
+  #div_form{
+    width: calc(50% - 10px);
+    margin-left: 10px;
+  }
+  #ventas_agregadas{
+    margin-top: 0px;
+  }
+  .ui-autocomplete-row{
+    padding:8px;
+    background-color: #b2dfdb;
+    border-bottom:1px solid #009688;
+    font-weight:bold;
+    font-family: rubik;
+  }
+  .ui-autocomplete-row:hover
+  {
+    background-color: #009688;
+    /*font-family: "Segoe UI Light"*/
+  }
+  .ui-menu{
+    font-size: 1rem !important;
+    z-index: 9999;
+  }
 </style>
 
 
-<a class="waves-effect waves-teal btn-large orange" id="regresar"><i class="material-icons left">arrow_back</i></a>
-
+<!-- <a class="waves-effect waves-teal btn-large orange" id="regresar"><i class="material-icons left">arrow_back</i></a> -->
 
 <div class="row">
-<!--   <div id="client_section" class="col s12 m4">
-    <form id="form_venta" action="" class="col s12">
-      <h4 class="fuente">Datos de cliente</h4>
-      <div class="row">
-        <div class="input-field col s8">
-            <input id="ci_c" name="ci_c" type="number" class="validate">
-            <label for="ci_c">Cédula de identidad</label>
-        </div>
-        <div class="col s3">
-          <a onclick="buscar_cliente()" class="waves-effect waves-teal btn-large"><i class="material-icons left">search</i></a>
-        </div>
-        <div class="input-field col s12">
-            <input id="nombre_c" name="nombre_c" type="text" class="validate dis">
-            <label for="nombre_c" class="active">Nombre</label>
-        </div>
-        <div class="input-field col s12">
-            <input id="ap_c" name="ap_c" type="text" class="validate dis">
-            <label for="ap_c" class="active">Apellidos</label>
-        </div>
-        <div class="input-field col s12">
-            <input type="text" id="tot_ped" name="tot_ped" value="" hidden>
-            <input id="telf" name="telf" type="number" class="validate dis">
-            <label for="telf" class="active">Teléfono</label>
-        </div>
-      </div>
-    </form>
-    <button class="btn waves-effect waves-light" onclick="confirm_client()">Guardar cliente</button> 
-  </div> -->
-  <div id="detalle_venta" class="col s12 m12">
-    <h4 class="fuente">Nueva venta</h4>
-    <div >
-      <a href="#modal_plato" class="modal-trigger btn btn-large waves-effect waves-light red"><i class="material-icons-outlined left">lunch_dining</i>Plato</a>
-      <a href="#modal_bebida" class="modal-trigger btn btn-large waves-effect waves-light green"><i class="material-icons left">local_drink</i>Bebida</a>
+  <div class="col s12 center">
+    <h4 class="fuente">Detalle de venta</h4>
+  </div>
+
+</div>
+
+<div class="row">
+  <div id="div_form" class="col s12 m6  z-depth-4">
+    <div class="col s12">
+      <p>Seleccione el producto:</p>
     </div>
+    <div class="col s12">
+      <form id="form_agregar_producto">
+        <div class="input-field col s12">
+          <input type="text" id="cod_producto" name="cod_producto" hidden>
+          <input type="text" id="stock_producto" name="stock_producto" hidden>
+          <input type="text" id="nombre_producto" name="nombre_producto" class="validate">
+          <label for="nombre_producto">Producto</label>
+        </div>
+        <div class="input-field col s12">
+          <input type="number" id="precio_producto" onKeyPress="return checkIt(event)" name="precio_producto" class="validate">
+          <label for="precio_producto">Precio (Bs.)</label>
+        </div>
+        <div class="input-field col s12 center number-container">
+              <label for="" class="rubik" style="font-weight: lighter">Cantidad</label>
+              <input class="browser-default" onKeyPress="return checkIt(event)" autocomplete="off" type="number" name="cantidad_producto" id="__cantidad" min="1" max="50" required>
+        </div>
+      </form>
+    </div>
+    <div class="col s12 center" style="padding-bottom: 10px">
+      <button form="form_agregar_producto" type="submit" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Agregar al detalle</button>
+    </div>
+  </div>
+
+  <div id="detalle_venta" class="col s12 m6">
     <div >
         <table border="1" class="content-table" id="ventas_agregadas">
           <thead>
@@ -126,12 +136,15 @@ $fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'n
           </div>
         </div>
     </div>
-    <div class="col s3 offset-s4">
-      <button class="waves-effect waves-light btn-large modal-trigger" data-target="modal-cliente"><i class="material-icons right">shopping_cart</i>Registrar</button>
-    </div>
+
   </div>
 </div>
-
+<br><br>
+<div class="row">
+  <div class="center">
+      <button class="waves-effect waves-light btn-large modal-trigger" data-target="modal-cliente"><i class="material-icons right">shopping_cart</i>Registrar</button>
+  </div>
+</div>
 <!-- onclick="reg_venta()" -->
 
   <!-- Modal Cliente -->
@@ -255,37 +268,6 @@ $fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'n
 </div>
 
 
-<div id="modal_bebida" class="modal">
-  <a href="#!" class="modal-close close right"><i class="material-icons">close</i></a>
-    <div class="modal-content">
-      <h4 class="fuente">Agregar bebida</h4>
-      <div class="col s12">
-         <table id="tabla_bebidas" class="highlight">
-          <thead>
-             <tr>
-                <th>Foto</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-             </tr>          
-          </thead>
-          <tbody>
-             <?php foreach($filab as $a  => $valor){ ?>
-             <tr style="cursor: pointer;" onclick="agregar_plato('<?php echo $valor['cod'] ?>', '<?php echo $valor['nombre'] ?>', '<?php echo $valor['precio'] ?>', '<?php echo $valor['stock'] ?>')">
-                <td align="center"><img src="<?php echo $valor['foto'] ?>" height="35" width=""></td>
-                <td align="center"><?php echo $valor["nombre"] ?></td>
-                <td align="center"><?php echo $valor["precio"]." Bs." ?></td>
-             </tr>
-             <?php } ?> 
-          </tbody>
-        </table> 
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn waves-effect waves-light modal-close right">Aceptar</button> 
-      <button class="btn red waves-effect waves-red modal-close left"><i class="material-icons left">close</i>Cancelar</button>
-    </div>
-</div>
-
 <div class="row">
   <div id="modal_cant_plato" class="modal fuente col s12 m2 offset-m3">
       <a href="#!" class="modal-close close right"><i class="material-icons">close</i></a>
@@ -299,7 +281,7 @@ $fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'n
               <input class="browser-default" onKeyPress="return checkIt(event)" autocomplete="off" type="number" id="__cantidad" min="1" max="15">
         </div>
 
-        <div id="__datosplato" hidden></div>
+        
       </div><br>
       <div class="modal-footer centrar_boton_div">
         <button class="btn waves-effect waves-light centrar_boton" onclick="agregar_fila_plato();">Aceptar</button> 
@@ -310,13 +292,13 @@ $fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'n
 
 <!-- Mensaje -->
 <div id="mensaje"></div>
-
+<div id="__datosplato" hidden></div>
 
 <script>
  
   $(document).ready(function() {
      $('.modal').modal();
-     $('input[type="number"]').niceNumber({
+     $('#__cantidad').niceNumber({
       autoSize: true,
       autoSizeBuffer: 1,
       buttonDecrement: "-",
@@ -324,6 +306,22 @@ $fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'n
       buttonPosition: 'around'
     });
 
+    $('#nombre_producto').autocomplete({
+        source: "recursos/ventas/buscar_producto.php",
+        minLength: 1,
+        select: function(event, ui){
+          
+          document.getElementById('cod_producto').value = ui.item.id;
+          document.getElementById('precio_producto').value = ui.item.precio;
+          document.getElementById('stock_producto').value = ui.item.stock;
+          M.updateTextFields();
+        }
+      }).data('ui-autocomplete')._renderItem = function(ul, item){
+        return $("<li class='ui-autocomplete-row'></li>")
+        .data("item.autocomplete", item)
+        .append(item.label)
+        .appendTo(ul);
+      };
   });
 
 $("#datos_cliente").click(function () {
@@ -405,32 +403,65 @@ $('#tabla_bebidas').dataTable({
   }
 });
 
-function agregar_plato(cod, nombre, precio, stock) {
-  console.log(cod, nombre, precio, stock)
-  $("#__datosplato").html("<input id='__datosp' cp='"+cod+"' np='"+nombre+"' pp='"+precio+"' />");
-
-  $.ajax({
-    url: "recursos/app/check_stock.php?id="+cod,
-    method: "GET",
-    success: function(response) {
-      $("#current_sell").val(response)
-      $("#current_stock").val(stock)
-      console.log(stock, response)
-      if (parseInt(stock) > parseInt(response)) {
-        $("#modal_cant_plato").modal('open');
-      }else{
-        M.toast({html: "Producto agotado, puede aumentar el stock en la pantalla de inicio."})
-      }
-    },
-    error: function(error) {
-        console.log(error)
-    }
-  })
-
-  
-  
-}
 var reg_pedidos = new Array();
+document.getElementById('form_agregar_producto').addEventListener('submit', function(e){
+  e.preventDefault();
+  var formulario = document.getElementById("form_agregar_producto");
+  formData = new FormData(formulario)
+
+  // return console.log(formData.get('stock_producto'));
+
+  let json_productos = {
+    "cod_producto": formData.get('cod_producto'),
+    "nombre_producto": formData.get('nombre_producto'),
+    "precio_producto": formData.get('precio_producto'),
+    "stock_producto": formData.get('stock_producto'),
+    "cantidad_producto": formData.get('cantidad_producto')
+  }
+
+  let json_prod = JSON.stringify(json_productos);
+  // console.log(json_prod)
+
+  $("#__datosplato").html(`<input id='__datosp' value='${json_prod}'  />`);
+
+  fetch("recursos/app/check_stock.php?id="+formData.get('cod_producto'))
+  .then(response => response.text())
+  .then(data => {
+    let disp = parseInt(json_productos.stock_producto) - parseInt(data)
+    if (parseInt(json_productos.stock_producto) < parseInt(data)) {
+      return M.toast({html: "Cantidad solicitada insuficiente en stock, "+disp+" disponible."})
+    }else{
+      M.toast({html: "Agregado al detalle de venta."})
+    }
+    if (parseInt(json_productos.cantidad_producto) > 35 || json_productos.cantidad_producto == "") {return M.toast({html: "El pedido no puede superar las 35 unidades"})}
+    if (parseInt(json_productos.cantidad_producto) < 1 || json_productos.cantidad_producto == "") {return M.toast({html: "Ingresa una cantidad válida."}); }
+    // let subtotal = parseInt(json_productos.precio_producto) * parseInt(json_productos.cantidad_producto)
+
+    reg_pedidos[json_productos.cod_producto] = [json_productos.cod_producto, json_productos.nombre_producto, json_productos.cantidad_producto, json_productos.precio_producto];
+    //reg_pedidos[codigo] = [codigo, nombre, cantidad, precio]
+    console.log(reg_pedidos);
+    
+    $('#ventas_agregadas tbody tr').empty();
+    var table = $("#ventas_agregadas")[0];
+    total =  0;
+    subtotal = 0;
+    //llenando tabla
+    reg_pedidos.forEach(function (valor) {
+      var row = table.insertRow(-1);
+      row.insertCell(0).innerHTML = valor[1];
+      row.insertCell(1).innerHTML = valor[2];
+      row.insertCell(2).innerHTML = valor[3];
+      row.insertCell(3).innerHTML = "<a href='#' onclick='borrar_producto("+valor[0]+")'><i class='material-icons prefix'>delete</i></a>";
+      subtotal = parseFloat(valor[3])*parseInt(valor[2]);
+      total  = parseFloat(total) + parseFloat(subtotal);
+    });
+    document.getElementById('total_ped').innerHTML = total+" Bs.";
+    formulario.reset();
+    document.getElementById('__cantidad').value = 1;
+  })
+})
+
+// var reg_pedidos = new Array();
 function agregar_fila_plato() {
       console.log(reg_pedidos)
 
@@ -481,20 +512,25 @@ function agregar_fila_plato() {
       }}
 }
 
-    function borr_pla(x) {
+    function borrar_producto(x) {
       delete reg_pedidos[x];
-          //borrando tabla
+      console.log(reg_pedidos);
+        //borrando tabla
         $('#ventas_agregadas tbody tr').empty();
         var table = $("#ventas_agregadas")[0];
         total =  0;
+        subtotal = 0;
         //llenando tabla
         reg_pedidos.forEach(function (valor) {
-          var row = table.insertRow(1);
-          row.insertCell(0).innerHTML = "<a href='#' onclick='borr_pla("+valor[0]+")'><i class='material-icons prefix'>delete</i></a>";
-          row.insertCell(0).innerHTML = valor[3];
-          row.insertCell(0).innerHTML = valor[2];
+          console.log(valor);
+          var row = table.insertRow(-1);
           row.insertCell(0).innerHTML = valor[1];
-          total  = parseInt(total) + parseInt(valor[3]);
+          row.insertCell(1).innerHTML = valor[2];
+          row.insertCell(2).innerHTML = valor[3];
+          row.insertCell(3).innerHTML = `<a href='#' onclick='borrar_producto("${valor[0]}")'><i class='material-icons prefix'>delete</i></a>`;
+
+          subtotal = parseFloat(valor[3])*parseFloat(valor[2]);
+          total  = parseFloat(total) + subtotal;
         });
         $("#total_ped").html(total +" Bs.");
         $("#subtotal").val(total);
@@ -815,5 +851,8 @@ return true;
 //   }
 // }
 
+document.getElementById('regresar').addEventListener('click', ()=> {
+  document.getElementById('div_regresar').hidden = true;
+})
 
 </script>

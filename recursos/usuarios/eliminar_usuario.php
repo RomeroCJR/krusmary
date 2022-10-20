@@ -1,15 +1,15 @@
 <?php 
 require("../conexion.php");
-$ci = $_GET['ci'];
+$id = $_GET['id'];
 
+$conexion->query("UPDATE `datos` SET `estado_dato`='0' WHERE cod_usuario = ".$id);
 
-$conexion->query("UPDATE datos SET Estado = '0' WHERE Ci = ".$ci);
-$res = $conexion->query("UPDATE `usuario` SET `Estado` = '0' WHERE Ci = ".$ci);
+$res = $conexion->query("UPDATE `usuario` SET `estado_usuario` = '0' WHERE cod_usuario = ".$id);
 
 if ($res) {
 	die($res);
 }else{
-	die($conexion->mysql_error());
+	die($conexion->mysqli_error($conexion));
 }
 
 ?>

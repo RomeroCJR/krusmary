@@ -3,15 +3,14 @@
 	$id = $_POST['mod_id'];
 	$ci = $_POST['mod_ci'];
 	$nombre = $_POST['mod_nombre'];
-	$apellidos = $_POST['mod_apellidos'];
+	$ap_paterno = $_POST['mod_ap_paterno'];
+	$ap_materno = $_POST['mod_ap_materno'];
 	$telf = $_POST['mod_telefono'];
 
-	// echo $id." ".$ci." ".$nombre." ".$apellidos." ".$telf
-
-	$result = $conexion->query("UPDATE `cliente` SET `Ci`= ".$ci.",`Nombre`='".$nombre."',`Apellidos`='".$apellidos."',`Telefono`='".$telf."' WHERE id = ".$id);
+	$result = $conexion->query("UPDATE `cliente` SET `ci_cliente`= ".$ci.",`nombre_cliente`='".$nombre."',`ap_paterno_cliente`='".$ap_paterno."', `ap_materno_cliente`='".$ap_materno."',`nro_celular_cliente`='".$telf."' WHERE cod_cliente = ".$id);
 
 	if ($result) {
-		echo "1";
+		echo $result;
 	}else{
 		echo mysqli_error($conexion);
 	}

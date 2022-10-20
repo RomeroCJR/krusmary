@@ -196,13 +196,13 @@ img {
 .number-container{
    /* width: 450px;
     height: 450px;*/
-    background-color: white;
-    color: black;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    border-radius: 30px;
+    /* background-color: white; */
+    /* color: black; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* border-radius: 30px; */
 }
 
 .number-container label{
@@ -249,4 +249,8 @@ header, main, body, footer {
       header, main, body, footer {
           padding-left: 0;
       }
+}
+
+#tabla1_filter input{
+    padding:0px;
 }
