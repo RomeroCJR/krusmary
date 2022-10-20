@@ -49,7 +49,7 @@ if($userBD == $userPOST and  $passPOST == $passwordBD){
 
 	session_start();
 	$_SESSION['Ci_Usuario'] = $ciBD;
-	$consultaNA = "SELECT a.nombre_usuario as Nombre, CONCAT(a.ap_paterno_usuario,' ',a.ap_materno_usuario) AS Apellidos, b.cod_rol AS Codrol, c.login AS user, a.estado_usuario as estado FROM usuario a, usu_rol b, datos c WHERE c.cod_usuario = a.cod_usuario AND b.cod_usuario = a.cod_usuario AND a.ci_usuario = '".$ciBD."'";
+	$consultaNA = "SELECT a.cod_usuario, a.nombre_usuario as Nombre, CONCAT(a.ap_paterno_usuario,' ',a.ap_materno_usuario) AS Apellidos, b.cod_rol AS Codrol, c.login AS user, a.estado_usuario as estado FROM usuario a, usu_rol b, datos c WHERE c.cod_usuario = a.cod_usuario AND b.cod_usuario = a.cod_usuario AND a.ci_usuario = '".$ciBD."'";
 	$resultadoNA = mysqli_query($conexion, $consultaNA);
 	
 	if(empty($resultadoNA)){
@@ -60,6 +60,7 @@ if($userBD == $userPOST and  $passPOST == $passwordBD){
 	
 	$_SESSION['Nombre'] = $datosNA['Nombre'];
 	$_SESSION['Apellidos'] = $datosNA['Apellidos'];
+	$_SESSION['Cod_usuario'] = $datosNA['cod_usuario'];
 	$_SESSION['estado'] = 'Autenticado';
 	$_SESSION['user'] = $userBD;
 	$_SESSION['rol'] = $datosNA['Codrol'];

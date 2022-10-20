@@ -93,11 +93,11 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
         <div class="input-field col s12">
           <input type="text" id="cod_producto" name="cod_producto" hidden>
           <input type="text" id="stock_producto" name="stock_producto" hidden>
-          <input type="text" id="nombre_producto" name="nombre_producto" class="validate">
+          <input type="text" id="nombre_producto" name="nombre_producto" class="validate" required>
           <label for="nombre_producto">Producto</label>
         </div>
         <div class="input-field col s12">
-          <input type="number" id="precio_producto" onKeyPress="return checkIt(event)" name="precio_producto" class="validate">
+          <input type="number" id="precio_producto"  onKeyPress="return checkIt(event)" name="precio_producto" class="validate" required>
           <label for="precio_producto">Precio (Bs.)</label>
         </div>
         <div class="input-field col s12 center number-container">
@@ -148,7 +148,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
 <!-- onclick="reg_venta()" -->
 
   <!-- Modal Cliente -->
-  <div id="modal-cliente" class="modal">
+  <div id="modal-cliente" class="modal" style="width:45%">
     <div class="modal-content">
       <div class="container">
         <h4>Registrar venta e imprimir factura:</h4><br>
@@ -163,7 +163,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
         </p>
       </div>
 
-      <div id="tipo_cliente_radios" class="container" hidden>
+      <!-- <div id="tipo_cliente_radios" class="container" hidden>
         <form action="radio_clientes">
           <label>
             <input class="with-gap" name="rad_client" value="0" type="radio" />
@@ -174,7 +174,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
             <span>Persona jurídica</span>
           </label>
         </form>
-      </div>
+      </div> -->
 
       <div id="form_registro_venta_fisica" class="container" hidden>
         <form >
@@ -188,8 +188,12 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
               <label for="reg_nombres">Nombre (*)</label>
             </div>
             <div class="input-field col s12">
-              <input id="reg_apellidos" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="20" class="validate">
-              <label for="reg_apellidos">Apellidos (*)</label>
+              <input id="reg_apellido_p" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="20" class="validate">
+              <label for="reg_apellido_p">Apellidos paterno</label>
+            </div>
+            <div class="input-field col s12">
+              <input id="reg_apellido_m" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="20" class="validate">
+              <label for="reg_apellido_m">Apellido materno</label>
             </div>
             <div class="input-field col s12">
               <input id="f_reg_telf" name="f_reg_telf" type="text" onKeyPress="return checkIt(event)" minlength="8" maxlength="8" class="validate">
@@ -328,87 +332,90 @@ $("#datos_cliente").click(function () {
 
   if (!$('#datos_cliente').is(":checked")){
     // document.getElementById('form_registro_venta').hidden = true
-    document.getElementById('tipo_cliente_radios').hidden = true
+    // document.getElementById('tipo_cliente_radios').hidden = true
     document.getElementById('form_registro_venta_fisica').hidden = true
-    document.getElementById('form_registro_venta_juridica').hidden = true
+    // document.getElementById('form_registro_venta_juridica').hidden = true
   }else{
-    // document.getElementById('form_registro_venta').hidden = false
-    document.getElementById('tipo_cliente_radios').hidden = false
+    document.getElementById('form_registro_venta_fisica').hidden = false
+    // document.getElementById('tipo_cliente_radios').hidden = false
 
   }
 })
 
-$('input[name="rad_client"]').click(function(){
-  let value = $('input[name="rad_client"]:checked').val();
+// $('input[name="rad_client"]').click(function(){
+//   let value = $('input[name="rad_client"]:checked').val();
 
-  if (value == '0') {
-    document.getElementById('form_registro_venta_fisica').hidden = false
-    document.getElementById('form_registro_venta_juridica').hidden = true
-  }else{
-    document.getElementById('form_registro_venta_fisica').hidden = true
-    document.getElementById('form_registro_venta_juridica').hidden = false
-  }
+//   if (value == '0') {
+//     document.getElementById('form_registro_venta_fisica').hidden = false
+//     document.getElementById('form_registro_venta_juridica').hidden = true
+//   }else{
+//     document.getElementById('form_registro_venta_fisica').hidden = true
+//     document.getElementById('form_registro_venta_juridica').hidden = false
+//   }
 
-});
+// });
 
 
-function confirm_client() {
-  let nombre = $("#nombre_c").val()
-  let ap = $("#ap_c").val()
+// function confirm_client() {
+//   let nombre = $("#nombre_c").val()
+//   let ap = $("#ap_c").val()
 
-  if (nombre == "" || ap == "") {
-    M.toast({html: 'Debe ingresar datos válidos.'})
-    return false;
-  }
-  $("#detalle_venta").removeAttr('hidden')
-}
+//   if (nombre == "" || ap == "") {
+//     M.toast({html: 'Debe ingresar datos válidos.'})
+//     return false;
+//   }
+//   $("#detalle_venta").removeAttr('hidden')
+// }
 
 var total = 0;
-var mensaje = $("#mensaje");
-mensaje.hide();
+// var mensaje = $("#mensaje");
+// mensaje.hide();
 $( "#regresar" ).click(function() {
   $("#cuerpo").load("templates/ventas/ventas.php");
 });
 
-$('#tabla_platos').dataTable({
-  bInfo: false,
-  "lengthMenu": [[5, 10], [5, 10]],
-  "order": [[ 0, "desc" ]],
-  "language": {
-    "lengthMenu": "_MENU_ Mostrar",
-    "zeroRecords": "Lo siento, no se encontraron datos",
-    "info": "Página _PAGE_ de _PAGES_",
-    "infoEmpty": "No hay datos disponibles",
-    "infoFiltered": "(filtrado de _MAX_ resultados)",
-    "paginate": {
-      "next": "Siguiente",
-      "previous": "Anterior"
-    }
-  }
-});
-$('#tabla_bebidas').dataTable({
-  bInfo: false,
-  "lengthMenu": [[5, 10], [5, 10]],
-  "order": [[ 0, "desc" ]],
-    "language": {
-    "lengthMenu": "_MENU_ Mostrar",
-    "zeroRecords": "Lo siento, no se encontraron datos",
-    "info": "Página _PAGE_ de _PAGES_",
-    "infoEmpty": "No hay datos disponibles",
-    "infoFiltered": "(filtrado de _MAX_ resultados)",
-    "paginate": {
-      "next": "Siguiente",
-      "previous": "Anterior"
-    }
-  }
-});
+// $('#tabla_platos').dataTable({
+//   bInfo: false,
+//   "lengthMenu": [[5, 10], [5, 10]],
+//   "order": [[ 0, "desc" ]],
+//   "language": {
+//     "lengthMenu": "_MENU_ Mostrar",
+//     "zeroRecords": "Lo siento, no se encontraron datos",
+//     "info": "Página _PAGE_ de _PAGES_",
+//     "infoEmpty": "No hay datos disponibles",
+//     "infoFiltered": "(filtrado de _MAX_ resultados)",
+//     "paginate": {
+//       "next": "Siguiente",
+//       "previous": "Anterior"
+//     }
+//   }
+// });
+// $('#tabla_bebidas').dataTable({
+//   bInfo: false,
+//   "lengthMenu": [[5, 10], [5, 10]],
+//   "order": [[ 0, "desc" ]],
+//     "language": {
+//     "lengthMenu": "_MENU_ Mostrar",
+//     "zeroRecords": "Lo siento, no se encontraron datos",
+//     "info": "Página _PAGE_ de _PAGES_",
+//     "infoEmpty": "No hay datos disponibles",
+//     "infoFiltered": "(filtrado de _MAX_ resultados)",
+//     "paginate": {
+//       "next": "Siguiente",
+//       "previous": "Anterior"
+//     }
+//   }
+// });
 
 var reg_pedidos = new Array();
 document.getElementById('form_agregar_producto').addEventListener('submit', function(e){
   e.preventDefault();
   var formulario = document.getElementById("form_agregar_producto");
   formData = new FormData(formulario)
-
+  console.log(parseFloat(formData.get('precio_producto')));
+  if(parseFloat(formData.get('precio_producto')) < 1){
+    return M.toast({html: 'Por favor, ingrese un precio válido.'})
+  }
   // return console.log(formData.get('stock_producto'));
 
   let json_productos = {
@@ -456,6 +463,7 @@ document.getElementById('form_agregar_producto').addEventListener('submit', func
       total  = parseFloat(total) + parseFloat(subtotal);
     });
     document.getElementById('total_ped').innerHTML = total+" Bs.";
+    document.getElementById('subtotal').value = total;
     formulario.reset();
     document.getElementById('__cantidad').value = 1;
   })
@@ -485,7 +493,7 @@ function agregar_fila_plato() {
         else{
       if (parseInt(cantp) < 1 || cantp == "") { M.toast({html: "Ingresa una cantidad válida."}); }
       else{
-        pp = parseInt(pp)*parseInt(cantp);
+        pp = parseFloat(pp)*parseInt(cantp);
         
         reg_pedidos[cp] = [cp, np, cantp, pp];
         //borrando tabla
@@ -546,31 +554,32 @@ function agregar_fila_plato() {
     // let apc = $("#ap_c").val();
     // let totped = $("#tot_ped").val();
     // let telf = $("#telf").val();
-    let value = $('input[name="rad_client"]:checked').val();
+    // let value = $('input[name="rad_client"]:checked').val(); // para venta juridica
 
     let datos_cli = "";
     if ($('#datos_cliente').is(":checked")) {
-      if (value == '0') {
+      // if (value == '0') {
         let reg_cedula = $("#reg_cedula").val()
         let reg_nombres = $("#reg_nombres").val();
-        let reg_apellidos = $("#reg_apellidos").val();
+        let reg_apellido_p = $("#reg_apellido_p").val();
+        let reg_apellido_m = $("#reg_apellido_m").val();
         let telf = $("#f_reg_telf").val();
-        datos_cli = "&ci="+reg_cedula+"&nombre="+reg_nombres+"&apellidos="+reg_apellidos+"&telf="+telf+"&value="+value;
+        datos_cli = "&ci="+reg_cedula+"&nombre="+reg_nombres+"&apellido_p="+reg_apellido_p+"&apellido_m="+reg_apellido_m+"&telf="+telf;
         // console.log(reg_cedula, reg_nombres, reg_apellidos)
-        if (reg_cedula.length < 6 || reg_nombres.length < 5 || reg_apellidos < 5) {
+        if (reg_cedula.length < 6 || reg_nombres.length < 3 || reg_apellido_p < 3) {
           return M.toast({html: 'Ingrese datos válidos.'})
         }
-      }
-      else{
-        let reg_nit = $("#reg_nit").val()
-        let reg_razon = $("#reg_razon").val();
-        let telf = $("#j_reg_nit").val();
-        datos_cli = "&ci="+reg_nit+"&nombre="+reg_razon+"&telf="+telf+"&value="+value;
-        console.log(reg_nit, reg_razon)
-        if (reg_cedula.length < 9 || reg_razon.length < 4 ) {
-          return M.toast({html: 'Ingrese datos válidos.'})
-        }
-      }
+      // }
+      // else{
+        // let reg_nit = $("#reg_nit").val()
+        // let reg_razon = $("#reg_razon").val();
+        // let telf = $("#j_reg_nit").val();
+        // datos_cli = "&ci="+reg_nit+"&nombre="+reg_razon+"&telf="+telf+"&value="+value;
+        // console.log(reg_nit, reg_razon)
+        // if (reg_cedula.length < 9 || reg_razon.length < 4 ) {
+        //   return M.toast({html: 'Ingrese datos válidos.'})
+        // }
+      // }
     }
     let bdtotal = total
 
@@ -580,6 +589,7 @@ function agregar_fila_plato() {
     let json_detalle = reg_pedidos.filter(Boolean)
     json_detalle = JSON.stringify(json_detalle)
 
+    // return console.log(json_detalle);
     // console.log(JSON.parse(json_detalle).length)
 
     // cont = 0;
@@ -592,25 +602,21 @@ function agregar_fila_plato() {
       // misdatos="ci_cliente="+cic+"&nombre_cliente="+nombrec+"&ap_cliente="+apc+"&telf="+telf+"&tot_ped="+totped+x+y+"&cont="+cont;
 
       let subtotal = $("#subtotal").val()
-      $.ajax({
-        url: "recursos/ventas/agregar_venta.php?subtotal="+subtotal+"&json="+json_detalle+datos_cli,
-        method: "GET",
-        success: function(response) {
-          // mensaje.html(response)
-            // console.log(response)
-            if(!response.includes('error')){
-              M.toast({html: "Venta Realizada!"});
-              console.log(response)
-              obtenerElem(response);
-              // $("#cuerpo").load("templates/ventas/ventas.php");
-            }else{
-              console.log(response);
-            }
-        },
-        error: function(error) {
-            console.log(error)
-        }
+      // return console.log(subtotal+"<<<");
+      fetch("recursos/ventas/agregar_venta.php?subtotal="+subtotal+"&json="+json_detalle+datos_cli)
+      .then(response => response.text())
+      .then(data => {
+        // console.log(data);
+        // if(!data.includes('error')){
+          M.toast({html: "Venta Realizada!"});
+          // console.log(data)
+          obtenerElem(data);
+          // $("#cuerpo").load("templates/ventas/ventas.php");
+        // }else{
+          // console.log(data);
+        // }
       })
+
     }else{
       M.toast({html: "No se ha seleccionado ningún producto..."});
     }
@@ -620,30 +626,26 @@ function agregar_fila_plato() {
 function obtenerElem(cod){
 
   var datos_venta = "";
-  var data = {codx: cod}
-  $.ajax({
-    url: "recursos/ventas/datos_fyc.php",
-    data: data,
-    method: "post",
-    success: function(response){
-      response = JSON.parse(response)
-      // console.log(response.Codv, response.idcli, response.Total, response.Nombre, response.Apellidos);
-      imprimirElemento(response);
-    },
-    error: function(error, data, response){
-      console.log(error)
-    }
-  });
-
+  // var data = {codx: cod}
+  fetch("recursos/ventas/datos_fyc.php?codx="+cod)
+  .then(response => response.json())
+  .then(data => {
+    // console.log(data);
+    // response = JSON.parse(response)
+    // console.log(response.Codv, response.idcli, response.Total, response.Nombre, response.Apellidos);
+    imprimirElemento(data); 
+  })
 }
 function imprimirElemento(response){
 
 // var data_fac = response.split(",")
-var cod = response.Codv;
-var ci = response.Ci;
-var nombres = response.Nombre+" "+response.Apellidos
-var usuario = "<?php echo $_SESSION['Nombre'] ; echo ' '.$_SESSION['Apellidos']; ?>"
-var total = response.Total
+var cod = response.cod_venta;
+var ci = response.ci_cliente;
+var nombres = response.nombre_cliente+" "+response.apellidos
+var usuario = "<?php echo $_SESSION['Nombre'].' '.$_SESSION['Apellidos']; ?>"
+var total = response.total_venta
+
+// return console.log(nombres, total, usuario);
 
 var date = new Date();
 
@@ -652,82 +654,96 @@ var hora = ("0"+(date.getHours())).slice(-2)+":"+("0"+(date.getMinutes())).slice
 
 // NUMEROS A LETRAS
 var monto = numeroALetras(total, {
-plural: 'BS.',
-singular: 'BS.',
-centPlural: 'CTVS.',
-centSingular: 'CTVS.'
+  plural: 'BS.',
+  singular: 'BS.',
+  centPlural: 'CTVS.',
+  centSingular: 'CTVS.'
 });
 "<?php foreach($fila3 as $a  => $valor){ ?>"
-var aut = "<?php echo $valor['aut']; ?>"
-var llave = "<?php echo $valor['llave']; ?>"
-var nit = "<?php echo $valor['nit']; ?>"
-var fecha_lim = "<?php echo $valor['fecha_lim']; ?>"
+  var aut = "<?php echo $valor['aut']; ?>"
+  var llave = "<?php echo $valor['llave']; ?>"
+  var nit = "<?php echo $valor['nit']; ?>"
+  var fecha_lim = "<?php echo $valor['fecha_lim']; ?>"
 "<?php } ?>"
 
 
 
 var filas = "";
 
-var data = {codxv: cod}
-$.ajax({
-  url: "recursos/ventas/filas_fac_ven.php",
-  data: data,
-  method: "post",
-  success: function(response){
-    console.log(response)
-    filas = response;
-    //ENVIO CON AJAX --
-    var data = {autx: aut, llavex: llave, nitx: nit, cix: ci, fechax: (fecha.split("-").reverse().join("-")), montox: total, codped: cod, horax: hora}
-
-    $.ajax({
-      url: "recursos/ventas/datos_fac_ven.php",
-      data: data,
-      method: "post",
-      success: function(response){
-        console.log(response)
-        crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, response, fecha_lim, usuario);
-      },
-      error: function(error, data, response){
-        console.log(error)
-      }
-    });
-
-  },
-  error: function(error, data, response){
-    console.log(error)
+// var data = {codxv: cod}
+fetch("recursos/ventas/filas_fac_ven.php?codxv="+cod)
+.then(response => response.text())
+.then(data => {
+  // console.log(data);
+  filas = data;
+  var data_arr = {
+    autx: aut, 
+    llavex: llave, 
+    nitx: nit, 
+    cix: ci, 
+    fechax: (fecha.split("-").reverse().join("-")), 
+    montox: total, 
+    codped: cod, 
+    horax: hora
   }
-});
+  data_arr = JSON.stringify(data_arr)
+  fetch("recursos/ventas/datos_fac_ven.php?data_arr="+data_arr)
+  .then(response => response.text())
+  .then(data => {
+    // console.log(data);
+    crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, data, fecha_lim, usuario);
+  })
+})
+
+// $.ajax({
+//   url: "recursos/ventas/filas_fac_ven.php",
+//   data: data,
+//   method: "post",
+//   success: function(response){
+//     console.log(response)
+//     filas = response;
+//     //ENVIO CON AJAX --
+//     var data = {autx: aut, llavex: llave, nitx: nit, cix: ci, fechax: (fecha.split("-").reverse().join("-")), montox: total, codped: cod, horax: hora}
+
+//     $.ajax({
+//       url: "recursos/ventas/datos_fac_ven.php",
+//       data: data,
+//       method: "post",
+//       success: function(response){
+//         console.log(response)
+//         crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, response, fecha_lim, usuario);
+//       },
+//       error: function(error, data, response){
+//         console.log(error)
+//       }
+//     });
+
+//   },
+//   error: function(error, data, response){
+//     console.log(error)
+//   }
+// });
 //FIN ENVIO AJAX
 
 }
 // let qrcod = "";
 function crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, cod_control, fecha_lim, usuario) {
 
- var cad = cod_control.split(",");
+  var cad = cod_control.split(",");
 
-let cntdo = nit+"|"+cad[1]+"|"+aut+"|"+fecha+"|"+total+"|"+cad[0]+"|"+ci+"|"+"0"
-var data = {numfac: cad[1], contenido: cntdo }
-$.ajax({
-  url: "recursos/ventas/obtener_codigo.php",
-  data: data,
-  method: "post",
-  success: function(response){
-    console.log(response)
-    crear_html(nit, cad[1], aut, fecha, hora, ci, nombres, filas, total, monto, cad[0], fecha_lim, usuario, response );
+  let cntdo = nit+"|"+cad[1]+"|"+aut+"|"+fecha+"|"+total+"|"+cad[0]+"|"+ci+"|"+"0"
+  // var data = {numfac: cad[1], contenido: cntdo }
+  fetch("recursos/ventas/obtener_codigo.php?contenido="+cntdo+"&numfac="+cad[1])
+  .then(response => response.text())
+  .then(data => {
+    // console.log(data);
+    crear_html(nit, cad[1], aut, fecha, hora, ci, nombres, filas, total, monto, cad[0], fecha_lim, usuario, data );
 
-  },
-  error: function(error){
-    console.log(error)
-  }
-});
-
+  })
 }
 
 
 function crear_html(nit, numfac, aut, fecha, hora, ci, nombres, filas, total, monto, codctrl, fecha_lim, usuario, qrcod  ) {
-
-
-
 
 var miHtml = `
 <!DOCTYPE html>
@@ -745,7 +761,7 @@ var miHtml = `
   </style>
   <body>
   
-    <center>Restaurante de comida rápida Delicias Express.</center>
+    <center>Repostería KRUSMARY.</center>
     <center>B. IV Centenario, Calle Zamora. #423</center>
     <center>Telf.: 76191403 </center>
     <center>TARIJA - BOLIVIA</center>
@@ -773,7 +789,7 @@ var miHtml = `
     Son: ${monto}
     <center>----------------------------------------</center>
     Código de Control: ${codctrl}<br>
-    Fecha Límite de emisión: ${(fecha_lim.split("-").reverse().join("-"))}<br>
+    <small>Fecha Límite de emisión: ${(fecha_lim)}</small><br>
     Usuario: ${usuario}
     <div> <center><img src="${qrcod}" alt="" height="120px" /></center></div>
     <center><p>ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS. EL USO ILÍCITO DE ESTA SERÁ SANCIONADO DE ACUERDO A LEY</p></center>
@@ -782,7 +798,7 @@ var miHtml = `
   </body>
 </html> `;
 
-
+$("#modal-cliente").modal('close');
 $("#cuerpo").load("templates/ventas/nueva_venta.php");
 
 var pdf = new jsPDF('p', 'pt', 'letter');
@@ -810,7 +826,7 @@ margins = {
 
   function (dispose) {
 
-      pdf.save("fac_"+numfac+'.pdf');
+      // pdf.save("fac_"+numfac+'.pdf');
   }, margins
 );
 

@@ -1,7 +1,7 @@
  <?php
 require('../../recursos/conexion.php');
 session_start();
-$Sql = "SELECT a.cod_venta, c.nombre_usuario, a.cod_usuario, b.ci_cliente, a.cod_cliente, a.fecha_venta, a.total_venta, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1"; 
+$Sql = "SELECT a.cod_venta, c.nombre_usuario, a.cod_usuario, b.ci_cliente, a.cod_cliente, a.fecha_venta, a.total_venta, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',(SELECT IFNULL(b.ap_materno_cliente, ''))) AS apellidos FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1"; 
 $Busq = $conexion->query($Sql); 
 $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 
@@ -65,9 +65,9 @@ overflow-x: hidden;*/
         <td align="center"><?php echo $valor["nombre_cliente"]." ".$valor["apellidos"] ?></td>
         <td align="center"><?php echo $valor["total_venta"] ?> Bs.</td>
         <td align="center"><?php echo date('d-m-Y', strtotime($valor['fecha_venta'])) ?></td>
-        <td align="center">
-          <a href="#!" onclick="eliminar_venta('<?php echo $valor['codv'] ?>')" class="btn-floating"><i class="material-icons">delete</i></a>
-          <a href="#" class="btn-floating" onclick="ver_ped('<?php echo $valor['codv'] ?>','<?php echo $valor["cliente"] ?>','<?php echo $valor["cicli"] ?>','<?php echo $valor['nombrecli'] ?>', '<?php echo $valor['apcli'] ?>');"><i class="material-icons">search</i></a>
+        <td align="center"> 
+          <a href="#!" onclick="eliminar_venta('<?php echo $valor['cod_venta'] ?>')" class="btn-floating"><i class="material-icons">delete</i></a>
+          <a href="#" class="btn-floating" onclick="ver_ped('<?php echo $valor['cod_venta'] ?>','<?php echo $valor['cod_cliente'] ?>','<?php echo $valor['ci_cliente'] ?>','<?php echo $valor['nombre_cliente'] ?>', '<?php echo $valor['apellidos'] ?>');"><i class="material-icons">search</i></a>
         </td>
      </tr>
      <?php } ?>	
@@ -196,15 +196,7 @@ function ver_ped(cod, idcli, cicli, nombrecli, apcli) {
   var table = $("#tab_det")[0];
   total =  0;
   //llenando tabla
-  "<?php foreach($fila2 as $a  => $valor){ ?>";
-  if(cod == "<?php echo $valor['cod'] ?>"){
-  var row = table.insertRow(1);
-  row.insertCell(0).innerHTML = "<?php echo $valor['precio'] ?>";
-  row.insertCell(0).innerHTML = "<?php echo $valor['cant'] ?>";
-  row.insertCell(0).innerHTML = "<?php echo $valor['nombre'] ?>";
-  total  = parseInt(total) + (parseInt("<?php echo $valor['precio'] ?>")*(parseInt("<?php echo $valor['cant'] ?>")));
-  }
-  "<?php } ?>";
+  
   $("#total_ped").html("Total: "+total +" Bs.");
   $("#modal2").modal('open');
 }

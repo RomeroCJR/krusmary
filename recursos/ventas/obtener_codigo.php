@@ -2,8 +2,8 @@
 require('../factura/phpqrcode/qrlib.php');
 
 
-$numfac = $_POST['numfac'];
-$cntdo = $_POST['contenido'];
+$numfac = $_GET['numfac'];
+$cntdo = $_GET['contenido'];
 
 // die($numfac."--".$cntdo);
 

@@ -305,7 +305,7 @@ $Busq = $conexion->query($Sql);
 
     //Funcion para validación de solo números.
     function checkIt(evt) {
-      console.log(evt.keyCode)
+      // console.log(evt.keyCode)
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       

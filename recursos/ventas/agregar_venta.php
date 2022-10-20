@@ -3,8 +3,10 @@
 require('../conexion.php');
 require('../sesiones.php');
 session_start();
+date_default_timezone_set("America/La_Paz");
+$fecha = date("Y-m-d H:i:s");
 
-$ciusu = $_SESSION['Ci_Usuario'];
+$cod_usuario = $_SESSION['Cod_usuario'];
 $total = $_GET['subtotal'];
 $json = json_decode($_GET['json']);
 
@@ -12,15 +14,16 @@ $json = json_decode($_GET['json']);
 
 $ci = $_GET['ci']; //DEBE UTULIZARSE EL ID NO EL CI
 $nombre = $_GET['nombre'];
-$apellidos = $_GET['apellidos'];
+$apellido_p = $_GET['apellido_p'];
+$apellido_m = $_GET['apellido_m'];
 $telf = $_GET['telf'];
 // $razon = $_GET['razon'];
-$val = $_GET['value'];
+// $val = $_GET['value'];
 
 // die(empty($_GET['ci']).'--'.empty($nombre).'--'.empty($apellidos));
-if ($val == '1') {
-	$apellidos = " ";
-}
+// if ($val == '1') {
+// 	$apellidos = " ";
+// }
 
 
 $id = 1;
@@ -30,14 +33,14 @@ if(!empty($_GET['ci'])){
 	// $rows = mysqli_num_rows($result);
 	if (!empty($result) AND mysqli_num_rows($result) < 1) {
 		$insertar_cli = $conexion->query("INSERT INTO cliente (Ci, Nombre, Apellidos, Telefono, tipo) VALUES (".$ci.", '".$nombre."', '".$apellidos."', '".$telf."',".$val.")");
-		if ($insertar_cli == 1) {+
+		if ($insertar_cli) {
 			$id = mysqli_insert_id($conexion);
 		}else{
 			die(mysqli_error($conexion));
 		}
 	}else{
 		$update = $conexion->query('UPDATE cliente SET Nombre = "'.$nombre.'", Apellidos = "'.$apellidos.'", Telefono = "'.$telf.'", tipo = '.$val.' WHERE Ci = '.$ci);
-		if ($update == 1) {
+		if ($update) {
 			$res = $conexion->query("SELECT id FROM cliente WHERE Ci = ".$ci);
 			$res = mysqli_fetch_assoc($res);
 			$id = $res['id'];
@@ -66,7 +69,7 @@ if(!empty($_GET['ci'])){
 // }
 
 //DEBE UTILIZARSE EL ID PARA LA INSERCION NO EL CI...
-$consulta = "INSERT INTO venta(Ciusu, idcli, Total) VALUES(".$ciusu.", ".$id.", ".$total.")";
+$consulta = "INSERT INTO venta(cod_usuario, cod_cliente, fecha_venta, total_venta) VALUES(".$cod_usuario.", ".$id.", '".$fecha."', ".$total.")";
 	if(mysqli_query($conexion, $consulta)){
 
 		// $cOC = "SELECT MAX(Codv) as codv FROM venta WHERE Cicli = '".$ci."' AND Estado = 1";
@@ -77,15 +80,17 @@ $consulta = "INSERT INTO venta(Ciusu, idcli, Total) VALUES(".$ciusu.", ".$id.", 
 		// 	$cDV = "INSERT INTO det_plato (Codpla, Codv, Cantidad, Precio) VALUES (".$_POST[$v].", ".$roc['codv'].", ".$_POST[$v.'c'].", (SELECT Precio FROM plato WHERE Codpla = ".$_POST[$v]."))";
 		// 	if(!(mysqli_query($conexion, $cDV))) {die($_POST[$v]."--".$roc['codv']."--".$_POST[$v.'c']);}
 		// }
-
+		//(SELECT precio_producto FROM producto WHERE cod_producto = ".$value[0].") <-- ESTO ERA PRECIO PRODUCTO EN LA SIGUIENTE LINEA
 		foreach ($json as $key => $value) {
-			$consulta_detven = "INSERT INTO det_plato (Codpla, Codv, Cantidad, Precio) VALUES (".$value[0].", ".$lastid.", ".$value[2].", (SELECT Precio FROM plato WHERE Codpla = ".$value[0]."))";
-			if(!(mysqli_query($conexion, $consulta_detven))) {die('<script>M.toast({html: "Error en consulta inserción detalle pedido"});</script>');}
+			$consulta_detven = "INSERT INTO detalle_venta (cod_producto, cod_venta, cant_producto, precio_det_venta) VALUES (".$value[0].", ".$lastid.", ".$value[2].", ".$value[3].")";
+			if(!(mysqli_query($conexion, $consulta_detven))) {
+				die(mysqli_error($conexion));
+			}
 		}
 
 		die($lastid.'');
 	} else {
-		die('error');
+		die(mysqli_error($conexion));
 	}
 
 
