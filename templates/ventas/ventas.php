@@ -49,7 +49,7 @@ overflow-x: hidden;*/
  <table id="tabla1" class="highlight content-table">
   <thead>
      <tr>
-        <th>Código de venta</th>
+        <th width="15%">Código de venta</th>
         <th>Usuario</th>
         <th>Cliente</th>
         <th>Total</th>
@@ -80,12 +80,12 @@ overflow-x: hidden;*/
 <div id="modal2" class="modal">
   <input type="text" id="cod_ven" hidden>
   <div class="modal-content">
-    <h4 class="center"><b>Ver venta</b></h4>
-    <p id="__ci"></p>
-    <p id="__cli"></p>
+    <h4 class="center roboto">Detalle de venta</h4>
+    <p id="__ci" class="rubik"></p>
+    <p id="__cli" class="rubik"></p>
     <!-- <h5><p id="__telf"></p></h5> -->
     
-    <table id="tab_det" >
+    <table id="tab_det" class="rubik">
       <tr>
         <th>Nombre</th>
         <th>Cantidad</th>
@@ -97,7 +97,7 @@ overflow-x: hidden;*/
         <td>3</td>
       </tr>
     </table><br>  
-    <div class="container"><b><span id="total_ped" class="right"></span></b></div>
+    <div class="container rubik"><b><span id="total_ped" class="right"></span></b></div>
   </div>
 
   <div class="modal-footer">
@@ -166,69 +166,84 @@ function eliminar_venta(id) {
   $("#id_ped").val(id);
   $("#modal_elim").modal('open');
 }
-$("#elimped").click(function (argument) {
-  let id = $("#id_ped").val();
-  $.ajax({
-    url: "recursos/ventas/eliminar_venta.php?id="+id,
-    method: "get",
-    success: function(response){
-      console.log(response)
-      if (response == '1') {
-        M.toast({html: 'La venta y su detalle ha sido eliminada.'})
-        $("#modal_elim").modal('close')
-        $("#cuerpo").load("templates/ventas/ventas.php");
-      }
-    },
-    error: function(error, data, response){
-      console.log(error)
+document.getElementById('elimped').addEventListener('click', function (e) {
+  let id = document.getElementById('id_ped').value;
+  fetch("recursos/ventas/eliminar_venta.php?id="+id)
+  .then(response => response.text())
+  .then(data => {
+    console.log(data)
+    if (data == '1') {
+      M.toast({html: 'La venta y su detalle han sido eliminados.'})
+      $("#modal_elim").modal('close')
+      $("#cuerpo").load("templates/ventas/ventas.php");
     }
-  });
+  })
+
 })
 
 function ver_ped(cod, idcli, cicli, nombrecli, apcli) {
 
-  $("#cod_ven").val(cod);
+  document.getElementById('cod_ven').value = cod;
   $("#__ci").html("<b>Cédula: </b>"+cicli);
   $("#__cli").html("<b>Cliente: </b>"+nombrecli+" "+apcli);
 
 
+  
   $('#tab_det tr:not(:first-child)').slice(0).remove();
   var table = $("#tab_det")[0];
+
   total =  0;
   //llenando tabla
+  fetch("recursos/ventas/get_detalle.php?cod_venta="+cod)
+  .then(response => response.json())
+  .then(data => {
+    // console.log(data);
+    data.forEach(element => {
+      var row = table.insertRow(-1);
+      row.insertCell(0).innerHTML = element.nombre_producto;
+      row.insertCell(1).innerHTML = element.cant_producto;
+      row.insertCell(2).innerHTML = element.precio_det_venta;
+      
+      total  = parseInt(total) + (parseInt(element.precio_det_venta)*(parseInt(element.cant_producto)));
+    });
+    $("#total_ped").html("Total: "+total +" Bs.");
+    $("#modal2").modal('open');
+  })
+
+
+
   
-  $("#total_ped").html("Total: "+total +" Bs.");
-  $("#modal2").modal('open');
 }
 
 
 function crear_html() {
 // nit, numfac, aut, fecha, hora, ci, nombres, filas, total, monto, codctrl, fecha_lim, usuario, qrcod 
 let cod = $("#cod_ven").val();
-let nit = '<?php echo $res[0][5]?>'
+let nit = '<?php echo $res[0][7]?>'
 let aut = '<?php echo $res[0][1]?>'
 let llave = '<?php echo $res[0][4]?>'
 let fecha_lim = '<?php echo $res[0][3]?>'
 var usuario = "<?php echo $_SESSION['Nombre']; echo ' '.$_SESSION['Apellidos']; ?>"
 
+// return console.log(cod, nit, aut, llave, fecha_lim, usuario);
 
 let numfac; let ci; let nombres; let fecha; let hora; let total; let codctrl; let qrcod; let monto; var miHtml; let filas;
 
-  $.ajax({
-    url: "recursos/ventas/get_fac_data.php?cod="+cod,
-    method: "GET",
-    success: function(response) {
-      // console.log(response)
-      response = JSON.parse(response)
+  fetch("recursos/ventas/get_fac_data.php?cod="+cod)
+  .then(response => response.text())
+  .then(data => {
+// console.log(response)
+    // return console.log(data);
+      data = JSON.parse(data)
       // console.log(response[0])
-      numfac = response[0];
+      numfac = data[0];
       qrcod = numfac+".png";
-      ci = response[1];
-      nombres = response[2];
-      fecha = response[3];
-      total = response[5];
-      hora = response[4];
-      filas = response[6];
+      ci = data[1];
+      nombres = data[2];
+      fecha = data[3];
+      total = data[5];
+      hora = data[4];
+      filas = data[6];
       //NUMEROS A LETRAS
       monto = numeroALetras(total, {
         plural: 'BS.',
@@ -307,11 +322,7 @@ let numfac; let ci; let nombres; let fecha; let hora; let total; let codctrl; le
           $("#modal3").modal('open')
         }
       })
-    },
   })
-
-
-
 
 
 }
