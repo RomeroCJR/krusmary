@@ -147,8 +147,8 @@ $Busq = $conexion->query($Sql);
 			<a href="#" id="menu" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 			<a href="#" id="titulo" class="brand-logo center fuente">Repostería Krusmary </a>
 			<ul class="right hide-on-med-and-down">
-          <li><?php echo $estado; ?></li>
-          <li><?php echo $salir; ?></li>
+          <li style="margin-right:5px;"><?php echo $estado; ?></li>
+
         </ul>
 		</div>
 	</nav>
@@ -188,7 +188,7 @@ $Busq = $conexion->query($Sql);
             </li>
         </ul>
 		    <!-- <li><a class="subheader"></a></li> -->
-		    <li><a class="waves-effect" href="recursos/catalogos/salir.php"><i class="material-icons">logout</i>Cerrar sesión</a></li>
+		    <li><a class="waves-effect" href="recursos/salir.php"><i class="material-icons">logout</i>Cerrar sesión</a></li>
         <li>
           <a href="#modal_gasto" class="waves-effect waves-light btn modal-trigger light-blue darken-1"><i class=""><img width="50px" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/000000/external-money-finance-kiranshastry-lineal-kiranshastry-3.png"/></i>Nuevo gasto</a>
         </li>

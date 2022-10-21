@@ -16,40 +16,62 @@
 		</script> -->
 		<title>Acceso al sistema</title>
 	</head>
-	<body>
-		<style>
-			.fuente{
-				font-family: 'Segoe UI Light';
-				color: black;
-			}
+	<style>
+		body {
+			background-image: url('images/fondo1.png');
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-size: cover;
+		}
+		.fuente{
+			font-family: 'Segoe UI Light';
+			color: black;
+		}
+		
+		* {
+			box-sizing: border-box;
+		}
+		body {
+			margin: 0;
+			background-color: aqua;
+			color: black;
+			font-family: 'Segoe UI Light';
+		}
+		
+		
+		@media (min-width: 480px) {
+		}
+		@media (min-width: 768px) {
 			
-			* {
-				box-sizing: border-box;
-			}
 			body {
-				margin: 0;
-				background-color: aqua;
-				color: black;
-				font-family: 'Segoe UI Light';
+				font-size: 35px;
 			}
+		}
+		@media (min-width: 1024px) {
 			
+			body {
+				font-size: 17px;
+			}
+		}
+		.ingreso{
+			/* opacity:0.5; */
 			
-			@media (min-width: 480px) {
-			}
-			@media (min-width: 768px) {
-				
-				body {
-					font-size: 35px;
-				}
-			}
-			@media (min-width: 1024px) {
-				
-				body {
-					font-size: 17px;
-				}
-			}
-			input:focus { font-size: 30px !important;}
-		</style>
+			position: absolute;
+			/* left: 50%; */
+			top: 50%;
+
+		}
+		.row-form{
+			
+			/* display:flex; */
+			/* justify-content: center; */
+			/* align-items: center; */
+			margin-top:10%;
+		}
+		input:focus { font-size: 30px !important;}
+	</style>
+	<body>
+		
 
 		<!-- Modal Structure -->
 		<div class="row">
@@ -57,14 +79,14 @@
 				<div id="mensaje" class="modal-content">
 					
 				</div>
-				<div class="modal-footer row">
+				<!-- <div class="modal-footer row"> -->
 					<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
 				</div>
 			</div>
 		</div>
 		<!-- Modal Structure -->
-		<div class="row">
-			<div id="modal_ingreso"  class="col m10 offset-m1 s8 offset-s2 l4 offset-l4 white">
+		<div class="row row-form " >
+			<div id="ingreso"  class="col s10 offset-s1  m4 offset-m1 white">
 				<div class="formulario-acceso">
 					<div class="row">
 						<div class="col s10 offset-s1">
@@ -90,7 +112,7 @@
 							<div class="row">
 								<div class="input-field col s9 offset-s1">
 									<button class="btn waves-effect waves-light right" type="submit" name="acceso">Ingresar
-									<i class="material-icons right">send</i></button>
+									<i class="material-icons right">lock</i></button>
 								</div>
 							</div>
 							
@@ -103,7 +125,7 @@
 
 	<script>
 	$(document).ready(function() {
-		$('#mod_ingreso').leanModal();
+		// $('#mod_ingreso').leanModal();
 	});
 		function checkIt(evt) {
 			evt = (evt) ? evt : window.event;
