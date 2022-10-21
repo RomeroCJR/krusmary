@@ -765,10 +765,10 @@ var miHtml = `
   </style>
   <body>
   
-    <center>Repostería KRUSMARY.</center>
-    <center>B. IV Centenario, Calle Zamora. #423</center>
-    <center>Telf.: 76191403 </center>
-    <center>TARIJA - BOLIVIA</center>
+    <center>Repostería "KRUS-MARY".</center>
+    <center>Calle Independencia esq Cochabamba #395</center>
+    <center>Telf.: 71819635-67673738 </center>
+    <center>VILLAZON - BOLIVIA</center>
     <center>FACTURA</center>
     <center>----------------------------------------</center>
     <span style="float: left">NIT: ${nit}</span><span style="float: right">Factura N° ${numfac}</span><br>

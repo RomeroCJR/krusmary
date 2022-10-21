@@ -274,10 +274,10 @@ let numfac; let ci; let nombres; let fecha; let hora; let total; let codctrl; le
             </style>
             <body>
             
-              <center>Restaurante de comida rápida Delicias Express.</center>
-              <center>B. IV Centenario, Calle Zamora. #423</center>
-              <center>Telf.: 76191403 </center>
-              <center>TARIJA - BOLIVIA</center>
+              <center>Reposteria "KRUS-MARY"</center>
+              <center>Calle Independencia esq. Cochabamba. #395</center>
+              <center>Telf.: 7189635-67673738 </center>
+              <center>VILLAZON - BOLIVIA</center>
               <center>FACTURA</center>
               <center>----------------------------------------</center>
               <span style="float: left">NIT: ${nit}</span><span style="float: right">Factura N° ${numfac}</span><br>
