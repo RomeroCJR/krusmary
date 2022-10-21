@@ -412,7 +412,7 @@ document.getElementById('form_agregar_producto').addEventListener('submit', func
   e.preventDefault();
   var formulario = document.getElementById("form_agregar_producto");
   formData = new FormData(formulario)
-  console.log(parseFloat(formData.get('precio_producto')));
+  // console.log(parseFloat(formData.get('precio_producto')));
   if(parseFloat(formData.get('precio_producto')) < 1){
     return M.toast({html: 'Por favor, ingrese un precio válido.'})
   }
@@ -435,7 +435,8 @@ document.getElementById('form_agregar_producto').addEventListener('submit', func
   .then(response => response.text())
   .then(data => {
     let disp = parseInt(json_productos.stock_producto) - parseInt(data)
-    if (parseInt(json_productos.stock_producto) < parseInt(data)) {
+    // console.log('stock actual: '+json_productos.stock_producto+' cantidad vendidos hoy: '+data+ ' cantidad disponible: '+disp+ 'cantidad pedida por cliente: '+json_productos.cantidad_producto);
+    if (parseInt(json_productos.cantidad_producto) > disp) {
       return M.toast({html: "Cantidad solicitada insuficiente en stock, "+disp+" disponible."})
     }else{
       M.toast({html: "Agregado al detalle de venta."})
@@ -446,7 +447,7 @@ document.getElementById('form_agregar_producto').addEventListener('submit', func
 
     reg_pedidos[json_productos.cod_producto] = [json_productos.cod_producto, json_productos.nombre_producto, json_productos.cantidad_producto, json_productos.precio_producto];
     //reg_pedidos[codigo] = [codigo, nombre, cantidad, precio]
-    console.log(reg_pedidos);
+    // console.log(reg_pedidos);
     
     $('#ventas_agregadas tbody tr').empty();
     var table = $("#ventas_agregadas")[0];
@@ -557,7 +558,9 @@ function agregar_fila_plato() {
     // let value = $('input[name="rad_client"]:checked').val(); // para venta juridica
 
     let datos_cli = "";
+    let sw = 0;
     if ($('#datos_cliente').is(":checked")) {
+        sw = 1;
       // if (value == '0') {
         let reg_cedula = $("#reg_cedula").val()
         let reg_nombres = $("#reg_nombres").val();
@@ -603,10 +606,11 @@ function agregar_fila_plato() {
 
       let subtotal = $("#subtotal").val()
       // return console.log(subtotal+"<<<");
-      fetch("recursos/ventas/agregar_venta.php?subtotal="+subtotal+"&json="+json_detalle+datos_cli)
+      fetch("recursos/ventas/agregar_venta.php?subtotal="+subtotal+"&sw="+sw+"&json="+json_detalle+datos_cli)
       .then(response => response.text())
       .then(data => {
-        // console.log(data);
+
+        // return console.log(data);
         // if(!data.includes('error')){
           M.toast({html: "Venta Realizada!"});
           // console.log(data)
@@ -736,7 +740,7 @@ function crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, 
   fetch("recursos/ventas/obtener_codigo.php?contenido="+cntdo+"&numfac="+cad[1])
   .then(response => response.text())
   .then(data => {
-    // console.log(data);
+    // return console.log(data);
     crear_html(nit, cad[1], aut, fecha, hora, ci, nombres, filas, total, monto, cad[0], fecha_lim, usuario, data );
 
   })
@@ -761,10 +765,10 @@ var miHtml = `
   </style>
   <body>
   
-    <center>Repostería KRUSMARY.</center>
-    <center>B. IV Centenario, Calle Zamora. #423</center>
-    <center>Telf.: 76191403 </center>
-    <center>TARIJA - BOLIVIA</center>
+    <center>Repostería "KRUS-MARY".</center>
+    <center>Calle Independencia esq Cochabamba #395</center>
+    <center>Telf.: 71819635-67673738 </center>
+    <center>VILLAZON - BOLIVIA</center>
     <center>FACTURA</center>
     <center>----------------------------------------</center>
     <span style="float: left">NIT: ${nit}</span><span style="float: right">Factura N° ${numfac}</span><br>

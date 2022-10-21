@@ -3,30 +3,29 @@
 
 	$cod = $_GET['cod'];
 
-	$res = $conexion->query('SELECT Nro_fac, Ci_cli, Fecha, Hora FROM factura WHERE Codv = '.$cod.' OR Codp = '.$cod);
+	// $res = $conexion->query('SELECT nro_factura, ci_cli, Fecha, Hora FROM factura WHERE Codv = '.$cod.' OR Codp = '.$cod);
+	$res = $conexion->query('SELECT a.nro_factura, b.ci_cliente, a.fecha_factura, a.hora_factura, b.cod_cliente FROM factura a, cliente b WHERE a.cod_cliente = b.cod_cliente AND a.cod_venta = '.$cod);
 	$res = $res->fetch_all();
 
-	$result = $conexion->query("SELECT Total FROM venta WHERE Codv = ".$cod);
+
+	$result = $conexion->query("SELECT total_venta FROM venta WHERE cod_venta = ".$cod);
 	$result = $result->fetch_all();
 
-	$r = $conexion->query("SELECT Nombre, Apellidos FROM cliente WHERE Ci = ".$res[0][1]);
+	$r = $conexion->query("SELECT nombre_cliente as Nombre, CONCAT(ap_paterno_cliente,' ',(SELECT IFNULL(ap_materno_cliente, ''))) AS Apellidos FROM cliente WHERE cod_cliente = ".$res[0][4]);
 	$r = $r->fetch_all();
 
 
 	//PARA OBTENER LAS FILAS DEL DETALLE DE VENTA
-	$Sql2 = "SELECT a.Codpla, a.Cantidad, a.Precio, b.Nombre FROM det_plato a, plato b WHERE a.Codpla = b.Codpla AND a.Codv = ".$cod;
+	$Sql2 = "SELECT a.cod_producto, a.cant_producto, a.precio_det_venta, b.nombre_producto FROM detalle_venta a, producto b WHERE a.cod_producto = b.cod_producto AND a.cod_venta = ".$cod;
 	$Busq2 = $conexion->query($Sql2);
-	while($arr2 = $Busq2->fetch_array())
-	{
-	$fila2[] = array('codpla'=>$arr2['Codpla'], 'cant'=>$arr2['Cantidad'], 'precio'=>$arr2['Precio'], 'nombre'=>$arr2['Nombre']);
-	}
+	$fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
 
 
 	$celdas = "";
 	$filas = "";
 	foreach($fila2 as $a  => $valor){ 
 
-			$celdas = "<tr><td> ".$valor['nombre']." </td><td style='text-align:center'> ".$valor['cant']." </td><td style='text-align:center'>".$valor['precio']." </td></tr>";
+			$celdas = "<tr><td> ".$valor['nombre_producto']." </td><td style='text-align:center'> ".$valor['cant_producto']." </td><td style='text-align:center'>".$valor['precio_det_venta']." </td></tr>";
 			$filas = $filas ."". $celdas;
 
 		

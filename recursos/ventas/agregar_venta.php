@@ -11,12 +11,13 @@ $total = $_GET['subtotal'];
 $json = json_decode($_GET['json']);
 
 // die(var_dump(json_decode($json)));
-
-$ci = $_GET['ci']; //DEBE UTULIZARSE EL ID NO EL CI
-$nombre = $_GET['nombre'];
-$apellido_p = $_GET['apellido_p'];
-$apellido_m = $_GET['apellido_m'];
-$telf = $_GET['telf'];
+if($_GET['sw'] == 1){
+	$ci = $_GET['ci']; //DEBE UTULIZARSE EL ID NO EL CI
+	$nombre = $_GET['nombre'];
+	$apellido_p = $_GET['apellido_p'];
+	$apellido_m = $_GET['apellido_m'];
+	$telf = $_GET['telf'];
+}
 // $razon = $_GET['razon'];
 // $val = $_GET['value'];
 
@@ -29,21 +30,21 @@ $telf = $_GET['telf'];
 $id = 1;
 if(!empty($_GET['ci'])){
 	// $ci = '1';
-	$result = $conexion->query("SELECT * FROM cliente WHERE Ci = ".$ci);
+	$result = $conexion->query("SELECT * FROM cliente WHERE ci_cliente = ".$ci);
 	// $rows = mysqli_num_rows($result);
 	if (!empty($result) AND mysqli_num_rows($result) < 1) {
-		$insertar_cli = $conexion->query("INSERT INTO cliente (Ci, Nombre, Apellidos, Telefono, tipo) VALUES (".$ci.", '".$nombre."', '".$apellidos."', '".$telf."',".$val.")");
+		$insertar_cli = $conexion->query("INSERT INTO cliente (ci_cliente, nombre_cliente, ap_paterno_cliente, ap_materno_cliente, nro_celular_cliente) VALUES (".$ci.", '".$nombre."', '".$apellido_p."', '".$apellido_m."', '".$telf."')");
 		if ($insertar_cli) {
 			$id = mysqli_insert_id($conexion);
 		}else{
 			die(mysqli_error($conexion));
 		}
 	}else{
-		$update = $conexion->query('UPDATE cliente SET Nombre = "'.$nombre.'", Apellidos = "'.$apellidos.'", Telefono = "'.$telf.'", tipo = '.$val.' WHERE Ci = '.$ci);
+		$update = $conexion->query('UPDATE cliente SET nombre_cliente = "'.$nombre.'", ap_paterno_cliente = "'.$apellido_p.'", ap_materno_cliente = "'.$apellido_m.'", nro_celular_cliente = "'.$telf.'" WHERE ci_cliente = '.$ci);
 		if ($update) {
-			$res = $conexion->query("SELECT id FROM cliente WHERE Ci = ".$ci);
+			$res = $conexion->query("SELECT cod_cliente FROM cliente WHERE ci_cliente = ".$ci);
 			$res = mysqli_fetch_assoc($res);
-			$id = $res['id'];
+			$id = $res['cod_cliente'];
 		}else{
 			die(mysqli_error($conexion));
 		}
@@ -52,6 +53,7 @@ if(!empty($_GET['ci'])){
 	// die($result['Ci'].','.$result['Nombre'].'-'.$result['Apellidos']);
 }
 
+// die(mysqli_error($conexion));
 
 // $telf = $_POST['telf'];
 // $total = $_POST['tot_ped'];

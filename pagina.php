@@ -169,7 +169,7 @@ $Busq = $conexion->query($Sql);
         <li><a href="#!" onclick="cargar('templates/inicio/inicio');" class="waves-effect waves-teal"><i class="material-icons-outlined">home</i>Inicio</a></li>
         <li><a href="#!" onclick="cargar('templates/ventas/ventas');" class="waves-effect waves-teal"><i class="material-icons-outlined">shopping_cart</i>Ventas</a></li>
 		    <li><a href="#!" onclick="cargar('templates/productos/productos');" class="waves-effect waves-teal"><i class="material-icons-outlined">cake</i>Productos</a></li>
-        <li><a href="#!" onclick="cargar('templates/categorias/categorias');" class="waves-effect waves-teal"><i class="material-icons-outlined">cake</i>Categorias</a></li>
+        <li><a href="#!" onclick="cargar('templates/categorias/categorias');" class="waves-effect waves-teal"><i class="material-icons-outlined">category</i>Categorias</a></li>
         <li><a href="#!" onclick="cargar('templates/pedidos/pedidos');" class="waves-effect waves-teal"><i class="material-icons-outlined">receipt</i>Pedidos</a></li>
         <li><div class="divider grey darken-3"></div></li>
         
