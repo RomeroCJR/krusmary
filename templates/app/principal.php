@@ -1,16 +1,14 @@
 <?php
 	require('recursos/conexion.php');
     
-    $Sql = "SELECT a.*, b.Stock FROM plato a, stock b WHERE a.Codpla = b.Codpla AND a.beb = 0 AND a.Estado = 1";
+    $Sql = "SELECT a.*, b.stock FROM producto a, inventario b WHERE a.cod_producto = b.cod_producto AND a.estado_producto = 1";
     $Busq = $conexion->query($Sql);
-    while($arr = $Busq->fetch_array()){
-        $fila[] = array('codpla'=>$arr['Codpla'], 'nombre'=>$arr['Nombre'], 'precio'=>$arr['Precio'], 'descripcion'=>$arr['Descripcion'], 'foto'=>$arr['Foto'], 'stock'=>$arr['Stock']);
-    }
-    $Sql2 = "SELECT Ci, Nombre, Apellidos, Telefono FROM cliente WHERE Estado = 1";
+	$fila = $Busq->fetch_all(MYSQLI_ASSOC);
+
+    $Sql2 = "SELECT cod_cliente, ci_cliente, nombre_cliente, ap_paterno_cliente, ap_materno_cliente, nro_celular_cliente FROM cliente WHERE estado_cliente = 1";
     $Busq2 = $conexion->query($Sql2);
-    while($arr2 = $Busq2->fetch_array()) {
-        $fila2[] = array('ci'=>$arr2['Ci'], 'nombre'=>$arr2['Nombre'], 'apellidos'=>$arr2['Apellidos'], 'telf'=>$arr2['Telefono']);
-    }
+	$fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -62,9 +60,9 @@
 		<ul id="slide-out" class="sidenav">
 			<li><div class="user-view">
 			<div class="background">
-				<img src="img/fondo3.jpg" width="100%">
+				<img src="images/fondo2.png" width="100%">
 			</div>
-			<a href="#user"><img class="circle" src="images/1117.jpg"></a>
+			<a href="#user"><img class="circle" src="images/logo.png"></a>
 			<a href="#name"><span class="white-text name"><?php $_SESSION['nombre']?></span></a>
 			<a href="#email"><span class="white-text email"><?php $_SESSION['correo'] ?></span></a>
 			</div></li>
@@ -87,17 +85,17 @@
 				<h5>Productos disponibles:</h5>
 				<?php foreach($fila as $a  => $valor){ ?>
 					<!-- antes era s12 m6 l6 xl6 -->
-				<div class="col s12 m6 l6 xl4 rubik" onclick="cantidad_plato('<?php echo $valor['codpla'] ?>','<?php echo $valor['nombre'] ?>','<?php echo $valor['precio'] ?>','<?php echo $valor['foto'] ?>', '<?php echo $valor['stock'] ?>')">
+				<div class="col s12 m6 l6 xl4 rubik" onclick="cantidad_plato('<?php echo $valor['cod_producto'] ?>','<?php echo $valor['nombre_producto'] ?>','<?php echo $valor['precio_producto'] ?>','<?php echo $valor['foto_producto'] ?>', '<?php echo $valor['stock'] ?>')">
 					<div class="z-depth-3 card horizontal card__pad">
 					  <div class="card-stacked">
 					    <div class="">
-					    	<p><?php echo $valor['nombre']; ?></p>
-					      	<small><?php echo $valor['descripcion'] ?></small>
-					      	<p style="position: absolute; bottom: 0px;"><?php echo 'Bs. '.$valor['precio']; ?></p>
+					    	<p><?php echo $valor['nombre_producto']; ?></p>
+					      	<small><?php echo $valor['descripcion_producto'] ?></small>
+					      	<p style="position: absolute; bottom: 0px;"><?php echo 'Bs. '.$valor['precio_producto']; ?></p>
 					    </div>
 					  </div>
 					  <div class="card__img">    
-					    	<img class=" img__card" src="<?php echo $valor['foto'] ?>">
+					    	<img class=" img__card" src="<?php echo $valor['foto_producto'] ?>">
 					  </div>
 					</div>
 				</div>

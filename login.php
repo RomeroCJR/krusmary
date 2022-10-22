@@ -66,7 +66,7 @@
 			/* display:flex; */
 			/* justify-content: center; */
 			/* align-items: center; */
-			margin-top:10%;
+			margin-top:5%;
 		}
 		input:focus { font-size: 30px !important;}
 	</style>

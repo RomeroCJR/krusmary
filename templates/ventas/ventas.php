@@ -77,7 +77,7 @@ overflow-x: hidden;*/
 </div>
 
 <!-- Modal Ver Venta -->
-<div id="modal2" class="modal">
+<div id="modal2" class="modal" style="width:40%">
   <input type="text" id="cod_ven" hidden>
   <div class="modal-content">
     <h4 class="center roboto">Detalle de venta</h4>
@@ -101,8 +101,8 @@ overflow-x: hidden;*/
   </div>
 
   <div class="modal-footer">
-    <a href="#!" class="left waves-effect waves-light btn-large orange" onclick="crear_html()">Ver factura</a>
-    <a href="#!" class="right modal-action modal-close waves-effect waves-light btn-large">Aceptar</a>
+    <a href="#!" class="left waves-effect waves-light btn orange" onclick="crear_html()">Ver factura</a>
+    <a href="#!" class="right modal-action modal-close waves-effect waves-light btn">Aceptar</a>
   </div>
 </div>
 
@@ -132,7 +132,7 @@ overflow-x: hidden;*/
   </div>
 
   <div class="modal-footer">
-    <a href="#!" class="right modal-action modal-close waves-effect waves-light btn-large">cerrar</a>
+    <a href="#!" class="right modal-action modal-close waves-effect waves-light btn">cerrar</a>
   </div>
 </div>
 

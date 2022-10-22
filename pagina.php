@@ -166,7 +166,7 @@ $Busq = $conexion->query($Sql);
         
 	  	</li>
 	  	<div class="texto-blanco">
-        <li><a href="#!" onclick="cargar('templates/inicio/inicio');" class="waves-effect waves-teal"><i class="material-icons-outlined">home</i>Inicio</a></li>
+        <li><a href="#!" onclick="inicio();" class="waves-effect waves-teal"><i class="material-icons-outlined">home</i>Inicio</a></li>
         <li><a href="#!" onclick="cargar('templates/ventas/ventas');" class="waves-effect waves-teal"><i class="material-icons-outlined">shopping_cart</i>Ventas</a></li>
 		    <li><a href="#!" onclick="cargar('templates/productos/productos');" class="waves-effect waves-teal"><i class="material-icons-outlined">cake</i>Productos</a></li>
         <li><a href="#!" onclick="cargar('templates/categorias/categorias');" class="waves-effect waves-teal"><i class="material-icons-outlined">category</i>Categorias</a></li>
@@ -232,7 +232,7 @@ $Busq = $conexion->query($Sql);
     });
 
     $(document).ready(function() {
-      let fecha = new Date();
+      
       
       $('.modal').modal();
       $("#modal_gasto").modal({'dismissible':false});
@@ -253,6 +253,12 @@ $Busq = $conexion->query($Sql);
       })
 
       
+      inicio();
+
+    });
+    
+    function inicio (){
+      let fecha = new Date();
       $("#title_spend").html("Fecha: "+fecha.getDate()+"-"+(fecha.getMonth()+1)+"-"+fecha.getFullYear())
 
       // DAILY_STOCK
@@ -260,11 +266,9 @@ $Busq = $conexion->query($Sql);
       let actual = fecha.getFullYear()+"-"+(fecha.getMonth()+1);
       let year = fecha.getFullYear();
       let per = months[fecha.getMonth()];
-      $("#cuerpo").load("templates/inicio/daily_stock.php?mes="+actual+"&year="+year+"&per="+per);
+      $("#cuerpo").load("templates/inicio/inicio.php?mes="+actual+"&year="+year+"&per="+per);
       //END DAILY_STOCK
-
-    });
-    
+    }
 
     $("#enviar_gasto").click(function (e) {
       let gasto = $("#gasto").val()

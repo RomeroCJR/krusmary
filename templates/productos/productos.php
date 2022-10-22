@@ -175,8 +175,8 @@
       </thead>
       <tbody>
       	 <?php foreach($fila as $a  => $valor){ ?>
-         <tr>
-            <td class="center"><img src="<?php echo $valor['foto_producto'] ?>" height="50px"></td>
+         <tr loadin="lazy">
+            <td class="center"><img loading="lazy" src="<?php echo $valor['foto_producto'] ?>" height="50px"></td>
             <td class="center"><?php echo $valor["nombre_producto"] ?></td>
             <td class="center"><?php echo $valor["precio_producto"] ?></td>
             <td class="center"><?php echo $valor["stock"] ?></td>
