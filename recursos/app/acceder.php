@@ -27,7 +27,7 @@ if($result == 1){
 
 	$_SESSION['id_cliente'] = mysqli_insert_id($conexion); 
 	$_SESSION['estado_app'] = 'Autenticado';
-	$_SESSION['telf'] = $telf;
+	// $_SESSION['telf'] = $telf;
 
 	die("1");
 	/* Sesión iniciada, si se desea, se puede redireccionar desde el servidor */

@@ -101,7 +101,7 @@
 
 body {
     margin: 0;
-    background: #ffbb00;
+    background: #ec407a ;
     color: black;
     /*font-family: 'Segoe UI Light';*/
     /*font-family: 'Roboto', sans-serif;*/
@@ -414,3 +414,8 @@ p {
     color: #fff;
 
 }
+
+.circle{
+    height:64px;
+    width:auto !important;
+  }

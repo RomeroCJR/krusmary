@@ -27,7 +27,7 @@ $Busq = $conexion->query($Sql);
     <!-- <link rel="stylesheet" type="text/css" href="css/index.css"> -->
     <!-- <link rel="stylesheet" type="text/css" href="css/datatable.css"> -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="icon" type="image/x-icon" href="img/icono.ico" />
+    <link rel="icon" type="image/x-icon" href="images/logo.png" />
     <!-- <link rel="stylesheet" type="text/css" href="css/sidebar.css"> -->
     <link rel="stylesheet" type="text/css" href="css/style_sys.css">
     <link rel="stylesheet" href="css/jquery.nice-number.css">
@@ -64,7 +64,7 @@ $Busq = $conexion->query($Sql);
     <!-- src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBN0x9mkyg_9x41m82iSIQvJ8M9vo7fXm4"> -->
     <!-- </script> -->
     
-    <title> RCR. Delicias Express., Número de teléfono(s): 76191403, E-mail: rcrdelex@hotmail.com</title>
+    <title> Repostería Krus-Mary., Número de teléfono(s): 77556688, E-mail: krus-mary@gmail.com</title>
     <style>
     .fuente{
     font-family: 'Segoe UI Light';

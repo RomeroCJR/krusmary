@@ -1,13 +1,20 @@
 <?php
 	require('recursos/conexion.php');
     
-    $Sql = "SELECT a.*, b.stock FROM producto a, inventario b WHERE a.cod_producto = b.cod_producto AND a.estado_producto = 1";
+
+	$mes_actual = date("Y-m");
+
+    $Sql = "SELECT a.cod_producto, a.nombre_producto, a.precio_producto, a.descripcion_producto, a.foto_producto, d.stock, (SELECT IF (SUM(b.cant_producto)>0, SUM(b.cant_producto),0) FROM detalle_venta b, venta c WHERE a.cod_producto = b.cod_producto AND b.cod_venta = c.cod_venta AND c.fecha_venta LIKE '%".$mes_actual."%' AND b.estado_det_venta = 1) as cantidad, a.cod_categoria FROM producto a, inventario d WHERE a.cod_producto = d.cod_producto AND a.estado_producto = 1 GROUP BY a.cod_producto ORDER BY cantidad DESC";
     $Busq = $conexion->query($Sql);
 	$fila = $Busq->fetch_all(MYSQLI_ASSOC);
+
+	$result2 = $conexion->query("SELECT * FROM categoria WHERE estado_categoria = 1");
+	$result2 = $result2->fetch_all(MYSQLI_ASSOC);
 
     $Sql2 = "SELECT cod_cliente, ci_cliente, nombre_cliente, ap_paterno_cliente, ap_materno_cliente, nro_celular_cliente FROM cliente WHERE estado_cliente = 1";
     $Busq2 = $conexion->query($Sql2);
 	$fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
+
 
 ?>
 
@@ -16,7 +23,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no">
-		<link rel="icon" type="image/x-icon" href="img/icono.ico" />
+		<link rel="icon" type="image/x-icon" href="images/logo.png" />
 		<link rel="stylesheet" type="text/css" href="css/style.css">
     	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" >
@@ -33,16 +40,47 @@
 		<script src="js/jquery.nice-number.js"></script>
 		<!-- <script src="js/firebase.js" ></script> -->
 		
-		<title>Bienvenido, Pedidos Delicias Express</title>
+		<title>Bienvenido</title>
 	</head>
+	<style>
+		#cont_foto{
+			height:40%;
+			width: 100%;
+			/* display:flex; */
+			/* flex-direction: column; */
+		}
+		#conf_foto{
+
+		}
+		.contenedor-detalles{
+			/* margin-top:20px; */
+			padding-top:20px;
+			/* padding-bottom: 20px; */
+
+			height:55%;
+			width:100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+
+		}
+		.card_detalle{
+			display:flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 20px 10px 20px 10px;	
+		}
+	</style>
 	<body>
-		<nav style="background: rgba(255, 255, 255, 0.5);">
+		<nav style="background: rgba(255, 255, 255, 0.5); ">
 			<div class="nav-wrapper">
-		      <a href="#" class="brand-logo center"><img src="img/sidelex_sf.png" height="40" style="margin-top: 5px;" alt="Delicias Express"></a>
+				<a href="#" data-target="slide-out" class="sidenav-trigger show-on-large" style="color:black"><i class="material-icons">menu</i></a>
+		
+		    	<a href="#" class="brand-logo center"><img src="images/logo.png" height="55" style="margin-top: 5px;" alt="Repostería KrusMary"></a>
 		    </div>
 		</nav>
 		<div id="toggle_sidebar" class="get_out">
-			<a href="#" data-target="slide-out" class="sidenav-trigger btn-large waves-effect waves-light"><i class="material-icons">menu</i></a>
+			<!-- <a href="#" data-target="slide-out" class="sidenav-trigger btn-large waves-effect waves-light"><i class="material-icons">menu</i></a> -->
 		</div>
 
 			
@@ -57,52 +95,65 @@
 		<!-- <div class="ver_ped hide-on-small-only"><a href="templates/app/rev_pedido.php" style="background-color: #6c5ce7;" class="btn-large waves-light">mi pedido<i class="material-icons right">assignment</i></a></div> -->
 
 
-		<ul id="slide-out" class="sidenav">
-			<li><div class="user-view">
-			<div class="background">
-				<img src="images/fondo2.png" width="100%">
-			</div>
-			<a href="#user"><img class="circle" src="images/logo.png"></a>
-			<a href="#name"><span class="white-text name"><?php $_SESSION['nombre']?></span></a>
-			<a href="#email"><span class="white-text email"><?php $_SESSION['correo'] ?></span></a>
-			</div></li>
-			<li><a href="#!" onclick="location.reload()" class="waves-effect waves-purple"><i class="material-icons">home</i>Inicio</a></li>
-			<li><a href="#!" onclick="sidenav_navi('templates/app/perfil.php')" class="waves-effect waves-purple"><i class="material-icons">face</i>Mi perfil</a></li>
-			<li><a href="#!" onclick="sidenav_navi('templates/app/rev_pedido.php')" class="waves-effect waves-purple"><i class="material-icons">assignment</i>Mi pedido</a></li>
 
-			<li><div class="divider"></div></li>
+		<ul id="slide-out" class="sidenav rubik">
+			<li>
+				<div class="user-view">
+					<div class="background">
+						<img src="images/fondo2.png" width="100%">
+					</div>
+					<div><center><a href="#user"><img class="circle"  src="images/logo.png"></a></center></div>
+					<div><center><a href="#name"><span class="black-text name"><b>Repostería KRUS-MARY</b></span></a></center></div>
+					<div><center><a href="#email"><span class="black-text email"><b>krusmary@gmail.com</b></span></a></center></div>
+				</div>
+			</li>
+				<li><a href="#!" onclick="location.reload()" class="waves-effect waves-purple"><i class="material-icons">home</i>Inicio</a></li>
+				<li><a href="#!" onclick="sidenav_navi('templates/app/perfil.php')" class="waves-effect waves-purple"><i class="material-icons">face</i>Mi perfil</a></li>
+				<li><a href="#!" onclick="sidenav_navi('templates/app/rev_pedido.php')" class="waves-effect waves-purple"><i class="material-icons">assignment</i>Mi pedido</a></li>
 
-			<li><a class="waves-effect waves-red" href="recursos/app/salir.php"><i class="material-icons">logout</i>Salir</a></li>
+				<li>
+					<!-- <div class="divider"></div> -->
+				</li>
+
+			<li>
+				<!-- <a class="waves-effect waves-red" href="recursos/app/salir.php"><i class="material-icons">logout</i>Salir</a> -->
+			</li>
 		</ul>
 
 		<div id="cuerpo" class="container">
-		<h3 id="titulo_pedidos" class="center roboto">Realiza tu pedido</h3>
+		<h5 id="titulo_pedidos" class="roboto">Reserva tu producto:</h5>
 	
 
 		<div class="row" id="cards_row">
-			
 			<div class="col s12 m12 l12 xl12">
-				<h5>Productos disponibles:</h5>
-				<?php foreach($fila as $a  => $valor){ ?>
-					<!-- antes era s12 m6 l6 xl6 -->
-				<div class="col s12 m6 l6 xl4 rubik" onclick="cantidad_plato('<?php echo $valor['cod_producto'] ?>','<?php echo $valor['nombre_producto'] ?>','<?php echo $valor['precio_producto'] ?>','<?php echo $valor['foto_producto'] ?>', '<?php echo $valor['stock'] ?>')">
-					<div class="z-depth-3 card horizontal card__pad">
-					  <div class="card-stacked">
-					    <div class="">
-					    	<p><?php echo $valor['nombre_producto']; ?></p>
-					      	<small><?php echo $valor['descripcion_producto'] ?></small>
-					      	<p style="position: absolute; bottom: 0px;"><?php echo 'Bs. '.$valor['precio_producto']; ?></p>
-					    </div>
-					  </div>
-					  <div class="card__img">    
-					    	<img class=" img__card" src="<?php echo $valor['foto_producto'] ?>">
-					  </div>
-					</div>
+				<h6>Nuestro catálogo de productos disponibles:</h6>
+				<?php foreach ($result2 as $val): ?>
+				<div class="row">
+					<div class="col s12 center"><h4 class="rubik"><?php echo $val['nombre_categoria']; ?></h4></div>
+					<!-- <hr style="color:aquamarine"> -->
+					<?php foreach ($fila as $key): ?>
+						<?php if($val['cod_categoria'] == $key['cod_categoria']): ?>
+							<!-- antes era s12 m6 l6 xl6 -->
+							<div class="col s12 m6 l6 xl4 rubik" onclick="cantidad_plato('<?php echo $key['cod_producto'] ?>','<?php echo $key['nombre_producto'] ?>','<?php echo $key['precio_producto'] ?>','<?php echo $key['foto_producto'] ?>', '<?php echo $key['stock'] ?>')">
+								<div class="z-depth-3 card horizontal card__pad">
+								<div class="card-stacked">
+									<div class="">
+										<p><?php echo $key['nombre_producto']; ?></p>
+										<small><?php echo $key['descripcion_producto'] ?></small>
+										<p style="position: absolute; bottom: 0px;"><?php echo 'Bs. '.$key['precio_producto']; ?></p>
+									</div>
+								</div>
+								<div class="card__img">    
+										<img class=" img__card" src="<?php echo $key['foto_producto'] ?>">
+								</div>
+								</div>
+							</div>
+
+						<?php endif ?>
+					<?php endforeach ?>  
 				</div>
-				<?php } ?>
+				<?php endforeach ?>			
 			</div>
-
-
 
 		</div>
 
@@ -143,29 +194,44 @@
 				<a class="waves-effect waves-light btn btn-large modal-trigger" id="mod_ubi" href="#modal_ubi">PEDIR!</a>
 			</div>
 		</div>
-		<div id="modal2" class="modal ">
-			<div id="modal_pedidos" class="modal-content row">
-				<div class="col s12" id="cont_foto">
+
+		<div id="modal2" class="modal modal-fixed-footer" style="width:35%">
+			<div id="modal_pedidos" class="modal-content">
+				<div class="" id="cont_foto">
 					<img id="foto_plato" src="" >
 				</div>
-				<div class="col s8 black-text">
+				
+				<div class="black-text contenedor-detalles" >
 					<input type="text" id="current_sell" hidden>
 					<input type="text" id="current_stock" hidden>
-					<h5 id="nombre_p"> </h5>
-					<h5 id="precio_p"> </h5>
-				</div>
-				<div class="col s4">
-					<div class="number-container">
-						<label for="">Cantidad</label>
-						<input class="browser-default" type="number" name="" id="__cantidad" min="1" max="15" disabled>
+
+					<div class="rubik z-depth-1 card_detalle" style="height:28%">
+						<div>
+							<b>Producto:</b> <span class="right" id="nombre_p" ></span>
+						</div>
+					</div>
+					<div class="rubik z-depth-1 card_detalle" style="height:28%">
+						<div>
+							<b>Precio:</b><span class="right" id="precio_p" ></span>
+						</div>
+					</div>
+
+					<div class="rubik z-depth-1 card_detalle" style="height:28%">
+						<div>
+							<b>Cantidad:</b>	
+							<div class="number-container right">
+								<!-- <label for="">Cantidad</label> -->
+								<input class="browser-default" type="number" name="" id="__cantidad" min="1" max="15" disabled>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div id="__datosplato" hidden></div>
-			<hr>
-			<div class="modal-footer row ">
-				<a href="#!" class="left modal-action modal-close waves-effect waves-light btn btn-large red"><i class="material-icons">close</i></a>
-				<a class="waves-effect waves-light btn btn-large right" onclick="datos_plato();" >Agregar<i class="material-icons right">add_shopping_cart</i></a>
+
+			<div class="modal-footer">
+				<a href="#!" class="left modal-action modal-close waves-effect waves-light btn btn red"><i class="material-icons">close</i></a>
+				<a class="waves-effect waves-light btn btn right" onclick="datos_plato();" >Agregar<i class="material-icons right">add_shopping_cart</i></a>
 			</div>
 		</div>
 
@@ -386,17 +452,10 @@
 	function buscar_ci() {
 		valor = $("#ci_c").val();
 		encontrado = false;
-		"<?php foreach($fila2 as $a  => $valor){ ?>";
-		if (valor == ("<?php echo $valor['ci'] ?>")) {
-			$("#nombre_c").val("<?php echo $valor['nombre'] ?>");
-			$("#ap_c").val("<?php echo $valor['apellidos'] ?>");
-			$("#telf").val("<?php echo $valor['telf'] ?>");
-			M.updateTextFields();
-			encontrado = true;
-		}
-		"<?php } ?>";
+		// return console.log(valor);
+
 		if (!encontrado) {
-		M.toast("<b class='fz'>Cliente no encontrado, ingrese sus datos.</b>", 4000);
+		M.toast({html: "<b class='fz'>Cliente no encontrado, ingrese sus datos.</b>"});
 		}
 	}
 	//ENVIO CON AJAX --
@@ -409,22 +468,23 @@
 			return M.toast({html: 'Escribe una dirección válida.'})
 		}
 
-		let telf = "<?php echo $_SESSION['telf']?>"
-		let subtotal = total
-		colat = $("#coordLat").val()
-		colng = $("#coordLng").val()
+		// let telf = "echo $_SESSION['telf']; ";
+		let telf = "76191403"; //esto debe ser tomado desde formulario
+		let subtotal = total;
+		// colat = $("#coordLat").val()
+		// colng = $("#coordLng").val()
 		let json_detalle = reg_pedidos.filter(Boolean)
 		json_detalle = JSON.stringify(json_detalle)
 
 		if(JSON.parse(json_detalle).length > 0){
 		    $.ajax({
-	            url: "recursos/app/nuevo_pedido.php?telf="+telf+"&dir="+dir+"&subtotal="+subtotal+"&colat="+colat+"&colng="+colng+"&json="+json_detalle,
+	            url: "recursos/app/nuevo_pedido.php?telf="+telf+"&subtotal="+subtotal+"&json="+json_detalle,
 	            method: "GET",
 	            success: function(response) {
 	            	mensaje.html(response)
 	                console.log(response)
 	                if (response) {
-	                	M.toast({html:'<span style="color: #2ecc71">Pedido realizado, puedes ver tu pedido en la sección de Mi pedido</span>', displayLength: 8000, classes: 'rounded'})
+	                	M.toast({html:'<span style="color: #2ecc71">Pedido realizado, puedes ver tu pedido en la sección de Mi pedido</span>', displayLength: 5000, classes: 'rounded'})
 	                	$("#modal_ubi").modal('close')
 	                	regresar_prod()
 	                }

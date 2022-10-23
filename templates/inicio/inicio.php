@@ -76,7 +76,8 @@
 		</div>	
 		</div>
 		<?php foreach ($result2 as $val): ?>
-			<div class="row">
+
+		<div class="row">
 			<div class="col s12 center"><h4 class="rubik"><?php echo $val['nombre_categoria']; ?></h4></div>
 			<hr style="color:aquamarine">
 			<?php foreach ($result as $key): ?>
@@ -127,7 +128,7 @@
 			  	</div>
 				<?php endif ?>
 			<?php endforeach ?>  
-			</div>
+		</div>
 	 	<?php endforeach ?>
 
 </div>
