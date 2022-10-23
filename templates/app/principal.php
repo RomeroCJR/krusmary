@@ -70,6 +70,100 @@
 			justify-content: center;
 			padding: 20px 10px 20px 10px;	
 		}
+
+		
+.card__pad p {
+    margin: 0;
+    font-weight: bolder;
+}
+
+.card__pad{
+    padding:  12px;
+
+}
+.card__img{
+    width: 96px ;
+    height: 96px ;
+}
+.img__card{
+    min-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+
+}
+
+.p_card__pad{
+    padding:  12px;
+    cursor: pointer;
+}
+.p_card__img{
+    width: 96px ;
+    height: 96px ;
+}
+.p_img__card{
+    min-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 25%;
+}
+
+.img__card{
+	max-height: 187.85px;
+}
+.card{
+	max-height: 275px;
+	height: 275px;
+	min-height: 275px;
+	cursor: pointer;
+}
+@media only screen and (max-width : 992px) {
+
+	.img__card{
+		max-height: 134.783px;
+	}
+	.card{
+		max-height: 220.283px;
+		height: 220.283px;
+		min-height: 220.283px;
+	}
+}
+
+.card-content{
+	padding-top: 5px !important;
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+	padding-bottom: 20px !important;
+}
+.card-title{
+	/*padding-left: 0px !important;*/
+	/*padding-right: 0px !important;*/
+	margin-bottom: 0px !important;
+
+}
+.capit { 
+	text-transform: capitalize;
+} 
+.card_title{
+	background-color: #424242; 
+	color:white; 
+	text-align: center; 
+	line-height: 1;
+}
+.modal_title{
+	background-color: #424242; 
+	color:white; 
+	text-align: center; 
+	line-height: 1;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+}
+.modal_title h5{
+	margin: 5px 0;
+}
 	</style>
 	<body>
 		<nav style="background: rgba(255, 255, 255, 0.5); ">
@@ -121,31 +215,40 @@
 		</ul>
 
 		<div id="cuerpo" class="container">
-		<h5 id="titulo_pedidos" class="roboto">Reserva tu producto:</h5>
-	
+			<!-- <div class="row">
+				<div class="col s12">
+					<h5 id="titulo_pedidos" class="roboto">Reserva tu producto:</h5>
+				</div>
+			</div> -->
+
+
+
+
 
 		<div class="row" id="cards_row">
 			<div class="col s12 m12 l12 xl12">
-				<h6>Nuestro catálogo de productos disponibles:</h6>
+				<h5 class="roboto" >Nuestro catálogo de productos disponibles:</h5>
 				<?php foreach ($result2 as $val): ?>
 				<div class="row">
 					<div class="col s12 center"><h4 class="rubik"><?php echo $val['nombre_categoria']; ?></h4></div>
 					<!-- <hr style="color:aquamarine"> -->
-					<?php foreach ($fila as $key): ?>
-						<?php if($val['cod_categoria'] == $key['cod_categoria']): ?>
+					<?php foreach ($fila as $valor): ?>
+						<?php if($val['cod_categoria'] == $valor['cod_categoria']): ?>
 							<!-- antes era s12 m6 l6 xl6 -->
-							<div class="col s12 m6 l6 xl4 rubik" onclick="cantidad_plato('<?php echo $key['cod_producto'] ?>','<?php echo $key['nombre_producto'] ?>','<?php echo $key['precio_producto'] ?>','<?php echo $key['foto_producto'] ?>', '<?php echo $key['stock'] ?>')">
-								<div class="z-depth-3 card horizontal card__pad">
-								<div class="card-stacked">
-									<div class="">
-										<p><?php echo $key['nombre_producto']; ?></p>
-										<small><?php echo $key['descripcion_producto'] ?></small>
-										<p style="position: absolute; bottom: 0px;"><?php echo 'Bs. '.$key['precio_producto']; ?></p>
+							<div class="col s6 m3" loading="lazy" onclick="cantidad_prod('<?php echo $valor['cod_producto'] ?>','<?php echo $valor['nombre_producto'] ?>','<?php echo $valor['precio_producto'] ?>','<?php echo $valor['foto_producto'] ?>', '<?php echo $valor['cantidad'] ?>', '<?php echo $valor['stock'] ?>')">
+								<div class="card">
+									<div class="card_title">
+										<span class="card-title rubik"><small><?php echo $valor['nombre_producto'] ?></small></span>
 									</div>
-								</div>
-								<div class="card__img">    
-										<img class=" img__card" src="<?php echo $key['foto_producto'] ?>">
-								</div>
+									<div class="card-image" >
+										<img loading="lazy" class="img__card" src="<?php echo $valor['foto_producto'] ?>" >
+										
+									</div>
+									<div class="card-content">
+										<!-- <span class="card-title rubik"><small><b><?php echo $valor['id'] ?></b></small></span> -->
+											<small><p class="rubik" style="line-height: 1;"><?php echo ucfirst(strtolower($valor['descripcion_producto']))?></p></small>
+											<span style="position: absolute; bottom: 0px;" class="rubik"><small><b><?php echo $valor['precio_producto']." Bs."?></b></small></span>
+									</div>
 								</div>
 							</div>
 
@@ -205,18 +308,18 @@
 					<input type="text" id="current_sell" hidden>
 					<input type="text" id="current_stock" hidden>
 
-					<div class="rubik z-depth-1 card_detalle" style="height:28%">
+					<div class="rubik z-depth-1 card_detalle" style="height:30%">
 						<div>
 							<b>Producto:</b> <span class="right" id="nombre_p" ></span>
 						</div>
 					</div>
-					<div class="rubik z-depth-1 card_detalle" style="height:28%">
+					<div class="rubik z-depth-1 card_detalle" style="height:30%">
 						<div>
 							<b>Precio:</b><span class="right" id="precio_p" ></span>
 						</div>
 					</div>
 
-					<div class="rubik z-depth-1 card_detalle" style="height:28%">
+					<div class="rubik z-depth-1 card_detalle" style="height:30%">
 						<div>
 							<b>Cantidad:</b>	
 							<div class="number-container right">
