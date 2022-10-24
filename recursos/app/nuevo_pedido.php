@@ -61,7 +61,7 @@ $consultaVP = "SELECT a.* FROM pedido a WHERE a.cod_cliente = '".$id_cli."' ORDE
 $resultadoVP = mysqli_query($conexion, $consultaVP) or die(mysqli_error($conexion));
 $rvp = mysqli_fetch_array($resultadoVP);
 
-$resc = $conexion->query("SELECT estado_cliente FROM cliente WHERE cod_cliente = '".$cod_cliente."' ");
+$resc = $conexion->query("SELECT estado_cliente FROM cliente WHERE cod_cliente = '".$id_cli."' ");
 $resc = $resc->fetch_all(MYSQLI_ASSOC);
 
 if ($resc[0]['estado_cliente'] == '0') {
