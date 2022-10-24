@@ -74,7 +74,7 @@
 		
 .card__pad p {
     margin: 0;
-    font-weight: bolder;
+    /* font-weight: bolder; */
 }
 
 .card__pad{
@@ -118,6 +118,7 @@
 	min-height: 275px;
 	cursor: pointer;
 }
+
 @media only screen and (max-width : 992px) {
 
 	.img__card{
@@ -147,7 +148,7 @@
 } 
 .card_title{
 	background-color: #424242; 
-	color:white; 
+	color: #FFF; 
 	text-align: center; 
 	line-height: 1;
 }
@@ -164,14 +165,20 @@
 .modal_title h5{
 	margin: 5px 0;
 }
+.card:hover{
+	transform:  scale(1.03);
+	box-shadow: 4px 4px 8px 2px rgba(0,0,0,0.4);
+}
 	</style>
 	<body>
 		<nav style="background: rgba(255, 255, 255, 0.5); ">
 			<div class="nav-wrapper">
-				<a href="#" data-target="slide-out" class="sidenav-trigger show-on-large" style="color:black"><i class="material-icons">menu</i></a>
-		
-		    	<a href="#" class="brand-logo center"><img src="images/logo.png" height="55" style="margin-top: 5px;" alt="Repostería KrusMary"></a>
-		    </div>
+				<a href="#" id="menu_triger" data-target="slide-out" class="sidenav-trigger show-on-large" style="color:black"><i class="material-icons">menu</i></a>
+				<a href="#" style="margin-left: 10px;" id="cart_return" class="black-text left" onclick="regresar_prod()" hidden><i class="material-icons">keyboard_return</i></a>
+		    	<a href="#" class="brand-logo center ubuntu hide-on-med-and-down" style="color:#424242"><img src="images/logo.png" height="55" style="margin-top: 5px;" alt="Repostería KrusMary" class="left"><span>Repostería KRUS-MARY</span><img src="images/logo.png" height="55" style="margin-top: 5px;" alt="Repostería KrusMary" class="right"></a>
+				<a href="#" class="brand-logo center ubuntu hide-on-large-only" ><img src="images/logo.png" height="55" style="margin-top: 5px;" alt="Repostería KrusMary" ></a>
+		    
+			</div>
 		</nav>
 		<div id="toggle_sidebar" class="get_out">
 			<!-- <a href="#" data-target="slide-out" class="sidenav-trigger btn-large waves-effect waves-light"><i class="material-icons">menu</i></a> -->
@@ -215,88 +222,80 @@
 		</ul>
 
 		<div id="cuerpo" class="container">
-			<!-- <div class="row">
-				<div class="col s12">
-					<h5 id="titulo_pedidos" class="roboto">Reserva tu producto:</h5>
-				</div>
-			</div> -->
 
-
-
-
-
-		<div class="row" id="cards_row">
-			<div class="col s12 m12 l12 xl12">
-				<h5 class="roboto" >Nuestro catálogo de productos disponibles:</h5>
-				<?php foreach ($result2 as $val): ?>
-				<div class="row">
-					<div class="col s12 center"><h4 class="rubik"><?php echo $val['nombre_categoria']; ?></h4></div>
-					<!-- <hr style="color:aquamarine"> -->
-					<?php foreach ($fila as $valor): ?>
-						<?php if($val['cod_categoria'] == $valor['cod_categoria']): ?>
-							<!-- antes era s12 m6 l6 xl6 -->
-							<div class="col s6 m3" loading="lazy" onclick="cantidad_prod('<?php echo $valor['cod_producto'] ?>','<?php echo $valor['nombre_producto'] ?>','<?php echo $valor['precio_producto'] ?>','<?php echo $valor['foto_producto'] ?>', '<?php echo $valor['cantidad'] ?>', '<?php echo $valor['stock'] ?>')">
-								<div class="card">
-									<div class="card_title">
-										<span class="card-title rubik"><small><?php echo $valor['nombre_producto'] ?></small></span>
-									</div>
-									<div class="card-image" >
-										<img loading="lazy" class="img__card" src="<?php echo $valor['foto_producto'] ?>" >
-										
-									</div>
-									<div class="card-content">
-										<!-- <span class="card-title rubik"><small><b><?php echo $valor['id'] ?></b></small></span> -->
-											<small><p class="rubik" style="line-height: 1;"><?php echo ucfirst(strtolower($valor['descripcion_producto']))?></p></small>
+			<div class="row" id="cards_row">
+				<div class="col s12 m12 l12 xl12">
+					<h5 class="ubuntu" >Nuestro catálogo de productos disponibles:</h5>
+					<?php foreach ($result2 as $val): ?>
+					<div class="row">
+						<div class="col s12 center"><h4 class="ubuntu"><?php echo $val['nombre_categoria']; ?></h4></div>
+						<!-- <hr style="color:aquamarine"> -->
+						<?php foreach ($fila as $valor): ?>
+							<?php if($val['cod_categoria'] == $valor['cod_categoria']): ?>
+								<!-- antes era s12 m6 l6 xl6 -->
+								<div class="col s6 m3" loading="lazy" onclick="cantidad_prod('<?php echo $valor['cod_producto'] ?>','<?php echo $valor['nombre_producto'] ?>','<?php echo $valor['precio_producto'] ?>','<?php echo $valor['foto_producto'] ?>', '<?php echo $valor['cantidad'] ?>', '<?php echo $valor['stock'] ?>')">
+									<div class="card">
+										<div class="card_title">
+											<span class="card-title ubuntu"><small><?php echo $valor['nombre_producto'] ?></small></span>
+										</div>
+										<div class="card-image" >
+											<img loading="lazy" class="img__card" src="<?php echo $valor['foto_producto'] ?>" >
+											
+										</div>
+										<div class="card-content">
+											<small><p class="ubuntu" style="line-height: 1;"><?php echo ucfirst(strtolower($valor['descripcion_producto']))?></p></small>
 											<span style="position: absolute; bottom: 0px;" class="rubik"><small><b><?php echo $valor['precio_producto']." Bs."?></b></small></span>
+										</div>
 									</div>
 								</div>
-							</div>
 
-						<?php endif ?>
-					<?php endforeach ?>  
-				</div>
-				<?php endforeach ?>			
-			</div>
-
-		</div>
-
-		<div class="row roboto" id="cart_row" hidden>
-			<div class="row get_out">
-				<div class="left">
-					<a href="#!" class="btn-large red" onclick="regresar_prod()"><i class="material-icons">keyboard_return</i></a>
-				</div>
-			</div>
-			<!-- antes era col s12 m12 l4 xl5 -->
-			<div class="col s12 m12 l12" id="div_tabla_pedidos">
-				<!-- <div class="col l6 m10 offset-m1 s12"> -->
-					<div class="center"><h4>Tu pedido</h4></div>
-					<table id="pedidos_cliente" class="content-table centered z-depth-4">
-						<thead>
-							<tr>
-								<th>Producto</th>
-								<th>Cantidad</th>
-								<th>Precio</th>
-								<th>Borrar</th>
-							</tr>
-						</thead>
-						<tbody>
-							<td colspan="4">Aún no has agregado ningún producto.</td>
-						</tbody>
-					</table>
-
-					<hr>
-					<div class="row" align="right">
-						<!-- <div class="col m6 offset-m6 s4 offset-s6"> -->
-							<div class="neon" >Subtotal: <label id="total_ped" class="neon">0.00 Bs</label></div>
-						<!-- </div> -->
+							<?php endif ?>
+						<?php endforeach ?>  
 					</div>
-				<!-- </div> -->
+					<?php endforeach ?>			
+				</div>
+
 			</div>
 
-			<div class="center">
-				<a class="waves-effect waves-light btn btn-large modal-trigger" id="mod_ubi" href="#modal_ubi">PEDIR!</a>
+			<div class="row roboto" id="cart_row" hidden>
+				<div class="row get_out">
+					<div class="left">
+						<!-- <a href="#!" class="btn-large red" onclick="regresar_prod()"><i class="material-icons">keyboard_return</i></a> -->
+					</div>
+				</div>
+				<!-- antes era col s12 m12 l4 xl5 -->
+				<div class="col s12 m12 l12" id="div_tabla_pedidos">
+					<!-- <div class="col l6 m10 offset-m1 s12"> -->
+						<div class="center" style="font-size: 1em;"><span style='font-size:40px;'>&#128722;</span></div>
+						<table id="pedidos_cliente" class="content-table centered z-depth-4">
+							<thead>
+								<tr>
+									<th>Producto</th>
+									<th>Cantidad</th>
+									<th>Precio</th>
+									<th>Borrar</th>
+								</tr>
+							</thead>
+							<tbody>
+								<td colspan="4">Aún no has agregado ningún producto.</td>
+							</tbody>
+						</table>
+
+						<hr>
+						<div class="row" align="right">
+							<!-- <div class="col m6 offset-m6 s4 offset-s6"> -->
+								<div class="ubuntu col s12" >
+									Subtotal: <label id="total_ped" class="ubuntu" style="color:black;">0.00 Bs</label>
+								</div>
+							<!-- </div> -->
+						</div>
+					<!-- </div> -->
+				</div>
+
+				<div class="center">
+					<a class="waves-effect waves-light btn btn-large modal-trigger pink accent-2" id="mod_ubi" href="#modal_ubi">PEDIR</a>
+				</div>
 			</div>
-		</div>
 
 		<div id="modal2" class="modal modal-fixed-footer" style="width:35%">
 			<div id="modal_pedidos" class="modal-content">
@@ -334,7 +333,7 @@
 
 			<div class="modal-footer">
 				<a href="#!" class="left modal-action modal-close waves-effect waves-light btn btn red"><i class="material-icons">close</i></a>
-				<a class="waves-effect waves-light btn btn right" onclick="datos_plato();" >Agregar<i class="material-icons right">add_shopping_cart</i></a>
+				<a class="waves-effect waves-light btn btn right" onclick="datos_producto();" >Agregar<i class="material-icons right">add_shopping_cart</i></a>
 			</div>
 		</div>
 
@@ -429,7 +428,7 @@
 
 	var reg_pedidos = new Array();
 
-	function cantidad_plato(cod, nombre, precio, foto, stock) {
+	function cantidad_prod(cod, nombre, precio, foto, stock) {
 		$("#foto_plato").attr("src", foto);
 		$("#nombre_p").html(nombre);
 		$("#precio_p").html(precio+" Bs.");
@@ -477,9 +476,10 @@
 			$("#total_ped").html(total +" Bs.");
 	}
 		
-		function datos_plato(){
+		function datos_producto(){
 
 			// console.log(reg_pedidos.length)
+
 			let c_sell = $("#current_sell").val()
 			let c_stock = $("#current_stock").val()
 			var cantp = $("#__cantidad").val();
@@ -496,7 +496,7 @@
 			var pp = $("#__datosp").attr("pp");
 			var fp = $("#__datosp").attr("fp");
 			
-			if (parseInt(cantp) > 15 || cantp == "") {M.toast({html: "El pedido no puede superar las 15 unidades"})}
+			if (parseInt(cantp) > 20 || cantp == "") {M.toast({html: "El pedido no puede superar las 20 unidades"})}
 				else{
 			if (parseInt(cantp) < 1 || cantp == "") { M.toast({html: "Ingresa una cantidad válida."})}
 			else{
@@ -610,7 +610,8 @@
 
 	function shop_modal(argument) {
 		$("#shop_button").removeClass('pulse')
-		document.getElementById('titulo_pedidos').hidden = true
+		document.getElementById('menu_triger').hidden = true
+		document.getElementById('cart_return').hidden = false
 		document.getElementById('shop_section').hidden = true
 		document.getElementById('cards_row').hidden = true
 		document.getElementById('cart_row').hidden = false
@@ -619,7 +620,8 @@
 	}
 
 	function regresar_prod() {
-		document.getElementById('titulo_pedidos').hidden = false
+		document.getElementById('menu_triger').hidden = false
+		document.getElementById('cart_return').hidden = true
 		document.getElementById('shop_section').hidden = false
 		document.getElementById('cards_row').hidden = false
 		document.getElementById('cart_row').hidden = true

@@ -2,7 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Karla:wght@200&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
-.pacifico{
+@import url('https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+    .ubuntu{
+        font-family: 'Ubuntu', sans-serif;
+    }
+    .bubles{
+        font-family: 'Fuzzy Bubbles', cursive;
+    }
+    .pacifico{
 		font-family: 'Pacifico', cursive;;
 	}
 	.rubik{
@@ -57,7 +65,7 @@
   /*border-top-style: solid;*/
 }
 .content-table thead tr{
-  background-color: #e84118;
+  background-color: #ff4081;
   color: #FFF;
   text-align: left;
 }
@@ -326,8 +334,8 @@ input:focus {
 }
 
 p {
-    margin: 0;
-    font-weight: bolder;
+    /* margin: 0; */
+    /* font-weight: bolder; */
 }
 .card__pad{
     padding:  12px;
