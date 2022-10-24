@@ -19,7 +19,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ES">
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no">
@@ -33,10 +33,10 @@
 		<script src="js/jquery-3.0.0.min.js"></script>
 		<!-- <script src="js/materialize.js"></script> -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-		<script src="js/maps.js"></script>
-		<script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBN0x9mkyg_9x41m82iSIQvJ8M9vo7fXm4&callback=initMap">
-		</script>
+		<!-- <script src="js/maps.js"></script> -->
+		<!-- <script async defer -->
+		<!-- src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBN0x9mkyg_9x41m82iSIQvJ8M9vo7fXm4&callback=initMap"> -->
+		<!-- </script> -->
 		<script src="js/jquery.nice-number.js"></script>
 		<!-- <script src="js/firebase.js" ></script> -->
 		
@@ -120,7 +120,9 @@
 }
 
 @media only screen and (max-width : 992px) {
-
+	.modal{
+		width:100% !important;
+	}
 	.img__card{
 		max-height: 134.783px;
 	}
@@ -129,6 +131,7 @@
 		height: 220.283px;
 		min-height: 220.283px;
 	}
+	
 }
 
 .card-content{
@@ -233,7 +236,7 @@
 						<?php foreach ($fila as $valor): ?>
 							<?php if($val['cod_categoria'] == $valor['cod_categoria']): ?>
 								<!-- antes era s12 m6 l6 xl6 -->
-								<div class="col s6 m3" loading="lazy" onclick="cantidad_prod('<?php echo $valor['cod_producto'] ?>','<?php echo $valor['nombre_producto'] ?>','<?php echo $valor['precio_producto'] ?>','<?php echo $valor['foto_producto'] ?>', '<?php echo $valor['cantidad'] ?>', '<?php echo $valor['stock'] ?>')">
+								<div class="col s6 m3" loading="lazy" onclick="cantidad_prod('<?php echo $valor['cod_producto'] ?>','<?php echo $valor['nombre_producto'] ?>','<?php echo $valor['precio_producto'] ?>','<?php echo $valor['foto_producto'] ?>', '<?php echo $valor['cantidad'] ?>', '<?php echo $valor['stock'] ?>', '<?php echo $valor['cod_categoria'] ?>')">
 									<div class="card">
 										<div class="card_title">
 											<span class="card-title ubuntu"><small><?php echo $valor['nombre_producto'] ?></small></span>
@@ -272,7 +275,7 @@
 								<tr>
 									<th>Producto</th>
 									<th>Cantidad</th>
-									<th>Precio</th>
+									<th>Precio (Bs.)</th>
 									<th>Borrar</th>
 								</tr>
 							</thead>
@@ -293,7 +296,7 @@
 				</div>
 
 				<div class="center">
-					<a class="waves-effect waves-light btn btn-large modal-trigger pink accent-2" id="mod_ubi" href="#modal_ubi">PEDIR</a>
+					<a class="waves-effect waves-light btn btn-large pink accent-2" id="btn_modal_cliente">PEDIR</a>
 				</div>
 			</div>
 
@@ -337,32 +340,72 @@
 			</div>
 		</div>
 
-		<form id="form_pedido" hidden> <!-- onKeyPress="return checkIt(event)" SOLO NÚMEROS -->
-			<input type="text" id="coordLat" name="coordLat" >
-			<input type="text" id="coordLng" name="coordLng" >
-			<input type="text" id="tot_ped" name="tot_ped" value="" >
-		</form>
-
-		<div id="modal_ubi" class="modal"> <!-- arreglar esta wea -->
-			<div class="modal-content" id="modal_ubi_content">
-				<h4>Dirección</h4>
+		<div id="modal_cliente" class="modal ubuntu" style="width:35%"> <!-- arreglar esta wea -->
+			<div class="modal-content" id="modal_cliente_content">
+				<h5>Por favor ingresa tus datos</h5>
 				
 				<div class="row">
 					<div class="col s12">
-					  
-					  <div class="input-field">
-					    <input id="direccion" type="text" class="validate">
-					    <label for="direccion">Escribe aquí tu dirección</label>
-					    <!-- <span class="helper-text" data-error="wrong" data-success="right">Helper text</span> -->
-					  </div>
+					  <form id="form_pedido">
+					  	<div class="input-field col s12">
+						  <input type="text" id="tot_ped" name="tot_ped" value="" hidden>
+						  <input type="text" id="ci" onKeyPress="return checkIt(event)" name="ci" class="validate" required>
+						  <label for="ci">Cédula de identidad:</label>
+						</div>
+
+						<div class="input-field col s12">
+						  <input type="text" id="nombre" name="nombre" class="validate" required>
+						  <label for="nombre">Nombre:</label>
+						</div>
+
+						<div class="input-field col s12">
+						  <input type="text" id="apellidos" name="apellidos" class="validate" required>
+						  <label for="apellidos">Apellidos:</label>
+						</div>
+
+						<div class="input-field col s12">
+						  <input type="text" id="celular" name="celular" onKeyPress="return checkIt(event)" class="validate" required>
+						  <label for="celular">Celular:</label>
+						</div>
+
+						<div id="torta_personalizada" hidden>
+
+							<div class="input-field col s12" id="div_fototorta" style="margin-bottom:0px">
+								<p>
+									<label>
+										<input type="checkbox" id="check_fototorta" />
+										<span>Foto torta (Costo adicional: 30 Bs.)</span>
+									</label>
+								</p>
+							</div>
+							<div class="file-field input-field col s12" id="div_imagen" style="margin-top:0px" hidden>
+								<div class="btn">
+									<span>Foto</span>
+									<input type="file" id="imagen-nombre" name="imagen">
+								</div>
+								<div class="file-path-wrapper">
+									<input class="file-path validate" id="imagen-path" type="text">
+								</div>
+							</div>
+
+							<div class="input-field col s12" id="div_descripcion_torta" style="margin-bottom:0px">
+								<p>
+									<label>
+										<input type="checkbox" id="check_mensaje_personalizado" />
+										<span>Mensaje personalizado en torta:</span>
+									</label>
+								</p>
+							</div>
+							<div class="input-field col s12" id="div_mensaje" style="margin-top:0px" hidden>
+								<textarea id="dedicatoria" name="dedicatoria" class="materialize-textarea"></textarea>
+								<label for="dedicatoria">Ingrese una dedicatoria:</label>
+							</div>
+
+						</div>
+
+					  </form>
 					</div>
 				</div>
-
-				<!-- <div class="container"> -->
-					<!-- <input type="text" id="direccion" placeholder="Escribe tu dirección"> -->
-				<!-- </div> -->
-				<div id="map"></div>
-
 			</div>
 			<div class="modal-footer" id="footer_ubi">
 				<a href="#!" class="modal-close waves-effect waves-green btn red left">Cancelar</a>
@@ -411,6 +454,7 @@
 			buttonPosition: 'around'
 		});
 		$('.sidenav').sidenav();
+		document.getElementById('form_pedido').reset();
 	});
 	function direrc(){
 		window.location.replace("templates/app/rev_pedido.php");
@@ -428,12 +472,12 @@
 
 	var reg_pedidos = new Array();
 
-	function cantidad_prod(cod, nombre, precio, foto, stock) {
+	function cantidad_prod(cod, nombre, precio, foto, cantidad, stock, categoria) {
 		$("#foto_plato").attr("src", foto);
 		$("#nombre_p").html(nombre);
 		$("#precio_p").html(precio+" Bs.");
 		
-		$("#__datosplato").html("<input id='__datosp' cp='"+cod+"' np='"+nombre+"' pp='"+precio+"' fp='"+foto+"' hidden/>");
+		$("#__datosplato").html("<input id='__datosp' cp='"+cod+"' np='"+nombre+"' pp='"+precio+"' fp='"+foto+"' cat='"+categoria+"' hidden/>");
 
 
 		fetch("recursos/app/check_stock.php?id="+cod)
@@ -441,15 +485,14 @@
 		.then(response => {
 			$("#current_sell").val(response)
         	$("#current_stock").val(stock)
-        	console.log(stock, response)
+        	// console.log(stock, response)
         	if (parseInt(stock) > parseInt(response)) {
         		$("#modal2").modal('open');
         	}else{
         		M.toast({html: "Producto agotado."})
         	}
 		})
-		
-		
+
 	}
 
 	function borr_pla(x) {
@@ -471,7 +514,7 @@
 				row.insertCell(0).innerHTML = valor[3];
 				row.insertCell(0).innerHTML = valor[2];
 				row.insertCell(0).innerHTML = valor[1];
-				total  = parseInt(total) + parseInt(valor[3]);
+				total  = parseFloat(total) + parseFloat(valor[3]);
 			});
 			$("#total_ped").html(total +" Bs.");
 	}
@@ -495,14 +538,15 @@
 			var np = $("#__datosp").attr("np");
 			var pp = $("#__datosp").attr("pp");
 			var fp = $("#__datosp").attr("fp");
+			var cat = $("#__datosp").attr("cat");
 			
 			if (parseInt(cantp) > 20 || cantp == "") {M.toast({html: "El pedido no puede superar las 20 unidades"})}
 				else{
 			if (parseInt(cantp) < 1 || cantp == "") { M.toast({html: "Ingresa una cantidad válida."})}
 			else{
-				pp = parseInt(pp)*parseInt(cantp);
+				// pp = parseFloat(pp)*parseInt(cantp);
 				
-				reg_pedidos[cp] = [cp, np, cantp, pp, fp];
+				reg_pedidos[cp] = [cp, np, cantp, pp, fp, cat];
 				//borrando tabla
 				// $('#pedidos_cliente tr:not(:first-child)').slice(0).remove();
 				// var table = $("#pedidos_cliente")[0];
@@ -523,7 +567,7 @@
 					row.insertCell(0).innerHTML = valor[3];
 					row.insertCell(0).innerHTML = valor[2];
 					row.insertCell(0).innerHTML = valor[1];
-					total  = parseInt(total) + parseInt(valor[3]);
+					total  = parseFloat(total) + parseFloat(valor[3]);
 				});
 				$("#total_ped").html(total +" Bs.");
 				$("#shop_button").addClass('pulse');
@@ -566,40 +610,102 @@
 
 	$("#form_pedido").on("submit", function(e) {
 		e.preventDefault()
-		let dir = $("#direccion").val();
-		if (dir.length < 5) {
-			return M.toast({html: 'Escribe una dirección válida.'})
-		}
+		// let dir = $("#direccion").val();
+		// if (dir.length < 5) {
+		// 	return M.toast({html: 'Escribe una dirección válida.'})
+		// }
 
 		// let telf = "echo $_SESSION['telf']; ";
-		let telf = "76191403"; //esto debe ser tomado desde formulario
+		var formData = new FormData(document.getElementById('form_pedido')); //esto debe ser tomado desde formulario
+
 		let subtotal = total;
 		// colat = $("#coordLat").val()
 		// colng = $("#coordLng").val()
 		let json_detalle = reg_pedidos.filter(Boolean)
 		json_detalle = JSON.stringify(json_detalle)
 
+		
+		// return console.log(formData);
+		if((document.getElementById('check_fototorta').checked == true) && document.getElementById('imagen-nombre').value == ""){
+			return M.toast({html: 'Ingrese una imagen para la torta.'});
+		}
+		if((document.getElementById('check_fototorta').checked == true) && document.getElementById('imagen-nombre').value != ""){
+			subtotal = parseFloat(subtotal) + 30;
+		}
+		if((document.getElementById('check_mensaje_personalizado').checked == true) && document.getElementById('dedicatoria').value == ""){
+			return M.toast({html: 'Ingrese una dedicatoria.'});
+		}
+
+		formData.append('subtotal', subtotal);
+		formData.append('json_detalle', json_detalle);
+
 		if(JSON.parse(json_detalle).length > 0){
-		    $.ajax({
-	            url: "recursos/app/nuevo_pedido.php?telf="+telf+"&subtotal="+subtotal+"&json="+json_detalle,
-	            method: "GET",
-	            success: function(response) {
-	            	mensaje.html(response)
-	                console.log(response)
-	                if (response) {
-	                	M.toast({html:'<span style="color: #2ecc71">Pedido realizado, puedes ver tu pedido en la sección de Mi pedido</span>', displayLength: 5000, classes: 'rounded'})
-	                	$("#modal_ubi").modal('close')
-	                	regresar_prod()
-	                }
-	            },
-	            error: function(error) {
-	                console.log(error)
-	            }
-		    })
+			fetch("recursos/app/nuevo_pedido.php", {method:'post', body:formData})
+			.then(response => response.text())
+			.then(data => {
+				console.log(data)
+				if (data == '1') {
+					M.toast({html:'<span style="color: #2ecc71">Pedido realizado, puedes ver tu pedido en la sección de Mi pedido</span>', displayLength: 5000, classes: 'rounded'})
+					$("#modal_cliente").modal('close')
+					window.location.reload();
+				}else{
+					$("#mensaje").html(data);
+				}
+
+			})
+		   
 		}else{
 			M.toast({html: "No se ha seleccionado ningún producto..."});
 		}
 	})
+
+
+	document.getElementById('check_fototorta').addEventListener('click', () => {
+		let check = document.getElementById('check_fototorta');
+		if(check.checked){
+			document.getElementById('div_imagen').hidden = false;
+		}else{
+			document.getElementById('imagen-nombre').value ="";
+			document.getElementById('imagen-path').value ="";
+			document.getElementById('div_imagen').hidden = true;
+		}
+		
+	});
+	document.getElementById('check_mensaje_personalizado').addEventListener('click', () => {
+		let check = document.getElementById('check_mensaje_personalizado');
+		if(check.checked){
+			document.getElementById('div_mensaje').hidden = false;
+		}else{
+			document.getElementById('dedicatoria').value ="";
+			document.getElementById('div_mensaje').hidden = true;
+		}
+	});
+
+	document.getElementById('btn_modal_cliente').addEventListener('click', ()=>{
+		let x = false;
+		reg_pedidos.forEach(function (valor) {
+			if(valor[5] == "1"){
+				x = true;
+			}
+			if(x){
+				document.getElementById('torta_personalizada').hidden = false;
+				document.getElementById('imagen-nombre').value ="";
+				document.getElementById('imagen-path').value ="";
+				document.getElementById('dedicatoria').value ="";
+				// document.getElementById('check_fototorta').checked = false;
+				// document.getElementById('check_mensaje_personalizado').checked = false;
+			}else{
+				document.getElementById('torta_personalizada').hidden = true;
+				document.getElementById('imagen-nombre').value ="";
+				document.getElementById('imagen-path').value ="";
+				document.getElementById('dedicatoria').value ="";
+				// document.getElementById('check_fototorta').checked = false;
+				// document.getElementById('check_mensaje_personalizado').checked = false;
+			}
+			$("#modal_cliente").modal('open');
+		})
+
+	});
 
 	function sidenav_navi(link) {
 		var elem = document.getElementById('slide-out')

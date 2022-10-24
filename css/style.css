@@ -85,20 +85,20 @@
     top: 0;*/
 }
 
-#modal_ubi {
-    height: 100%;
+#modal_cliente {
+    /* height: 100%; */
 }
 
-#modal_ubi_content {
-    height: 85%;
+#modal_cliente_content {
+    /* height: 85%; */
 }
 #footer_ubi{
-    position: absolute;
-    bottom:  0;
+    /* position: absolute; */
+    /* bottom:  0; */
 }
 
 #map {
-    height: 90%;
+    /* height: 90%; */
 }
 
 
@@ -181,15 +181,15 @@ img {
 
     }
 
-    #modal_ubi{
-        top: 0% !important;
-        left: 0;
-        min-width: 100vw;
-        height: 100vh;
-        min-height: 90vh;
+    #modal_cliente{
+        /* top: 0% !important; */
+        /* left: 0; */
+        /* min-width: 100vw; */
+        /* height: 100vh; */
+        /* min-height: 90vh; */
     }
-    #modal_ubi_content {
-        height: 85%;
+    #modal_cliente_content {
+        /* height: 85%; */
     }
     #modal2 {
         /*top: 0% !important;*/

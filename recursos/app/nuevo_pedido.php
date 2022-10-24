@@ -6,31 +6,70 @@ session_start();
 // $nombre = $_POST['nombre_c'];
 // $ap = $_POST['ap_c'];
 
-$id = $_SESSION['id_cliente'];
-$telf = $_GET['telf'];
-$dir = $_GET['dir'];
-$total = $_GET['subtotal'];
-// $cont = $_POST['cont'];
-$colat = $_GET['colat'];
-$colng = $_GET['colng'];
-$json = $_GET['json'];
+// $id = $_SESSION['id_cliente'];
+
+
+$ci = $_POST['ci'];
+$telf = $_POST['celular'];
+$nombre = $_POST['nombre'];
+$subtotal = $_POST['subtotal'];
+$apellidos = $_POST['apellidos'];
+$apellidos = explode(" ", $apellidos);
+$ap_paterno = $apellidos[0];
+$ap_materno = $apellidos[1];
+
+$json = $_POST['json_detalle'];
 $json = json_decode($json);
+// die($json);
+$nombreimg = $_FILES['imagen']['name'];
+$archivo = $_FILES['imagen']['tmp_name'];
+
+$ruta = $_SERVER['DOCUMENT_ROOT']."/krusmary/images";
+$ruta = $ruta."/".$nombreimg;
+move_uploaded_file($archivo, $ruta);
+$ruta2 = "images/".$nombreimg;
+
+$mensaje = $_POST['dedicatoria'];
 
 
 
-$consultaVP = "SELECT * FROM pedido WHERE idcli = ".$id." ORDER BY Codped DESC LIMIT 1";
+if(empty($nombreimg)){
+	$ruta2 = NULL;
+}
+if(empty($mensaje)){
+	$mensaje = NULL;
+}
+
+// die($ruta2."---".$mensaje);
+
+$result = $conexion->query('SELECT * FROM cliente WHERE ci_cliente = "'.$ci.'"');
+$res = mysqli_num_rows($result);
+$result = $result->fetch_all(MYSQLI_ASSOC);
+
+$id_cli = "";
+if($res > 0){
+	$id_cli = $result[0]['cod_cliente'];
+	$conexion->query("UPDATE `cliente` SET `nombre_cliente`='".$nombre."',`ap_paterno_cliente`='".$ap_paterno."',`ap_materno_cliente`='".$ap_materno."',`nro_celular_cliente`='".$telf."' WHERE cod_cliente = ".$id_cli);
+}else{
+	$conexion->query("INSERT INTO `cliente`(`ci_cliente`, `nombre_cliente`, `ap_paterno_cliente`, `ap_materno_cliente`, `nro_celular_cliente`) VALUES ('".$ci."','".$nombre."','".$ap_paterno."','".$ap_materno."','".$telf."')");
+	$id_cli = mysqli_insert_id($conexion);
+}
+
+
+
+$consultaVP = "SELECT a.* FROM pedido a WHERE a.cod_cliente = '".$id_cli."' ORDER BY a.cod_pedido DESC LIMIT 1";
 $resultadoVP = mysqli_query($conexion, $consultaVP) or die(mysqli_error($conexion));
 $rvp = mysqli_fetch_array($resultadoVP);
 
-$resc = $conexion->query("SELECT Estado FROM cliente WHERE id = ".$id);
+$resc = $conexion->query("SELECT estado_cliente FROM cliente WHERE cod_cliente = '".$cod_cliente."' ");
 $resc = $resc->fetch_all(MYSQLI_ASSOC);
 
-if ($resc[0]['Estado'] == '0') {
+if ($resc[0]['estado_cliente'] == '0') {
 	die('<script>M.toast({html: "Usted ha sido bloqueado del servicio."});</script>');
 }
 
 
-if ($rvp['Estado'] == 1) {
+if ($rvp['estado_pedido'] == 1) {
 	die('<script>M.toast({html: "Usted ya tiene un pedido activo."});</script>');
 }
 
@@ -44,19 +83,20 @@ if (intval($telf) < 40000000) {
 }
 
 
-$result = $conexion->query("INSERT INTO pedido (idcli, Total, Direccion, Lat, Lng) VALUES ('".$id."', '".$total."', '".$dir."', '".$colat."', '".$colng."')");
+$result = $conexion->query("INSERT INTO pedido (cod_cliente, total_pedido, dedicatoria, foto_personalizada) VALUES ('".$id_cli."', '".$subtotal."', '".$mensaje."', '".$ruta2."')");
 
-if($result == 1){
+
+if($result){
 
 	$id_pedido = mysqli_insert_id($conexion); 
 	foreach ($json as $key => $value) {
-		$consulta_detped = "INSERT INTO det_ped (Codped, Codpla, Cant, Precio) VALUES (".$id_pedido.", ".$value[0].", ".$value[2].", (SELECT Precio FROM plato WHERE Codpla = ".$value[0]."))";
+		$consulta_detped = "INSERT INTO detalle_pedido (cod_pedido, cod_producto, cant_producto, precio_det_pedido) VALUES (".$id_pedido.", ".$value[0].", ".$value[2].", ".$value[3].")";
 		if(!(mysqli_query($conexion, $consulta_detped))) {die(mysqli_error($conexion));}
 	}
 
-	die(true);
+	die('1');
 } else {
-	die('<script>M.toast(html:{"Error desconocido"});</script>');
+	die(mysqli_error($conexion));
 }
 
 ?>

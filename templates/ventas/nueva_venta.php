@@ -97,7 +97,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
           <label for="nombre_producto">Producto</label>
         </div>
         <div class="input-field col s12">
-          <input type="number" id="precio_producto"  onKeyPress="return checkIt(event)" name="precio_producto" class="validate" required>
+          <input type="text" id="precio_producto"  onKeyPress="return checkIt(event)" name="precio_producto" class="validate" required>
           <label for="precio_producto">Precio (Bs.)</label>
         </div>
         <div class="input-field col s12 center number-container">
