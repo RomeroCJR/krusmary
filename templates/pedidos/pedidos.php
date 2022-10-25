@@ -1,24 +1,27 @@
 <?php
 require('../../recursos/conexion.php');
 session_start();
-$Sql = "SELECT a.Codped, a.idcli, b.Ci as cedula, a.Total, a.Fecha, a.Lat, a.Lng, a.Estado, b.Nombre, b.Apellidos, a.Direccion,b.Telefono FROM pedido a, cliente b WHERE a.idcli = b.id;";
+$Sql = "SELECT a.cod_pedido, a.cod_cliente, b.ci_cliente as cedula, a.total_pedido, a.fecha_pedido, a.dedicatoria, a.foto_personalizada, a.estado_pedido, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos,b.nro_celular_cliente FROM pedido a, cliente b WHERE a.cod_cliente = b.cod_cliente ;";
 $Busq = $conexion->query($Sql);
-while($arr = $Busq->fetch_array())
-{
-$fila[] = array('cod'=>$arr['Codped'], 'cliente'=>$arr['idcli'], 'cedula'=>$arr['cedula'],'total'=>$arr['Total'], 'fecha'=>$arr['Fecha'], 'lat'=>$arr['Lat'], 'lng'=>$arr['Lng'],'estado'=>$arr['Estado'], 'nombre'=>$arr['Nombre'], 'apellidos'=>$arr['Apellidos'], 'direccion'=>$arr['Direccion'],'telf'=>$arr['Telefono']);
-}
-$Sql2 = "SELECT a.Codped, a.Codpla, a.Cant, a.Precio, b.Nombre FROM det_ped a, plato b WHERE a.Codpla = b.Codpla;";
+$fila = $Busq->fetch_all(MYSQLI_ASSOC);
+// while($arr = $Busq->fetch_array())
+// {
+// $fila[] = array('cod'=>$arr['Codped'], 'cliente'=>$arr['idcli'], 'cedula'=>$arr['cedula'],'total'=>$arr['Total'], 'fecha'=>$arr['Fecha'], 'lat'=>$arr['Lat'], 'lng'=>$arr['Lng'],'estado'=>$arr['Estado'], 'nombre'=>$arr['Nombre'], 'apellidos'=>$arr['Apellidos'], 'direccion'=>$arr['Direccion'],'telf'=>$arr['Telefono']);
+// }
+$Sql2 = "SELECT a.cod_pedido, a.cod_producto, a.cant_producto, a.precio_det_pedido, b.nombre_producto FROM detalle_pedido a, producto b WHERE a.cod_producto = b.cod_producto;";
 $Busq2 = $conexion->query($Sql2);
-while($arr2 = $Busq2->fetch_array())
-{
-$fila2[] = array('cod'=>$arr2['Codped'], 'codpla'=>$arr2['Codpla'], 'cant'=>$arr2['Cant'], 'precio'=>$arr2['Precio'], 'nombre'=>$arr2['Nombre']);
-}
-$Sql3 = "SELECT * FROM talonario WHERE Estado = 1";
+$fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
+// while($arr2 = $Busq2->fetch_array())
+// {
+// $fila2[] = array('cod'=>$arr2['Codped'], 'codpla'=>$arr2['Codpla'], 'cant'=>$arr2['Cant'], 'precio'=>$arr2['Precio'], 'nombre'=>$arr2['Nombre']);
+// }
+$Sql3 = "SELECT * FROM talonario WHERE estado_talonario = 1";
 $Busq3 = $conexion->query($Sql3);
-while($arr3 = $Busq3->fetch_array())
-{
-$fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'nit'=>$arr3['Nit'], 'fecha_lim'=>$arr3['Fecha_emision']);
-}
+$fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
+// while($arr3 = $Busq3->fetch_array())
+// {
+// $fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'nit'=>$arr3['Nit'], 'fecha_lim'=>$arr3['Fecha_emision']);
+// }
 ?>
 
 <style>
@@ -51,19 +54,19 @@ $fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'n
       </thead>
       <tbody>
         <?php foreach($fila as $a  => $valor){ ?>
-        <tr <?php if(($valor['estado'])==1) echo 'style="background-color: #ffeaa7"'; ?> <?php if(($valor['estado'])==0) echo 'style="background-color: #fff"'; ?>>
+        <tr <?php if(($valor['estado_pedido'])==1) echo 'style="background-color: #ffeaa7"'; ?> <?php if(($valor['estado_pedido'])==0) echo 'style="background-color: #fff"'; ?>>
           
-          <td align="center"><?php echo $valor["cod"]?></td>
+          <td align="center"><?php echo $valor["cod_pedido"]?></td>
 
-          <td align="center"><?php echo date('d-m-Y H:m:s', strtotime($valor['fecha'])) ?></td>
-          <td align="center"><?php echo $valor["total"] ?></td>
+          <td align="center"><?php echo date('d-m-Y H:m:s', strtotime($valor['fecha_pedido'])) ?></td>
+          <td align="center"><?php echo $valor["total_pedido"] ?></td>
           <td align="center">
-            <?php if ($valor["estado"] == 1) { ?> Pendiente <?php }else{if ($valor["estado"] == 2) { ?> Rechazado <?php }else{ ?> Enviado <?php }} ?>
+            <?php if ($valor["estado_pedido"] == 1) { ?> Pendiente <?php }else{if ($valor["estado_pedido"] == 2) { ?> Rechazado <?php }else{ ?> Aceptado <?php }} ?>
           </td>
           <td class="center">
             <!-- <a onclick="" class="btn-floating modal-trigger"><i class="material-icons">build</i></a> -->
-            <a href="#!" onclick="eliminar_pedido('<?php echo $valor['cod']?>')" class="btn-floating"><i class="material-icons">delete</i></a>
-            <a onclick="vped('<?php echo $valor["cod"]?>', '<?php echo $valor["cliente"]?>', '<?php echo $valor["cedula"]?>', '<?php echo $valor["lat"]?>', '<?php echo $valor["lng"]?>','<?php echo $valor["nombre"]?>', '<?php echo $valor["apellidos"]?>', '<?php echo $valor["direccion"]?>','<?php echo $valor["telf"]?>','<?php echo $valor["estado"]?>');"  class="btn-floating"><i class="material-icons">search</i></a>
+            <a href="#!" onclick="eliminar_pedido('<?php echo $valor['cod_pedido']?>')" class="btn-floating"><i class="material-icons">delete</i></a>
+            <a onclick="vped('<?php echo $valor["cod_pedido"]?>', '<?php echo $valor["cod_cliente"]?>', '<?php echo $valor["cedula"]?>','<?php echo $valor["nombre_cliente"]?>', '<?php echo $valor["apellidos"]?>','<?php echo $valor["nro_celular_cliente"]?>','<?php echo $valor["estado_pedido"]?>');"  class="btn-floating"><i class="material-icons">search</i></a>
           </td>
         </tr>
         <?php } ?>

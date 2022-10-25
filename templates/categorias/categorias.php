@@ -8,7 +8,7 @@ $fila = $busq->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <style>
-  .fuente{
+  .fuente{  
   	font-family: 'Segoe UI light';
   	color: red;
   }
@@ -23,6 +23,7 @@ $fila = $busq->fetch_all(MYSQLI_ASSOC);
       <a class="waves-effect waves-light btn-large orange darken-4 modal-trigger rubik" id="modal_nuevo_categoria" href="#modal1"><i class="material-icons left">add</i><b>Categoria</b></a>
   </div>
 </div>
+
 
 <table id="tabla1" class="content-table">
       <thead>

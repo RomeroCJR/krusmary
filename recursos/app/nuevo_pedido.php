@@ -14,9 +14,16 @@ $telf = $_POST['celular'];
 $nombre = $_POST['nombre'];
 $subtotal = $_POST['subtotal'];
 $apellidos = $_POST['apellidos'];
-$apellidos = explode(" ", $apellidos);
-$ap_paterno = $apellidos[0];
-$ap_materno = $apellidos[1];
+$ap_paterno = "";
+$ap_materno = "";
+if(str_contains($apellidos, " ")){
+	$apellidos = explode(" ", $apellidos);
+	$ap_paterno = $apellidos[0];
+	$ap_materno = $apellidos[1];
+}else{
+	$ap_paterno = $apellidos;
+}
+
 
 $json = $_POST['json_detalle'];
 $json = json_decode($json);
@@ -56,10 +63,9 @@ if($res > 0){
 }
 
 
-
 $consultaVP = "SELECT a.* FROM pedido a WHERE a.cod_cliente = '".$id_cli."' ORDER BY a.cod_pedido DESC LIMIT 1";
 $resultadoVP = mysqli_query($conexion, $consultaVP) or die(mysqli_error($conexion));
-$rvp = mysqli_fetch_array($resultadoVP);
+$rvp = $resultadoVP->fetch_all(MYSQLI_ASSOC);
 
 $resc = $conexion->query("SELECT estado_cliente FROM cliente WHERE cod_cliente = '".$id_cli."' ");
 $resc = $resc->fetch_all(MYSQLI_ASSOC);
@@ -69,13 +75,15 @@ if ($resc[0]['estado_cliente'] == '0') {
 }
 
 
-if ($rvp['estado_pedido'] == 1) {
-	die('<script>M.toast({html: "Usted ya tiene un pedido activo."});</script>');
+if(mysqli_num_rows($resultadoVP)>0){
+	if ($rvp[0]['estado_pedido'] == 1) {
+		die('<script>M.toast({html: "Usted ya tiene un pedido activo."});</script>');
+	}
+	if (($_SERVER["REQUEST_TIME"] - strtotime($rvp[0]['fecha_pedido'])) < 1800) {
+		die('<script>M.toast({html: "Usted realizó un pedido recientemente, Espere unos minutos."});</script>');
+	}
 }
 
-if (($_SERVER["REQUEST_TIME"] - strtotime($rvp['Fecha'])) < 1800) {
-	die('<script>M.toast({html: "Usted realizó un pedido recientemente, Espere unos minutos."});</script>');
-}
 
 
 if (intval($telf) < 40000000) {

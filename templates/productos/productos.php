@@ -71,7 +71,7 @@
 
         <div class="input-field col s7">
           <input id="nombre" name="nombre" type="text" minlength="5" maxlength="25" class="validate" required>
-          <label for="nombre">Nombre del plato (*)</label>
+          <label for="nombre">Nombre del producto (*)</label>
         </div>
         <div class="input-field col s4 offset-s1">
           <input id="precio" name="precio" type="text" onkeypress="return checkIt(event)" class="validate" required>

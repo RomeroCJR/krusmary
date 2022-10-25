@@ -398,7 +398,7 @@
 							</div>
 							<div class="input-field col s12" id="div_mensaje" style="margin-top:0px" hidden>
 								<textarea id="dedicatoria" name="dedicatoria" class="materialize-textarea"></textarea>
-								<label for="dedicatoria">Ingrese una dedicatoria:</label>
+								<label for="dedicatoria">Ingrese una dedicatoria (Sea explícito por favor):</label>
 							</div>
 
 						</div>
@@ -514,7 +514,7 @@
 				row.insertCell(0).innerHTML = valor[3];
 				row.insertCell(0).innerHTML = valor[2];
 				row.insertCell(0).innerHTML = valor[1];
-				total  = parseFloat(total) + parseFloat(valor[3]);
+				total  = parseFloat(total) + (parseFloat(valor[3])*parseFloat(valor[2]));
 			});
 			$("#total_ped").html(total +" Bs.");
 	}
@@ -567,7 +567,7 @@
 					row.insertCell(0).innerHTML = valor[3];
 					row.insertCell(0).innerHTML = valor[2];
 					row.insertCell(0).innerHTML = valor[1];
-					total  = parseFloat(total) + parseFloat(valor[3]);
+					total  = parseFloat(total) + (parseFloat(valor[3])*parseFloat(valor[2]));
 				});
 				$("#total_ped").html(total +" Bs.");
 				$("#shop_button").addClass('pulse');
@@ -647,7 +647,7 @@
 				if (data == '1') {
 					M.toast({html:'<span style="color: #2ecc71">Pedido realizado, puedes ver tu pedido en la sección de Mi pedido</span>', displayLength: 5000, classes: 'rounded'})
 					$("#modal_cliente").modal('close')
-					window.location.reload();
+					// window.location.reload();
 				}else{
 					$("#mensaje").html(data);
 				}
