@@ -1,7 +1,7 @@
 <?php
 require('../../recursos/conexion.php');
 session_start();
-$Sql = "SELECT a.cod_pedido, a.cod_cliente, b.ci_cliente as cedula, a.total_pedido, a.fecha_pedido, a.dedicatoria, a.foto_personalizada, a.estado_pedido, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos,b.nro_celular_cliente FROM pedido a, cliente b WHERE a.cod_cliente = b.cod_cliente ;";
+$Sql = "SELECT a.cod_pedido, a.cod_cliente, b.ci_cliente as cedula, a.total_pedido, a.fecha_pedido, a.dedicatoria, a.foto_personalizada, a.estado_pedido, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos,b.nro_celular_cliente, a.dedicatoria, a.foto_personalizada, b.estado_cliente FROM pedido a, cliente b WHERE a.cod_cliente = b.cod_cliente ;";
 $Busq = $conexion->query($Sql);
 $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 // while($arr = $Busq->fetch_array())
@@ -18,6 +18,7 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
 $Sql3 = "SELECT * FROM talonario WHERE estado_talonario = 1";
 $Busq3 = $conexion->query($Sql3);
 $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
+// echo $fila3[0]['autorizacion'];
 // while($arr3 = $Busq3->fetch_array())
 // {
 // $fila3[] = array('aut'=>$arr3['Autorizacion'], 'llave'=>$arr3['Llave_dosif'], 'nit'=>$arr3['Nit'], 'fecha_lim'=>$arr3['Fecha_emision']);
@@ -66,7 +67,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
           <td class="center">
             <!-- <a onclick="" class="btn-floating modal-trigger"><i class="material-icons">build</i></a> -->
             <a href="#!" onclick="eliminar_pedido('<?php echo $valor['cod_pedido']?>')" class="btn-floating"><i class="material-icons">delete</i></a>
-            <a onclick="vped('<?php echo $valor["cod_pedido"]?>', '<?php echo $valor["cod_cliente"]?>', '<?php echo $valor["cedula"]?>','<?php echo $valor["nombre_cliente"]?>', '<?php echo $valor["apellidos"]?>','<?php echo $valor["nro_celular_cliente"]?>','<?php echo $valor["estado_pedido"]?>');"  class="btn-floating"><i class="material-icons">search</i></a>
+            <a onclick="vped('<?php echo $valor["cod_pedido"]?>', '<?php echo $valor["cod_cliente"]?>', '<?php echo $valor["cedula"]?>','<?php echo $valor["nombre_cliente"]?>', '<?php echo $valor["apellidos"]?>','<?php echo $valor["nro_celular_cliente"]?>','<?php echo $valor["estado_pedido"]?>',`<?php echo $valor["dedicatoria"]?>`,'<?php echo $valor["foto_personalizada"]?>', '<?php echo $valor["estado_cliente"]?>');"  class="btn-floating"><i class="material-icons">search</i></a>
           </td>
         </tr>
         <?php } ?>
@@ -94,6 +95,9 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
 
 <!-- Modal Ver Pedidos -->
 <div id="modal2" class="modal modal-fixed-footer">
+    <div style="position:absolute; top:1px;right:1px;">
+      <a href="#!" class=" modal-action modal-close waves-effect btn-floating waves-light red" ><i class="material-icons">close</i></a>
+    </div>
   <div class="modal-content">
     <h4 class="center"><b>Detalle de pedido</b></h4>
     <input type="text" id="__idcli" hidden>
@@ -104,9 +108,25 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
     <p class="marginless" id="__dir"></p>
     
     <div class="btn-bloquear_cliente">
-      <a href="#modal_confirmar_bloqueo" id="bloquear_cliente" class="btn-large waves-effect red waves-light modal-trigger">BLOQUEAR CLIENTE</a>
+      <a id="bloquear_cliente" class="btn-large waves-effect red waves-light">BLOQUEAR CLIENTE</a>
     </div>
-
+    <br>
+    <hr>
+    <div class="row">
+      <!-- <h5>Extras:</h5> -->
+      <div class="col s6">
+        <h6><b>Foto personalizada:</b></h6>
+        <div class="center">
+          <div id="foto_detalle1"><center><img id="foto_personalizada" width="50%" src="" alt=""></center></div>
+          <div id="foto_detalle2"><center><span class="red-text">Sin foto...</span></center></div>
+        </div>
+      </div>
+      <div class="col s6">
+        <h6><b>Dedicatoria:</b></h6>
+        <span class="dedicatoria" id="dedicatoria"></span>
+      </div>
+    </div>
+    <hr>
     <h5 class="">Detalle del pedido:</h5>
     <table id="tab_det" class="content-table" >
       <thead>
@@ -130,11 +150,6 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
       </div>
     </div>
  
-          <h5>Ubicación</h5>
-          <div id="map"></div>
-          <input type="text" id="__lat" value="-21.5201" hidden>
-          <input type="text" id="__lng" value="-64.7522" hidden>
-
   </div>
 
 
@@ -142,16 +157,16 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
   <form id="codiped">
     <input type="text" id="__codiped" name="__codiped" value="" hidden>
   </form>
-  <div class="modal-footer row" style="padding: 1rem !important">
-      <div class="col s3">
-      <a href="#!" class="left modal-action modal-close waves-effect waves-light btn red">Cerrar</a>
-      </div>
-      <div class="col s3 offset-s3">
-      <button class="waves-effect orange waves-light btn right" id="rechazar_ped">Rechazar Pedido</button>
-      </div>
-      <div class="col s3">
-      <button  class="waves-effect waves-light btn right" type="submit" form="codiped">Aceptar Pedido</button>
-      </div>
+  <div class="modal-footer">
+      <!-- <div class="col s3">
+        <a href="#!" class="left modal-action modal-close waves-effect waves-light btn red">Cerrar</a>
+      </div> -->
+
+        <button class="waves-effect orange waves-light btn left" id="rechazar_ped">Rechazar Pedido</button>
+
+
+        <button  class="waves-effect waves-light btn right" type="submit" form="codiped">Aceptar Pedido</button>
+
   </div>
 </div>
 
@@ -159,7 +174,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
 
   <div class="modal-content">
     <h5>Se procederá a bloquear al cliente del servicio:</h5>
-    <p>El cliente no podrá realizar pedidos mediante la aplicación web.</p>
+    <p>El cliente no podrá realizar pedidos mediante la página web.</p>
 
     <p id="block_ci"></p>
     <p id="block_name"></p>
@@ -200,19 +215,6 @@ var mensaje = $("#mensaje");
 mensaje.hide();
 
 
-function initMap() {
-  const myLatLng = { lat: parseFloat($("#__lat").val()), lng: parseFloat($("#__lng").val())};
-  const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 17,
-    center: myLatLng,
-  });
-
-  new google.maps.Marker({
-    position: myLatLng,
-    map,
-    // title: "Hello World!",
-  });
-}
   
 $("#rechazar_ped").click(function () {
   let status = $("#__status").val()
@@ -269,30 +271,60 @@ $("#elimped").click(function (argument) {
 })
 
 
+document.getElementById('bloquear_cliente').addEventListener('click', ()=> {
 
-function confirmar_bloqueo() {
   let idcli = $("#__idcli").val();
   let codped = $("#__codiped").val();
+  // return console.log(idcli, codped);
 
-  $.ajax({
-    url: "recursos/pedidos/bloquear_cliente.php?idcli="+idcli+"&codped="+codped,
-    method: "get",
-    success: function(response){
-      console.log(response)
-      if (response == '1') {
-        M.toast({html: 'Cliente bloqueado del servicio.'})
-        $("#modal_confirmar_bloqueo").modal('close')
-        $("#cuerpo").load("templates/pedidos/pedidos.php");
-      }
-    },
-    error: function(error, data, response){
-      console.log(error)
+  fetch("recursos/pedidos/bloquear_cliente.php?idcli="+idcli+"&codped="+codped)
+  .then(response => response.text())
+  .then(data => {
+    if (data.includes('Desbloquear')) {
+      M.toast({html: 'Cliente bloqueado del servicio.'})
+      let element = document.getElementById('bloquear_cliente');
+      element.innerHTML = 'Desbloquear cliente';
+      element.classList.remove('red');
+      element.classList.add('green');
+      // $("#modal_confirmar_bloqueo").modal('close')
+      // $("#cuerpo").load("templates/pedidos/pedidos.php");
+    }else{
+      M.toast({html: 'Cliente desbloqueado del servicio.'})
+      let element = document.getElementById('bloquear_cliente');
+      element.innerHTML = 'Bloquear cliente';
+      element.classList.remove('green');
+      element.classList.add('red');
     }
-  });
+  })
 
-}
+})
 
-function vped(cod, cliente, cedula, lat, lng, nombre, apellidos, direccion, telf, estado) {
+function vped(cod, cliente, cedula, nombre, apellidos, telf, estado, dedicatoria, foto, estado_cliente) {
+  // return console.log(dedicatoria, foto);
+  if(foto.length !== 0){
+    document.getElementById('foto_personalizada').src = foto;
+    document.getElementById('foto_detalle1').hidden = false;
+    document.getElementById('foto_detalle2').hidden = true;
+  }else{
+    document.getElementById('foto_detalle1').hidden = true;
+    document.getElementById('foto_detalle2').hidden = false;
+  }
+  if(dedicatoria.length === 0){
+    document.getElementById('dedicatoria').innerHTML = `<center><span class="red-text">Sin dedicatoria...</span></center>`;
+  }else{
+    document.getElementById('dedicatoria').innerHTML = `<span>${dedicatoria}</span>`;
+  }
+  let element = document.getElementById('bloquear_cliente');
+  if(estado_cliente == '1'){
+    element.classList.remove('green');
+    element.classList.add('red');
+    element.innerHTML = 'Bloquear cliente';
+  }else{
+    element.classList.remove('red');
+    element.classList.add('green');
+    element.innerHTML = 'Desloquear cliente';
+  }
+
   $("#__idcli").val(cliente);
   $("#__status").val(estado)
   $("#block_ci").html('<b>Cédula de identidad:</b> '+cedula)
@@ -302,18 +334,36 @@ function vped(cod, cliente, cedula, lat, lng, nombre, apellidos, direccion, telf
   $("#__ci").html("<b>Cédula: </b>"+cedula);
   $("#__telf").html("<b>Teléfono: </b>"+telf);
   $("#__cli").html("<b>Nombres: </b>"+nombre+" "+apellidos);
-  $("#__dir").html("<b>Dirección: </b>"+direccion);
+
   $("#__codiped").val(cod);
 
   //PARA EL MAPA
-  $("#__lat").val(lat)
-  $("#__lng").val(lng)
 
-  initMap();
 
   $('#tab_det tbody tr').empty();
   var table = $("#tab_det")[0];
   total =  0;
+  fetch(`recursos/pedidos/get_detalle_pedido.php?cod=${cod}`)
+  .then(response => response.json())
+  .then(data => {
+    // data = JSON.parse(data)
+    // return console.log(data);
+    data.forEach(element => {
+
+      var row = table.insertRow(-1);
+      row.insertCell(0).innerHTML = element.nombre_producto;
+      row.insertCell(1).innerHTML = element.cant_producto;
+      row.insertCell(2).innerHTML = element.precio_det_pedido;
+      
+      total  = parseInt(total) + (parseFloat(element.precio_det_pedido)*(parseInt(element.cant_producto)));
+
+    });
+    $("#total_ped").html("Total: "+total +" Bs.");
+    $("#modal2").modal('open');
+  })
+
+
+
   //llenando tabla
   // "< foreach($fila2 as $a  => $valor){ ?>";
   // if(cod == "< echo $valor['cod'] ?>"){
@@ -326,8 +376,7 @@ function vped(cod, cliente, cedula, lat, lng, nombre, apellidos, direccion, telf
   // total  = parseInt(total) + (parseInt("< echo $valor['precio'] ?>")*(parseInt("< echo $valor['cant'] ?>")));
   // }
   // "< } ?>";
-  $("#total_ped").html("Total: "+total +" Bs.");
-  $("#modal2").modal('open');
+  
 }
 
 
@@ -335,50 +384,54 @@ $("#codiped").on("submit", function(e){
   e.preventDefault();
 
   let codip = $("#__codiped").val();
-  var data = {__codiped: codip}
+  var formData = new FormData();
+  formData.append('__codiped', codip)
+// return imprimirElemento($("#__codiped").val());
 
-  $.ajax({
-  url: "recursos/pedidos/agregar_pedven.php",
-  method: "post",
-  data: data
-  }).done(function(echo){
-    console.log(echo)
-    if (echo == "aceptado") {
+  fetch("recursos/pedidos/agregar_pedven.php",{method: 'post', body: formData})
+  .then(response => response.text())
+  .then(data => {
+    console.log(data)
+    if (data == "aceptado") {
       // console.log(echo)
       $("#modal2").modal('close');
       M.toast({html: 'Pedido aceptado.'});
       $("#cuerpo").load("templates/pedidos/pedidos.php");
       imprimirElemento($("#__codiped").val());
     }
-    if (echo == 'rechazado') {
+    if (data == 'rechazado') {
       M.toast({html: "Este pedido fué rechazado previamente."});
     }
-    if(echo == "already"){
+    if(data == "already"){
       M.toast({html:'Este pedido ya ha sido aceptado previamente.'});
     }
-  });
+  })
+  
+
 });
 
 
 
 function imprimirElemento(cod){
-  // "< foreach($fila as $a  => $valor){ ?>"
-    // if (< echo $valor['cod']; ?> == cod) {
-    // date = new Date("< echo $valor['fecha']; ?>")
 
-    // var fecha = date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate();
-    // var hora = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+    fetch('recursos/pedidos/datos_pedido.php?cod='+cod)
+    .then(response => response.json())
+    .then(data => {
 
-    var fecha = ("0"+date.getDate()).slice(-2)+"-"+("0"+(date.getMonth()+1)).slice(-2)+"-"+date.getFullYear() //2 DIGITOS
-    var hora = ("0"+(date.getHours())).slice(-2)+":"+("0"+(date.getMinutes())).slice(-2)+":"+("0"+(date.getSeconds())).slice(-2)
+      var date = new Date(data[0].fecha_pedido);
+      // var fecha = date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate();
+      // var hora = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+
+      var fecha = ("0"+date.getDate()).slice(-2)+"-"+("0"+(date.getMonth()+1)).slice(-2)+"-"+date.getFullYear() //2 DIGITOS
+      var hora = ("0"+(date.getHours())).slice(-2)+":"+("0"+(date.getMinutes())).slice(-2)+":"+("0"+(date.getSeconds())).slice(-2)
 
 
-    // var ci = "< echo $valor['cedula']; ?>"
-    // // var nombres ="< echo $valor['nombre']; ?>"+" "+"< echo $valor['apellidos']; ?>"
-    // var usuario = "< echo $_SESSION['Nombre'] ; echo ' '.$_SESSION['Apellidos']; ?>"
-    // var total = "< echo $valor['total']; ?>"
-  // }
-  // "< } ?>"
+      var ci = data[0].cedula;
+      var nombres = data[0].nombre_cliente+' '+data[0].apellidos;
+      var usuario = "<?php echo $_SESSION['Nombre'].' '.$_SESSION['Apellidos']; ?>";
+      var total = data[0].total_pedido;
+      
+
   // NUMEROS A LETRAS
   var monto = numeroALetras(total, {
   plural: 'BS.',
@@ -387,67 +440,67 @@ function imprimirElemento(cod){
   centSingular: 'CTVS.'
   });
   // "< foreach($fila3 as $a  => $valor){ ?>"
-  // var aut = "< echo $valor['aut']; ?>"
-  // var llave = "< echo $valor['llave']; ?>"
-  // var nit = "< echo $valor['nit']; ?>"
-  // var fecha_lim = "< echo $valor['fecha_lim']; ?>"
+  var aut = "<?php echo $fila3[0]['autorizacion']; ?>"
+  var llave = "<?php echo $fila3[0]['llave_dosificacion']; ?>"
+  var nit = "<?php echo $fila3[0]['nit']; ?>"
+  var fecha_lim = "<?php echo $fila3[0]['fecha_emision']; ?>"
+
+
+
   // "< } ?>"
   var celdas = "";
   var filas = "";
-  // "< foreach($fila2 as $a  => $valor){ ?>"
-  // if( cod == < echo $valor['cod'] ?> ){
+  "<?php foreach($fila2 as $a  => $valor){ ?>"
+  if( cod == "<?php echo $valor['cod_pedido']; ?>" ){
   celdas = `
   <tr>
-    // <td>< echo $valor['nombre'] ?></td>
-    // <td style="text-align:center">< echo $valor['cant'] ?></td>
-    // <td style="text-align:center">< echo $valor['precio'] ?></td>
+    <td><?php echo $valor['nombre_producto'] ?></td>
+    <td style="text-align:center"><?php echo $valor['cant_producto'] ?></td>
+    <td style="text-align:center"><?php echo $valor['precio_det_pedido'] ?></td>
   </tr>
   `
   filas = filas + celdas;
-  // }
-  // "< } ?>"
-
+  }
+  "<?php } ?>"
 
   //ENVIO CON AJAX --
 
-
-  var data = {autx: aut, llavex: llave, nitx: nit, cix: ci, fechax: (fecha.split("-").reverse().join("-")), montox: total, codped: cod, horax: hora}
-  $.ajax({
-    url: "recursos/pedidos/datos_fac.php",
-    data: data,
-    method: "post",
-    success: function(response){
-      crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, response, fecha_lim, usuario);
-    },
-    error: function(error, data, response){
-      console.log(error)
-    }
-  });
-
-
+  var formData = new FormData()
+  // var data = {autx: aut, llavex: llave, nitx: nit, cix: ci, fechax: (fecha.split("-").reverse().join("-")), montox: total, codped: cod, horax: hora}
+  formData.append('autx', aut);
+  formData.append('llavex', llave);
+  formData.append('nitx', nit);
+  formData.append('cix', ci);
+  formData.append('fechax', (fecha.split("-").reverse().join("-")));
+  formData.append('montox', total);
+  formData.append('codped', cod);
+  formData.append('horax', hora);
+  fetch("recursos/pedidos/datos_fac.php", {method:'post', body: formData})
+  .then(response => response.text())
+  .then(data => {
+    // return console.log(data);
+    crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, data, fecha_lim, usuario);
+  })
   //FIN ENVIO AJAX
-
+  })
 }
 // let qrcod = "";
 function crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, cod_control, fecha_lim, usuario) {
 
  var cad = cod_control.split(",");
 
-let cntdo = nit+"|"+cad[1]+"|"+aut+"|"+fecha+"|"+total+"|"+cad[0]+"|"+ci+"|"+"0"
-var data = {numfac: cad[1], contenido: cntdo }
-// console.log(data)
+  let cntdo = nit+"|"+cad[1]+"|"+aut+"|"+fecha+"|"+total+"|"+cad[0]+"|"+ci+"|"+"0"
+  var data = {numfac: cad[1], contenido: cntdo }
+  // console.log(data)
+  var formData = new FormData()
+  formData.append('numfac', cad[1]);
+  formData.append('contenido', cntdo);
+  fetch("recursos/pedidos/obtener_codigo.php", {method:'post', body: formData})
+  .then(response => response.text())
+  .then(data => {
+    crear_html(nit, cad[1], aut, fecha, hora, ci, nombres, filas, total, monto, cad[0], fecha_lim, usuario, data );
+  })
 
-$.ajax({
-  url: "recursos/pedidos/obtener_codigo.php",
-  data: data,
-  method: "post",
-  success: function(response){
-    crear_html(nit, cad[1], aut, fecha, hora, ci, nombres, filas, total, monto, cad[0], fecha_lim, usuario, response );
-  },
-  error: function(error){
-    console.log(error)
-  }
-});
 
 }
 
@@ -473,10 +526,10 @@ var miHtml = `
   </style>
   <body>
   
-    <center>Restaurante de comida rápida Delicias Express</center>
-    <center>B. La Loma, Calle Cbba. Esq. Nuñez del prado</center>
-    <center>Telf.: 76191403 </center>
-    <center>TARIJA - BOLIVIA</center>
+    <center>Repostería KRUS-MARY</center>
+    <center>Calle Independencia esq. Cochabamba. #395</center>
+    <center>Telf.: 7189635-67673738 </center>
+    <center>VILLAZON - BOLIVIA</center>
     <center>FACTURA</center>
     <center>----------------------------------------</center>
     <span style="float: left">NIT: ${nit}</span><span style="float: right">Factura N° ${numfac}</span><br>
@@ -546,7 +599,7 @@ pdf.fromHTML(
 
   function (dispose) {
 
-      pdf.save("fac_"+numfac+'.pdf');
+      // pdf.save("fac_"+numfac+'.pdf');
   }, margins
 );
 

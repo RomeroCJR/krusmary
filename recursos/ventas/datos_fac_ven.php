@@ -16,6 +16,7 @@ $numero_autorizacion = $data->autx;
 $fecha_c = $data->fechax;
 $monto_compra = $data->montox;
 $clave = $data->llavex;
+$monto_compra = str_replace('.',',',$monto_compra);
 
 $result = $conexion->query('SELECT cod_cliente FROM cliente WHERE ci_cliente = '.$nit_cliente);
 $result = $result->fetch_all(MYSQLI_ASSOC);

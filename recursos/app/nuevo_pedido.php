@@ -16,7 +16,10 @@ $subtotal = $_POST['subtotal'];
 $apellidos = $_POST['apellidos'];
 $ap_paterno = "";
 $ap_materno = "";
-if(str_contains($apellidos, " ")){
+
+$pos = strpos($apellidos, " ");
+
+if(!strpos($apellidos, " ")){
 	$apellidos = explode(" ", $apellidos);
 	$ap_paterno = $apellidos[0];
 	$ap_materno = $apellidos[1];

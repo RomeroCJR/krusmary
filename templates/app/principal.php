@@ -643,7 +643,7 @@
 			fetch("recursos/app/nuevo_pedido.php", {method:'post', body:formData})
 			.then(response => response.text())
 			.then(data => {
-				console.log(data)
+				// return console.log(data)
 				if (data == '1') {
 					M.toast({html:'<span style="color: #2ecc71">Pedido realizado, puedes ver tu pedido en la sección de Mi pedido</span>', displayLength: 5000, classes: 'rounded'})
 					$("#modal_cliente").modal('close')

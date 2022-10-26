@@ -3,19 +3,20 @@ require('../conexion.php');
 require('../sesiones.php');
 session_start();
 
-$ciusu = $_SESSION['Ci_Usuario'];
+$cod_usuario = $_SESSION['Cod_usuario'];
 $codped = $_POST['__codiped'];
 
-$cVE = "SELECT Estado FROM pedido WHERE Codped = ".$codped;
+
+$cVE = "SELECT estado_pedido FROM pedido WHERE cod_pedido = ".$codped;
 $rVE = mysqli_query($conexion, $cVE) or die(mysqli_error($conexion));
 $dVE = mysqli_fetch_array($rVE);
 
-if ($dVE['Estado'] == 1) {
-$consulta = "INSERT INTO venta(Ciusu, idcli, Fecha, Total, Codped ) SELECT b.Ci, a.idcli, a.Fecha, a.Total, a.Codped FROM pedido a, usuario b WHERE b.Ci = ".$ciusu." AND a.Codped = ".$codped;
+if ($dVE['estado_pedido'] == 1) {
+$consulta = "INSERT INTO venta(cod_usuario, cod_cliente, fecha_venta, total_venta, cod_pedido ) SELECT b.cod_usuario, a.cod_cliente, a.fecha_pedido, a.total_pedido, a.cod_pedido FROM pedido a, usuario b WHERE b.cod_usuario = ".$cod_usuario." AND a.cod_pedido = ".$codped;
 	if(mysqli_query($conexion, $consulta)){
-		$consultaUE = "UPDATE pedido SET Estado = 0 WHERE Codped = ".$codped;
+		$consultaUE = "UPDATE pedido SET estado_pedido = 0 WHERE cod_pedido = ".$codped;
 		mysqli_query($conexion, $consultaUE);
-		$cADP = "INSERT INTO det_plato( Codpla, Codv, Cantidad, Precio  ) SELECT a.Codpla, b.Codv, a.Cant, a.Precio FROM det_ped a, venta b WHERE a.Codped = ".$codped." AND a.Codped = b.Codped";
+		$cADP = "INSERT INTO detalle_venta( cod_producto, cod_venta, cant_producto, precio_det_venta  ) SELECT a.cod_producto, b.cod_venta, a.cant_producto, a.precio_det_pedido FROM detalle_pedido a, venta b WHERE a.cod_pedido = ".$codped." AND a.cod_pedido = b.cod_pedido";
 		mysqli_query($conexion, $cADP);
 		
 		die('aceptado');
@@ -24,7 +25,7 @@ $consulta = "INSERT INTO venta(Ciusu, idcli, Fecha, Total, Codped ) SELECT b.Ci,
 	}
 }
 
-if ($dVE['Estado'] == 2) {
+if ($dVE['estado_pedido'] == 2) {
 	die('rechazado');
 }else{
 	die('already');
