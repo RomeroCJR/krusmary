@@ -55,14 +55,14 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
       </thead>
       <tbody>
         <?php foreach($fila as $a  => $valor){ ?>
-        <tr <?php if(($valor['estado_pedido'])==1) echo 'style="background-color: #ffeaa7"'; ?> <?php if(($valor['estado_pedido'])==0) echo 'style="background-color: #fff"'; ?>>
+        <tr >
           
           <td align="center"><?php echo $valor["cod_pedido"]?></td>
 
           <td align="center"><?php echo date('d-m-Y H:m:s', strtotime($valor['fecha_pedido'])) ?></td>
           <td align="center"><?php echo $valor["total_pedido"] ?></td>
           <td align="center">
-            <?php if ($valor["estado_pedido"] == 1) { ?> Pendiente <?php }else{if ($valor["estado_pedido"] == 2) { ?> Rechazado <?php }else{ ?> Aceptado <?php }} ?>
+            <?php if ($valor["estado_pedido"] == 1) { ?><span style="color:#aa9900"><b>Pendiente</b></span><?php }else{if ($valor["estado_pedido"] == 2) { ?><span style="color:red"></b>Rechazado</b></span><?php }else{ ?> <span style="color:green"><b>Aceptado</b></span> <?php }} ?>
           </td>
           <td class="center">
             <!-- <a onclick="" class="btn-floating modal-trigger"><i class="material-icons">build</i></a> -->
@@ -215,8 +215,8 @@ var mensaje = $("#mensaje");
 mensaje.hide();
 
 
-  
-$("#rechazar_ped").click(function () {
+document.getElementById('rechazar_ped').addEventListener('click', ()=> {
+
   let status = $("#__status").val()
   if (status == '0') {
     return M.toast({html: "Este pedido ya ha sido aceptado previamente."})
@@ -224,24 +224,18 @@ $("#rechazar_ped").click(function () {
   if (status == '2') {
     return M.toast({html: "Este pedido ya ha sido rechazado previamente."})
   }
-
   let id = $("#__codiped").val()
-  $.ajax({
-    url: "recursos/pedidos/rechazar_ped.php?id="+id,
-    method: "get",
-    success: function(response){
-      console.log(response)
-      if (response == '1') {
-        M.toast({html: 'Pedido cancelado.'})
-        $("#modal2").modal('close')
-        $("#cuerpo").load("templates/pedidos/pedidos.php");
-      }
-    },
-    error: function(error, data, response){
-      console.log(error)
+  fetch("recursos/pedidos/rechazar_ped.php?id="+id)
+  .then(response => response.text())
+  .then(data => {
+    console.log(data)
+    if (data == '1') {
+      M.toast({html: 'Pedido cancelado.'})
+      $("#modal2").modal('close')
+      $("#cuerpo").load("templates/pedidos/pedidos.php");
     }
-  });
-
+  })
+  
 })
 
 
@@ -251,23 +245,20 @@ function eliminar_pedido(id) {
   $("#modal_elimped").modal('open');
 }
 
-$("#elimped").click(function (argument) {
+document.getElementById('elimped').addEventListener('click', () => {
+
   let id = $("#id_ped").val();
-  $.ajax({
-    url: "recursos/pedidos/eliminar_pedido.php?id="+id,
-    method: "get",
-    success: function(response){
-      console.log(response)
-      if (response == '1') {
-        M.toast({html: 'El pedido y sus detalles han sido eliminados.'})
-        $("#modal_elimped").modal('close')
-        $("#cuerpo").load("templates/pedidos/pedidos.php");
-      }
-    },
-    error: function(error, data, response){
-      console.log(error)
+  fetch("recursos/pedidos/eliminar_pedido.php?id="+id)
+  .then(response => response.text())
+  .then(data => {
+    console.log(data)
+    if (data == '1') {
+      M.toast({html: 'El pedido y sus detalles han sido eliminados.'})
+      $("#modal_elimped").modal('close')
+      $("#cuerpo").load("templates/pedidos/pedidos.php");
     }
-  });
+  })
+
 })
 
 

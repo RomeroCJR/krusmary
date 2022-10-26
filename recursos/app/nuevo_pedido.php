@@ -2,6 +2,7 @@
 require('../sesiones.php');
 require('../conexion.php');
 session_start();
+date_default_timezone_set("America/La_Paz");
 // $ci = $_POST['ci_cliente'];
 // $nombre = $_POST['nombre_c'];
 // $ap = $_POST['ap_c'];
@@ -76,7 +77,6 @@ $resc = $resc->fetch_all(MYSQLI_ASSOC);
 if ($resc[0]['estado_cliente'] == '0') {
 	die('<script>M.toast({html: "Usted ha sido bloqueado del servicio."});</script>');
 }
-
 
 if(mysqli_num_rows($resultadoVP)>0){
 	if ($rvp[0]['estado_pedido'] == 1) {

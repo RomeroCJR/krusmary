@@ -3,11 +3,11 @@
 
 	$id = $_GET['id'];
 
-	$res = $conexion->query("UPDATE `det_ped` SET `Estado`= 0 WHERE Codped = ".$id);
-	$result = $conexion->query("UPDATE `pedido` SET `Estado`= 2 WHERE Codped = ".$id);
+	$res = $conexion->query("UPDATE `detalle_pedido` SET `estado_det_pedido`= 0 WHERE cod_pedido = ".$id);
+	$result = $conexion->query("UPDATE `pedido` SET `estado_pedido`= 2 WHERE cod_pedido = ".$id);
 
 	if ($result) {
-		die('1');
+		die($result);
 	}
 	else{
 		die(mysqli_error($conexion));
