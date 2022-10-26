@@ -31,9 +31,9 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
     right: 5%;
   }
 </style>
-<div class="Rubik">
+<div class="rubik">
 
-<span><h3>Pedidos
+<span class="roboto"><h3>Pedidos
   <!-- Modal Trigger -->
   <!-- <a class="waves-effect waves-light btn-floating btn-large red" id="modal" href="#modal1"><i class="material-icons left">add</i></a> --></h3>
 </span>
@@ -315,17 +315,17 @@ function vped(cod, cliente, cedula, lat, lng, nombre, apellidos, direccion, telf
   var table = $("#tab_det")[0];
   total =  0;
   //llenando tabla
-  "<?php foreach($fila2 as $a  => $valor){ ?>";
-  if(cod == "<?php echo $valor['cod'] ?>"){
-  var row = table.insertRow(-1);
-  row.insertCell(0).innerHTML = "<?php echo $valor['nombre'] ?>";
-  row.insertCell(1).innerHTML = "<?php echo $valor['cant'] ?>";
-  row.insertCell(2).innerHTML = "<?php echo $valor['precio'] ?>";
+  // "< foreach($fila2 as $a  => $valor){ ?>";
+  // if(cod == "< echo $valor['cod'] ?>"){
+  // var row = table.insertRow(-1);
+  // row.insertCell(0).innerHTML = "< echo $valor['nombre'] ?>";
+  // row.insertCell(1).innerHTML = "< echo $valor['cant'] ?>";
+  // row.insertCell(2).innerHTML = "< echo $valor['precio'] ?>";
   
 
-  total  = parseInt(total) + (parseInt("<?php echo $valor['precio'] ?>")*(parseInt("<?php echo $valor['cant'] ?>")));
-  }
-  "<?php } ?>";
+  // total  = parseInt(total) + (parseInt("< echo $valor['precio'] ?>")*(parseInt("< echo $valor['cant'] ?>")));
+  // }
+  // "< } ?>";
   $("#total_ped").html("Total: "+total +" Bs.");
   $("#modal2").modal('open');
 }
@@ -362,9 +362,9 @@ $("#codiped").on("submit", function(e){
 
 
 function imprimirElemento(cod){
-  "<?php foreach($fila as $a  => $valor){ ?>"
-    if (<?php echo $valor['cod']; ?> == cod) {
-    date = new Date("<?php echo $valor['fecha']; ?>")
+  // "< foreach($fila as $a  => $valor){ ?>"
+    // if (< echo $valor['cod']; ?> == cod) {
+    // date = new Date("< echo $valor['fecha']; ?>")
 
     // var fecha = date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate();
     // var hora = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
@@ -373,12 +373,12 @@ function imprimirElemento(cod){
     var hora = ("0"+(date.getHours())).slice(-2)+":"+("0"+(date.getMinutes())).slice(-2)+":"+("0"+(date.getSeconds())).slice(-2)
 
 
-    var ci = "<?php echo $valor['cedula']; ?>"
-    var nombres ="<?php echo $valor['nombre']; ?>"+" "+"<?php echo $valor['apellidos']; ?>"
-    var usuario = "<?php echo $_SESSION['Nombre'] ; echo ' '.$_SESSION['Apellidos']; ?>"
-    var total = "<?php echo $valor['total']; ?>"
-  }
-  "<?php } ?>"
+    // var ci = "< echo $valor['cedula']; ?>"
+    // // var nombres ="< echo $valor['nombre']; ?>"+" "+"< echo $valor['apellidos']; ?>"
+    // var usuario = "< echo $_SESSION['Nombre'] ; echo ' '.$_SESSION['Apellidos']; ?>"
+    // var total = "< echo $valor['total']; ?>"
+  // }
+  // "< } ?>"
   // NUMEROS A LETRAS
   var monto = numeroALetras(total, {
   plural: 'BS.',
@@ -386,26 +386,26 @@ function imprimirElemento(cod){
   centPlural: 'CTVS.',
   centSingular: 'CTVS.'
   });
-  "<?php foreach($fila3 as $a  => $valor){ ?>"
-  var aut = "<?php echo $valor['aut']; ?>"
-  var llave = "<?php echo $valor['llave']; ?>"
-  var nit = "<?php echo $valor['nit']; ?>"
-  var fecha_lim = "<?php echo $valor['fecha_lim']; ?>"
-  "<?php } ?>"
+  // "< foreach($fila3 as $a  => $valor){ ?>"
+  // var aut = "< echo $valor['aut']; ?>"
+  // var llave = "< echo $valor['llave']; ?>"
+  // var nit = "< echo $valor['nit']; ?>"
+  // var fecha_lim = "< echo $valor['fecha_lim']; ?>"
+  // "< } ?>"
   var celdas = "";
   var filas = "";
-  "<?php foreach($fila2 as $a  => $valor){ ?>"
-  if( cod == <?php echo $valor['cod'] ?> ){
+  // "< foreach($fila2 as $a  => $valor){ ?>"
+  // if( cod == < echo $valor['cod'] ?> ){
   celdas = `
   <tr>
-    <td><?php echo $valor['nombre'] ?></td>
-    <td style="text-align:center"><?php echo $valor['cant'] ?></td>
-    <td style="text-align:center"><?php echo $valor['precio'] ?></td>
+    // <td>< echo $valor['nombre'] ?></td>
+    // <td style="text-align:center">< echo $valor['cant'] ?></td>
+    // <td style="text-align:center">< echo $valor['precio'] ?></td>
   </tr>
   `
   filas = filas + celdas;
-  }
-  "<?php } ?>"
+  // }
+  // "< } ?>"
 
 
   //ENVIO CON AJAX --
