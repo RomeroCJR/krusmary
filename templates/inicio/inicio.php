@@ -26,6 +26,7 @@
 
 	$result2 = $conexion->query("SELECT * FROM categoria WHERE estado_categoria = 1");
 	$result2 = $result2->fetch_all(MYSQLI_ASSOC);
+
 ?>
 <style>
 	.container-fluid{

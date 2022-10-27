@@ -32,7 +32,7 @@ $numero_factura = (int)$datosCNF['numfac'] + 1; //para bd factura
 // die($numero_factura."<<<");
 // $codigo_control = CodigoControlV7::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
 
-$codigo_control = CodigoControlV7::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
+$codigo_control = CodigoControlV7::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, (float)$monto_compra, $clave);
 
 
 // die($codped.",".$fecha.",".$hora.",".$nit_cliente.",".$numero_factura);

@@ -7,7 +7,7 @@
 	$telf = $_POST['telf'];
 	$email = $_POST['email'];
 
-	$result = $conexion->query("UPDATE `empresa` SET `NIT`=".$nit.",`direccion`='".$dir."',`actividad`='".$act."',`leyenda`='".$ley."',`telefono`='".$telf."',`email`='".$email."' WHERE 1");
+	$result = $conexion->query("UPDATE `empresa` SET `NIT`=".$nit.",`direccion`='".$dir."',`actividad`='".$act."',`leyenda`='".$ley."',`telefono_celular`='".$telf."',`email`='".$email."' WHERE 1");
 	if ($result) {
 		echo '1';
 	}else{

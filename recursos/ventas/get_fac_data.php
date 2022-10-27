@@ -2,9 +2,17 @@
 	require("../conexion.php");
 
 	$cod = $_GET['cod'];
+	$codf = 'a.cod_venta = '.$cod;
+	$ress = $conexion->query('SELECT cod_pedido FROM venta WHERE cod_venta = '.$cod);
+	$ress = $ress->fetch_all(MYSQLI_ASSOC);
+	if($ress[0]['cod_pedido'] != NULL){
+		$codf = 'a.cod_pedido = '.$ress[0]['cod_pedido'];
+	}
 
+	// die($codf);
+	// die(var_dump($ress));
 	// $res = $conexion->query('SELECT nro_factura, ci_cli, Fecha, Hora FROM factura WHERE Codv = '.$cod.' OR Codp = '.$cod);
-	$res = $conexion->query('SELECT a.nro_factura, b.ci_cliente, a.fecha_factura, a.hora_factura, b.cod_cliente FROM factura a, cliente b WHERE a.cod_cliente = b.cod_cliente AND a.cod_venta = '.$cod);
+	$res = $conexion->query('SELECT a.nro_factura, b.ci_cliente, a.fecha_factura, a.hora_factura, b.cod_cliente FROM factura a, cliente b WHERE a.cod_cliente = b.cod_cliente AND '.$codf);
 	$res = $res->fetch_all();
 
 

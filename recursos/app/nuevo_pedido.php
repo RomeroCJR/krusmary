@@ -22,8 +22,14 @@ $pos = strpos($apellidos, " ");
 
 if(!strpos($apellidos, " ")){
 	$apellidos = explode(" ", $apellidos);
+	// die(var_dump($apellidos));
 	$ap_paterno = $apellidos[0];
-	$ap_materno = $apellidos[1];
+	if(isset($apellidos[1])){
+		$ap_materno = $apellidos[1];
+	}else{
+		$ap_materno = "";
+	}
+	
 }else{
 	$ap_paterno = $apellidos;
 }
@@ -96,6 +102,7 @@ if (intval($telf) < 40000000) {
 
 $result = $conexion->query("INSERT INTO pedido (cod_cliente, total_pedido, dedicatoria, foto_personalizada) VALUES ('".$id_cli."', '".$subtotal."', '".$mensaje."', '".$ruta2."')");
 
+// die(mysqli_error($conexion)."---- error");
 
 if($result){
 

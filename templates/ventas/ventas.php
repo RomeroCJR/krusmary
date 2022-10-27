@@ -1,7 +1,7 @@
  <?php
 require('../../recursos/conexion.php');
 session_start();
-$Sql = "SELECT a.cod_venta, c.nombre_usuario, a.cod_usuario, b.ci_cliente, a.cod_cliente, a.fecha_venta, a.total_venta, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',(SELECT IFNULL(b.ap_materno_cliente, ''))) AS apellidos FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1"; 
+$Sql = "SELECT a.cod_venta, c.nombre_usuario, a.cod_usuario, b.ci_cliente, a.cod_cliente, a.fecha_venta, a.total_venta, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',(SELECT IFNULL(b.ap_materno_cliente, ''))) AS apellidos, a.cod_pedido FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1"; 
 $Busq = $conexion->query($Sql); 
 $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 
@@ -60,7 +60,7 @@ overflow-x: hidden;*/
   <tbody>
   	 <?php foreach($fila as $a  => $valor){ ?>
      <tr>
-        <td align="center"><?php echo $valor["cod_venta"] ?></td>
+        <td align="center" <?php if($valor['cod_pedido'] != NULL){ echo "style='color:#886600;'";}?>><?php echo $valor["cod_venta"] ?></td>
         <td align="center"><?php echo $valor["nombre_usuario"] ?></td>
         <td align="center"><?php echo $valor["nombre_cliente"]." ".$valor["apellidos"] ?></td>
         <td align="center"><?php echo $valor["total_venta"] ?> Bs.</td>
@@ -255,7 +255,7 @@ let numfac; let ci; let nombres; let fecha; let hora; let total; let codctrl; le
         url: "recursos/ventas/get_control_code.php?aut="+aut+"&numfac="+numfac+"&nit="+ci+"&fecha="+fecha+"&total="+total+"&llave="+llave,
         method: "GET",
         success: function(response) {
-          console.log(response)
+          // return console.log(response)
           codctrl = response;
 
           miHtml = `

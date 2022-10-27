@@ -1,14 +1,14 @@
 <?php 
 	require("../../recursos/conexion.php");
-	$result = $conexion->query("SELECT * FROM empresa WHERE estado = 1");
+	$result = $conexion->query("SELECT * FROM empresa WHERE estado_empresa = 1");
 	$result = $result->fetch_all(MYSQLI_ASSOC);
 
-	$res = $conexion->query("SELECT * FROM `talonario` WHERE Estado = 1");
+	$res = $conexion->query("SELECT * FROM `talonario` WHERE estado_talonario = 1");
 	$res = $res->fetch_all(MYSQLI_ASSOC);
 
 ?>
 <br>
-<div class="container">
+<div class="container rubik">
 	<button class="btn-large waves-effect waves-light orange" id="btn-empresa">DATOS DE EMPRESA</button>
 	<button class="btn-large waves-effect waves-light orange" id="btn-factura">DATOS DE FACTURA</button>
 
@@ -35,7 +35,7 @@
 			        </div>
 
 			        <div class="input-field col s12">
-			          <input id="telf" name="telf" type="text" class="validate" onkeypress="return checkIt(event)" minlength="8" maxlength="8" value="<?php echo $result[0]['telefono'] ?>" required>
+			          <input id="telf" name="telf" type="text" class="validate" onkeypress="return checkIt(event)" minlength="8" maxlength="8" value="<?php echo $result[0]['telefono_celular'] ?>" required>
 			          <label for="telf">Número de teléfono (*)</label>
 			        </div>
 			        <div class="input-field col s12">
@@ -54,19 +54,19 @@
 			<form id="form_factura">
 				<div class="row">
 					<div class="input-field col s12" >
-			          <input id="autorizacion" name="autorizacion" type="text" onkeypress="return checkIt(event)" class="validate" minlength="8" maxlength="8" value="<?php echo $res[0]['Autorizacion'] ?>">
+			          <input id="autorizacion" name="autorizacion" type="text" onkeypress="return checkIt(event)" class="validate" minlength="8" maxlength="8" value="<?php echo $res[0]['autorizacion'] ?>">
 			          <label for="autorizacion">N° autorización</label>
 			        </div>
 			        <div class="input-field col s12">
-			          <input id="llave" name="llave" type="text" class="validate" value="<?php echo $res[0]['Llave_dosif'] ?>">
+			          <input id="llave" name="llave" type="text" class="validate" value="<?php echo $res[0]['llave_dosificacion'] ?>">
 			          <label for="llave">Llave de dosificación</label>
 			        </div>
 			        <div class="input-field col s12">
-			          <input id="num_inicial" name="num_inicial" type="text" class="validate" value="<?php echo $res[0]['Num_inicio'] ?>">
+			          <input id="num_inicial" name="num_inicial" type="text" class="validate" value="<?php echo $res[0]['num_inicio'] ?>">
 			          <label for="num_inicial">Número de factura inicial</label>
 			        </div>
 			        <div class="input-field col s12">
-			        	<input id="limite" name="limite" type="date" class="validate" value="<?php echo $res[0]['Fecha_emision'] ?>">
+			        	<input id="limite" name="limite" type="date" class="validate" value="<?php echo $res[0]['fecha_emision'] ?>">
 			          	<label for="limite">Fecha límite de emisión</label>
 			        </div>
 		      </div>

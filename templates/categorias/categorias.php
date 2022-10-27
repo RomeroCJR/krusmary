@@ -22,9 +22,24 @@ $fila = $busq->fetch_all(MYSQLI_ASSOC);
   <div class="col s4">
       <a class="waves-effect waves-light btn-large orange darken-4 modal-trigger rubik" id="modal_nuevo_categoria" href="#modal1"><i class="material-icons left">add</i><b>Categoria</b></a>
   </div>
-</div>
 
+    <div class="col s4 offset-s4">
+    <div class="right">  
+      <p>
+        <label>
+          <input name="group1" class="radios" value="1" type="radio" checked/>
+          <span>Altas</span>
+        </label>
 
+        <label>
+          <input name="group1"  class="radios" value="2" type="radio"/>
+          <span>Bajas</span>
+        </label>
+      </p>
+    </div>
+  </div>
+  </div>
+  </div>
 <table id="tabla1" class="content-table">
       <thead>
          <tr>
@@ -41,9 +56,8 @@ $fila = $busq->fetch_all(MYSQLI_ASSOC);
            
 
             <td class="center">
-              <a href="#" class="btn-small btn-floating" onclick="mod_categ('<?php echo $valor['cod'] ?>', '<?php echo $valor['nombre'] ?>')"><i class="material-icons">build</i></a>
-  	          <a href="#" class="btn-small btn-floating" onclick="delete_client('<?php echo $valor['cod'] ?>')"><i class="material-icons">delete</i></a>
-  	          <a href="#" onclick="vcli('<?php echo $valor['cod'] ?>', '<?php echo $valor['nombre'] ?>');" class="btn-small btn-floating"><i class="material-icons">search</i></a></td>
+              <a href="#!" class="btn-small btn-floating" onclick="mod_categ('<?php echo $valor['cod'] ?>', '<?php echo $valor['nombre'] ?>')"><i class="material-icons">build</i></a>
+  	          <a href="#!" class="btn-small btn-floating" onclick="delete_categ('<?php echo $valor['cod'] ?>')"><i class="material-icons">delete</i></a>
             </td>
          </tr>
          <?php } ?>	
@@ -70,23 +84,37 @@ $fila = $busq->fetch_all(MYSQLI_ASSOC);
 
    <!-- Modal formulario modificar cliente -->
   <div id="modal2" class="modal" style="width: 40%;">
-  <div class="modal-content">
-    <h4>Modificar Categoria</h4>
-    <form id="form_mod_categ" accept-charset="utf-8">
-   
-      <div class="input-field col s12 m12">
-         <input type="text" id="mod_id" name="mod_id" hidden>
-         <input id="mod_nombre" name="mod_nombre" type="text" autocomplete="off" onKeyPress="return checkText(event)" minlength="3" maxlength="30" onpaste="return false" class="validate" required>
-         <label for="mod_nombre">Nombre</label>
-      </div>  
-   </form>
+    <div class="modal-content">
+      <h4>Modificar Categoria</h4>
+      <form id="form_mod_categ" accept-charset="utf-8">
+    
+        <div class="input-field col s12 m12">
+          <input type="text" id="mod_id" name="mod_id" hidden>
+          <input id="mod_nombre" name="mod_nombre" type="text" autocomplete="off" onKeyPress="return checkText(event)" minlength="3" maxlength="30" onpaste="return false" class="validate" required>
+          <label for="mod_nombre">Nombre</label>
+        </div>  
+    </form>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-red btn red left">Cancelar</a>
+      <button class="btn waves-effect waves-light" type="submit" form="form_mod_categ">Agregar</button>
+    </div>
   </div>
-  <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-red btn red left">Cancelar</a>
-    <button class="btn waves-effect waves-light" type="submit" form="form_mod_categ">Agregar</button>
-  </div>
-</div>
 
+
+  <!-- Modal Structure -->
+  <div id="modal3" class="modal">
+    <div class="modal-content">
+      <h4>Eliminar categoría</h4>
+      <p>Se eliminará la categoría seleccionada.</p>
+      <input type="text" id="cod_categoria" hidden>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-red btn red left">Cancelar</a>
+      <a href="#!" onclick="borrar_categoria()" class="waves-effect waves-green btn">Aceptar</a>
+    </div>
+  </div>
+  
 
    <script>
      $(document).ready(function() {
@@ -141,5 +169,30 @@ document.getElementById('form_mod_categ').addEventListener('submit', function (e
       $("#cuerpo").load("templates/categorias/categorias.php");
    })
 });
+
+function delete_categ(cod){
+  document.getElementById('cod_categoria').value = cod;
+  $("#modal3").modal('open');
+}
+function borrar_categoria(){
+  var cod = document.getElementById('cod_categoria').value;
+  fetch(`recursos/categorias/borrar_categoria.php?cod=${cod}`)
+  .then(response => response.text())
+  .then(data => {
+    if(data == '1'){
+      M.toast({html: '<b>Categoría dada de baja.</b>', displayLength: 4000})
+      $("#modal3").modal('close');
+      $("#cuerpo").load('templates/categorias/categorias.php');
+    }else{
+      console.log(data);
+    }
+  })
+}
+
+
+document.getElementsByClassName('radios')[1].addEventListener('click', ()=> {
+  console.log(document.getElementsByName('group1')[1].value)
+  $("#cuerpo").load("templates/categorias/categorias_bajas.php");
+})
 
    </script>

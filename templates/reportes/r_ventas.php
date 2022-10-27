@@ -7,17 +7,17 @@ $gestion = $_GET['ges'];
 $mes = $_GET['per'];
 
 if ($mes == 0) {
-	$result = $conexion->query("SELECT a.Codv, a.Fecha, a.Total, a.Ciusu, IF((IFNULL((a.Codped),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.Nombre,' ',b.Apellidos) as cliente FROM venta a, cliente b WHERE a.idcli = b.id AND a.Estado = 1 AND a.Fecha LIKE '".$gestion."%'");
+	$result = $conexion->query("SELECT a.cod_venta, a.fecha_venta, a.total_venta, a.cod_usuario, c.ci_usuario, IF((IFNULL((a.cod_pedido),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.nombre_cliente,' ',b.ap_paterno_cliente,' ', (SELECT IFNULL(b.ap_materno_cliente, ' '))) as cliente FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1 AND a.fecha_venta LIKE '".$gestion."%'");
 }else{
-	$result = $conexion->query("SELECT a.Codv, a.Fecha, a.Total, a.Ciusu, IF((IFNULL((a.Codped),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.Nombre,' ',b.Apellidos) as cliente FROM venta a, cliente b WHERE a.idcli = b.id AND a.Estado = 1 AND a.Fecha LIKE '".$gestion."-".$mes."%'");
+	$result = $conexion->query("SELECT a.cod_venta, a.fecha_venta, a.total_venta, a.cod_usuario, c.ci_usuario, IF((IFNULL((a.cod_pedido),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.nombre_cliente,' ',b.ap_paterno_cliente,' ', (SELECT IFNULL(b.ap_materno_cliente, ' '))) as cliente FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1 AND a.fecha_venta LIKE '".$gestion."-".$mes."%'");
 }
 	$cant_local = 0;
 	$cant_pedido = 0;
 	$ingreso_total = 0;
 	if((mysqli_num_rows($result))>0){
 	  while($arr = $result->fetch_array()){ 
-	        $fila[] = array('codv'=>$arr['Codv'], 'cliente'=>$arr['cliente'], 'fecha'=>$arr['Fecha'], 'tipo'=>$arr['Tipo'], 'total'=>$arr['Total'], 'ciusu'=>$arr['Ciusu']); 
-	        $ingreso_total = $ingreso_total + (int)$arr['Total'];
+	        $fila[] = array('codv'=>$arr['cod_venta'], 'cliente'=>$arr['cliente'], 'fecha'=>$arr['fecha_venta'], 'tipo'=>$arr['Tipo'], 'total'=>$arr['total_venta'], 'ciusu'=>$arr['ci_usuario']); 
+	        $ingreso_total = $ingreso_total + (int)$arr['total_venta'];
 	        if ($arr['Tipo'] == 'local') {
 	        	$cant_local++;
 	        }else{
@@ -52,7 +52,7 @@ if ($mes == 0) {
 <title>reporte de compras</title>
 <h3 class="fuente">Reporte de ventas</h3><br>
 <div class="row">
-	<div class="col s11">
+	<div class="col s12">
 		<table id="tabla1">
 			<thead>
 				<tr>
@@ -72,7 +72,7 @@ if ($mes == 0) {
 					<td><?php echo $valor['cliente']?></td>
 					<td><?php echo date('d-m-Y', strtotime($valor['fecha']))?></td>
 					<td><?php echo $valor['tipo']?></td>
-					<td><?php echo $valor['total']." Bs."?></td>
+					<td><?php echo $valor['total']	?></td>
 				</tr>
 			    <?php } ?>
 			</tbody>
@@ -123,11 +123,11 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
 	        className:  'btn-flat blue',
-	        title: 			`<span style="font-size:30; line-height: 100%;">Reporte del ventas del periodo: <?php echo $_GET["ges"] ?> - ${per}</span> 
-	        						<p style="font-size:18; line-height: 25%;">Total ventas: <?php echo mysqli_num_rows($result) ?></p>
-	        						<p style="font-size:18; line-height: 25%;">Ventas locales: <?php echo $cant_local?></p>
-	        						<p style="font-size:18; line-height: 25%;">Ventas por pedido: <?php echo $cant_pedido?></p>
-	        						<p style="font-size:18; line-height: 25%;">Ingresos totales: <?php echo $ingreso_total ?> Bs.</p>`
+	        title: 		`<span style="font-size:30; line-height: 100%;">Reporte del ventas del periodo: <?php echo $_GET["ges"] ?> - ${per}</span> 
+						<p style="font-size:18; line-height: 25%;">Total ventas: <?php echo mysqli_num_rows($result) ?></p>
+						<p style="font-size:18; line-height: 25%;">Ventas locales: <?php echo $cant_local?></p>
+						<p style="font-size:18; line-height: 25%;">Ventas por pedido: <?php echo $cant_pedido?></p>
+						<p style="font-size:18; line-height: 25%;">Ingresos totales: <?php echo $ingreso_total ?> Bs.</p>`
 	      }
 	    ]
 	    });

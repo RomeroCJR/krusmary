@@ -694,7 +694,7 @@ fetch("recursos/ventas/filas_fac_ven.php?codxv="+cod)
   fetch("recursos/ventas/datos_fac_ven.php?data_arr="+data_arr)
   .then(response => response.text())
   .then(data => {
-    // console.log(data);
+    // return console.log(data);
     crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, data, fecha_lim, usuario);
   })
 })

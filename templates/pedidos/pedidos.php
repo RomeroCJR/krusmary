@@ -475,6 +475,7 @@ function imprimirElemento(cod){
   //FIN ENVIO AJAX
   })
 }
+
 // let qrcod = "";
 function crear_factura(nit, aut, fecha, hora, ci, nombres, filas, total, monto, cod_control, fecha_lim, usuario) {
 

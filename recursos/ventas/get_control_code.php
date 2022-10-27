@@ -8,9 +8,12 @@
 	$monto_compra = $_GET['total'];
 	$clave = $_GET['llave'];
 
-	// die($numero_autorizacion." ".$numero_factura." ".$nit_cliente." ".$fecha_compra." ".$monto_compra." ".$clave);
+	
 	$fecha_compra = strtotime(str_replace("/", "-", $fecha_c));
-	$codigo_control = CodigoControlV7::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
+	// die($numero_autorizacion." ".$numero_factura." ".$nit_cliente." ".$fecha_compra." ".$monto_compra." ".$clave);
+	$monto_compra = str_replace('.', ',', $monto_compra);
+	// die($monto_compra);
+	$codigo_control = CodigoControlV7::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, (float)$monto_compra, $clave);
 	echo $codigo_control;
 	
 ?>
