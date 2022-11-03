@@ -5,21 +5,89 @@
 	if ($per == '0') {
 		$per = "";
 	}
-
+	// SELECT SUM(a.total_venta) as ingreso, SUM(b.monto_caja) AS gasto , DATE(a.fecha_venta) FROM venta a, caja b WHERE b.fecha_caja LIKE '2022-%' AND DATE(a.fecha_venta) = DATE(b.fecha_caja) AND a.estado_venta = 1 AND b.estado_caja = 1 GROUP BY DATE(a.fecha_caja)
 	// $result = $conexion->query("SELECT SUM(a.Total)as ingreso, a.Fecha FROM venta a WHERE a.Fecha LIKE '".$gestion."-".$per."%' AND a.Estado = 1 GROUP BY a.Fecha");
 	// $result = $result->fetch_all();
 
 	// $res = $conexion->query("SELECT b.Monto, b.Fecha FROM gastos b WHERE b.Fecha LIKE '".$gestion."-".$per."%' AND b.Estado = 1 GROUP BY b.Fecha");
 	// $res = $res->fetch_all();
+	//consulta de ingresos
+	$ingresos = $conexion->query("SELECT SUM(a.total_venta) AS ingreso, DATE(a.fecha_venta) as fecha FROM venta a WHERE a.fecha_venta LIKE '".$gestion."-".$per."%' AND a.estado_venta = 1 GROUP BY DATE(a.fecha_venta)");
+	$ingreso = $ingresos->fetch_all(MYSQLI_ASSOC);
+	//consulta de gastos
+	$gastos = $conexion->query("SELECT SUM(a.monto_caja) AS gasto, DATE(a.fecha_caja) as fecha FROM caja a WHERE a.fecha_caja LIKE '".$gestion."-".$per."%' AND a.estado_caja = 1 GROUP BY DATE(a.fecha_caja)");
+	$gastos = $gastos->fetch_all(MYSQLI_ASSOC);
+	// $result = $conexion->query("SELECT * FROM caja b WHERE b.fecha_caja LIKE '".$gestion."-".$per."%' AND b.estado_caja = 1 GROUP BY b.fecha_caja");
+	// $res = $result->fetch_all();
 
-	$result = $conexion->query("SELECT SUM(a.Total) as ingreso, b.Monto, b.Fecha FROM venta a, gastos b WHERE b.Fecha LIKE '".$gestion."-".$per."%' AND a.Fecha LIKE b.Fecha AND a.Estado = 1 GROUP BY b.Fecha");
-	$res = $result->fetch_all();
-	$total = 0;
+	// $result2 = $conexion->query("SELECT SUM(total_venta) FROM venta WHERE estado_venta = 1 AND fecha_venta LIKE '".$gestion."-".$per."%'");
+	// $res2 = $result2->fetch_all();
+	// $total_venta = $res2[0][0];
+	foreach($ingreso as $key => $a){
+		foreach($gastos as $b){
+			if($a['fecha'] == $b['fecha']){
+				$ingreso[$key]['gasto'] =  $b['gasto'];
+			}else{
+				// $ingresos[$key]['fecha'] = $b['fecha'];
+				if(!isset($ingreso[$key]['gasto'])){
+					$ingreso[$key]['gasto'] = 0;
+				}
+			}
+		}
+	}
+	$x = true;
+	foreach($gastos as $key => $a){
+		foreach($ingreso as $b){
+			if($a['fecha'] == $b['fecha']){
+				$x = false;
+				// $ingresos[$key]['gasto'] =  $b['gasto'];
+			}
+		}
+		if($x){
+			$arr = array(
+				"ingreso" => 0,
+				"gasto" => $a['gasto'],
+				"fecha" => $a['fecha']
+			);
+			array_push($ingreso, $arr);
+			$x = false;
+		}
+	}
+
+	// echo var_dump($ingresos);
+
+	// foreach($gastos as $key => $a){
+	// 	foreach($ingresos as $b){
+	// 		if($a['fecha'] != $b['fecha']){
+	// 			$ingresos[$key]['ingreso'] = 0;
+	// 			$ingresos[$key]['gasto'] = $a['gasto'];
+	// 			$ingresos[$key]['fecha'] = $a['fecha'];
+	// 		}
+	// 	}
+	// }
+
+	// echo var_dump($ingreso);
+
+	$total = 0;	
 	$total_g = 0;
 	$total_ing = 0;
+
+	foreach ($ingreso as $key => $a) {
+		$total = $total + (float)$a['ingreso'];
+		$total_g = $total_g + (float)$a['gasto'];
+	}
+	$total_ing = $total - $total_g;
+
 ?>
 
 
+<style>
+	@media print{
+		header, main, body, footer { 
+			padding-left:0px;
+		}
+	}
+</style>
 
 <title>reporte de ingresos y gastos</title>
 <h3 class="fuente">Reporte de ingresos y gastos</h3><br>
@@ -28,23 +96,25 @@
 		<table id="tabla1">
 			<thead>
 				<tr>
-					<th class="center">Gasto</th>
-					<th class="center">Ventas</th>
-					<th class="center">Ingreso</th>
+					<th class="center">Gasto (Bs.)</th>
+					<th class="center">Ventas (Bs.)</th>
+					<th class="center">Ingreso (Bs.)</th>
 					<th class="center">Fecha</th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($res as $a): ?>
-					<?php $total = $total + $a[0] ?>
-					<?php $total_g = $total_g + $a[1] ?>
-					<?php $total_ing = $total_ing + ($a[0]-$a[1]) ?>
+				<!-- ingreso, monto, fecha,  -->
+				<?php foreach($ingreso as $a): ?>
+
+
 								<tr>
-									<td class="center"><?php echo $a[1]." Bs."?></td>
-									<td class="center"><?php echo $a[0]." Bs."?></td>
-									<td class="center"><?php echo $a[0]-$a[1]." Bs."?></td>
-									<td class="center"><?php echo date("d-m-Y", strtotime($a[2]))?></td>
+									<td class="center"><?php echo $a['gasto'] ?></td>
+									<td class="center"><?php echo $a['ingreso'] ?></td>
+									<td class="center"><?php echo (float)$a['ingreso'] - (float)$a['gasto']?></td>
+									<td class="center"><?php echo date("Y-m-d", strtotime($a['fecha']))?></td>
 								</tr>
+
+
 			    <?php endforeach ?>
 			</tbody>
 		</table>
@@ -98,7 +168,7 @@ $(document).ready(function() {
 	        className:  'btn-flat blue',
 	        title: 			`<span style="font-size:30; line-height: 100%;">Reporte de gastos del periodo: <?php echo $_GET["ges"] ?> - `+per+`</span> 
 	        						<p style="font-size:20; font-weight: bold; line-height: 25%;">Totales:</p>
-	        						<p style="font-size:18; line-height: 25%;">Días: <?php echo mysqli_num_rows($result) ?></p>
+	        						<p style="font-size:18; line-height: 25%;">Días: <?php echo mysqli_num_rows($ingresos) ?></p>
 	        						<p style="font-size:18; line-height: 25%;">Ventas: <?php echo $total ?> Bs.</p>
 	        						<p style="font-size:18; line-height: 25%;">Gastos: <?php echo $total_g ?> Bs.</p>
 	        						<p style="font-size:18; line-height: 25%;">Ingresos: <?php echo $total_ing ?> Bs.</p>`

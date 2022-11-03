@@ -56,11 +56,12 @@
         <!-- <form action="recursos/redireccionador.php" method="post" class="col s12" id="ffecha"> -->
             <div class="input-field">
                 <select name="gestion" id="gestion">
-                  <option value="2021"  '<?php if(date("Y") == "2021"){echo "selected";} ?>'><b>2021</b></option>
-                  <option value="2022"  '<?php if(date("Y") == "2022"){echo "selected";} ?>'><b>2022</b></option>
-                  <option value="2023"  '<?php if(date("Y") == "2023"){echo "selected";} ?>'><b>2023</b></option>
-                  <option value="2024"  '<?php if(date("Y") == "2024"){echo "selected";} ?>'><b>2024</b></option>
-                  <option value="2025"  '<?php if(date("Y") == "2025"){echo "selected";} ?>'><b>2025</b></option>
+                  <!-- <option value="2021"  ''><b>2021</b></option> -->
+                  <option value="2022"  <?php if(date("Y") == "2022"){echo "selected";} ?>><b>2022</b></option>
+                  <option value="2023"  <?php if(date("Y") == "2023"){echo "selected";} ?>><b>2023</b></option>
+                  <option value="2024"  <?php if(date("Y") == "2024"){echo "selected";} ?>><b>2024</b></option>
+                  <option value="2025"  <?php if(date("Y") == "2025"){echo "selected";} ?>><b>2025</b></option>
+                  <option value="2025"  <?php if(date("Y") == "2025"){echo "selected";} ?>><b>2025</b></option>
                 </select>
                 <label><b>Seleccione la gestión</b></label>
             </div>

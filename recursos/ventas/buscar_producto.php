@@ -6,7 +6,7 @@ if(isset($_GET["term"]))
 {
 
     //NUEVA CONSULTA, RECOGE PRECIO DE ÚLTIMA VENTA REALIZADA... TEST
-    $result = $conexion->query("SELECT a.cod_producto as id, a.nombre_producto, b.stock, a.precio_producto, a.foto_producto FROM producto a, inventario b WHERE a.cod_producto = b.cod_producto AND  a.estado_producto = 1  AND a.nombre_producto LIKE '%".$_GET["term"]."%' ORDER BY a.cod_producto ASC");
+    $result = $conexion->query("SELECT a.cod_producto as id, a.nombre_producto, b.stock, a.precio_producto, a.foto_producto FROM producto a, inventario b WHERE a.cod_producto = b.cod_producto AND  a.estado_producto = 1  AND CONCAT(a.cod_producto,' ',a.nombre_producto) LIKE '%".$_GET["term"]."%' ORDER BY a.cod_producto ASC");
 
     $total_row = mysqli_num_rows($result); 
     $output = array();

@@ -160,6 +160,18 @@
 						</div>
 
 						<div id="torta_personalizada" hidden>
+							<div class="input-field col s12" id="div_instrucciones_torta" style="margin-bottom:0px">
+								<p>
+									<label>
+										<input type="checkbox" id="check_instrucciones" />
+										<span>Instrucciones especiales:</span>
+									</label>
+								</p>
+							</div>
+							<div class="input-field col s12" id="div_instrucciones" style="margin-top:0px" hidden>
+								<textarea id="excepciones" name="excepciones" class="materialize-textarea"></textarea>
+								<label for="excepciones">Sin azucar / sal / nuez / otros... :</label>
+							</div>
 
 							<div class="input-field col s12" id="div_fototorta" style="margin-bottom:0px">
 								<p>
@@ -189,8 +201,9 @@
 							</div>
 							<div class="input-field col s12" id="div_mensaje" style="margin-top:0px" hidden>
 								<textarea id="dedicatoria" name="dedicatoria" class="materialize-textarea"></textarea>
-								<label for="dedicatoria">Ingrese una dedicatoria (Sea explícito por favor):</label>
+								<label for="dedicatoria">"Feliz cumpleaños amiga", "Felicidades mamá":</label>
 							</div>
+							
 
 						</div>
 
@@ -409,6 +422,9 @@
 		if((document.getElementById('check_mensaje_personalizado').checked == true) && document.getElementById('dedicatoria').value == ""){
 			return M.toast({html: 'Ingrese una dedicatoria.'});
 		}
+		if((document.getElementById('check_instrucciones').checked == true) && document.getElementById('excepciones').value == ""){
+			return M.toast({html: 'Ingrese las instrucciones especiales de la torta.'});
+		}
 
 		formData.append('subtotal', subtotal);
 		formData.append('json_detalle', json_detalle);
@@ -470,6 +486,15 @@
 			document.getElementById('div_mensaje').hidden = true;
 		}
 	});
+	document.getElementById('check_instrucciones').addEventListener('click', () => {
+		let check = document.getElementById('check_instrucciones');
+		if(check.checked){
+			document.getElementById('div_instrucciones').hidden = false;
+		}else{
+			document.getElementById('excepciones').value ="";
+			document.getElementById('div_instrucciones').hidden = true;
+		}
+	});
 
 	document.getElementById('btn_modal_cliente').addEventListener('click', ()=>{
 		let x = false;
@@ -482,6 +507,7 @@
 				document.getElementById('imagen-nombre').value ="";
 				document.getElementById('imagen-path').value ="";
 				document.getElementById('dedicatoria').value ="";
+				document.getElementById('excepciones').value ="";
 				// document.getElementById('check_fototorta').checked = false;
 				// document.getElementById('check_mensaje_personalizado').checked = false;
 			}else{
@@ -489,6 +515,7 @@
 				document.getElementById('imagen-nombre').value ="";
 				document.getElementById('imagen-path').value ="";
 				document.getElementById('dedicatoria').value ="";
+				document.getElementById('excepciones').value ="";
 				// document.getElementById('check_fototorta').checked = false;
 				// document.getElementById('check_mensaje_personalizado').checked = false;
 			}

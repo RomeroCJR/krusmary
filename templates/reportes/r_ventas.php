@@ -1,7 +1,7 @@
 <?php 
-require("../../recursos/sesiones.php");
+
 require("../../recursos/conexion.php");
-session_start();
+
 
 $gestion = $_GET['ges'];
 $mes = $_GET['per'];
@@ -30,7 +30,7 @@ if ($mes == 0) {
 
 ?>
 <style>
-	.dataTables_wrapper .dataTables_filter input {
+	/* .dataTables_wrapper .dataTables_filter input {
     border: 1px solid #aaa;
     border-top-width: 1px;
     border-right-width: 1px;
@@ -47,13 +47,19 @@ if ($mes == 0) {
 		border-top-width: 0px;
 		border-left-width: 0px;
 		border-right-width: 0px;
-  }
+  } */
+
+	@media print{
+		header, main, body, footer { 
+			padding-left:0px;
+		}
+	}
 </style>
 <title>reporte de compras</title>
 <h3 class="fuente">Reporte de ventas</h3><br>
-<div class="row">
-	<div class="col s12">
-		<table id="tabla1">
+<!-- <div class="row"> -->
+	<!-- <div class="col s12"> -->
+		<table id="tabla1" >
 			<thead>
 				<tr>
 					<th>Código</th>
@@ -77,8 +83,8 @@ if ($mes == 0) {
 			    <?php } ?>
 			</tbody>
 		</table>
-	</div>
-</div>
+	<!-- </div> -->
+<!-- </div> -->
 
 <script>
 	    
@@ -90,7 +96,7 @@ $(document).ready(function() {
 	}
 
 	$('#tabla1').dataTable({
-      "order": [[ 0, "asc" ]],
+      "order": [[ 0, "desc" ]],
         "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Lo siento, no se encontraron datos",
@@ -102,21 +108,21 @@ $(document).ready(function() {
           "previous": "Anterior"
         }
        },
-			"dom": 'Bfrtip',
+		"dom": 'Bfrtip',
 	    "buttons":[
 	      {
 	        extend:     'excelHtml5',
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/ms-excel--v1.png"/></i>',
 	        titleAttr:  'Exportar a Excel',
 	        className:  'btn-flat green',
-	        title: 			'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
+	        title: 		'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
 	      },
 	      {
 	        extend:     'pdfHtml5',
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/pdf-2--v1.png"/></i>',
 	        titleAttr:  'Exportar a PDF',
 	        className:  'btn-flat red',
-	        title: 			'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
+	        title: 		'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
 	      },
 	      {
 	        extend:     'print',
@@ -132,4 +138,7 @@ $(document).ready(function() {
 	    ]
 	    });
 })
+
+
+
 </script>

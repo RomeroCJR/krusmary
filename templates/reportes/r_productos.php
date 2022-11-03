@@ -6,12 +6,18 @@
 		$per = "";
 	}
 	// echo $per." ".$gestion;
-	$result = $conexion->query("SELECT a.Codpla, a.Nombre, a.Precio, a.Descripcion, a.Foto, (SELECT IF (SUM(b.Cantidad)>0, SUM(b.Cantidad),0) FROM det_plato b, venta c WHERE a.Codpla = b.Codpla AND b.Codv = c.Codv AND c.Fecha LIKE '%".$gestion."-".$per."%' AND b.Estado = 1) as Cantidad FROM plato a WHERE a.Estado = 1 GROUP BY a.Codpla ORDER BY Cantidad DESC");
+	$result = $conexion->query("SELECT a.cod_producto, a.nombre_producto, a.precio_producto, a.descripcion_producto, a.foto_producto, (SELECT IF (SUM(b.cant_producto)>0, SUM(b.cant_producto),0) FROM detalle_venta b, venta c WHERE a.cod_producto = b.cod_producto AND b.cod_venta = c.cod_venta AND c.fecha_venta LIKE '%".$gestion."-".$per."%' AND b.estado_det_venta = 1) as cantidad FROM producto a WHERE a.estado_producto = 1 GROUP BY a.cod_producto ORDER BY cantidad DESC");
 
 	$res = $result->fetch_all();
 	$total = 0;
 ?>
-
+<style>
+	@media print{
+		header, main, body, footer { 
+			padding-left:0px;
+		}
+	}
+</style>
 
 <title>reporte de PRODUCTOS</title>
 <h3 class="fuente">Reporte de productos</h3><br>
@@ -25,7 +31,7 @@
 					<th>Precio</th>
 					<th>Descripción</th>
 					<th>Cantidad vendida</th>
-					<th>Ingreso total</th>
+					<th>Ingreso total (Bs.)</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -37,7 +43,7 @@
 					<td><?php echo $a[2]?></td>
 					<td><?php echo $a[3]?></td>
 					<td><?php echo $a[5]?></td>
-					<td><?php echo $a[5]*$a[2]." Bs."?></td>
+					<td><?php echo $a[5]*$a[2]?></td>
 				</tr>
 			    <?php } ?>
 			</tbody>
@@ -57,7 +63,7 @@ $(document).ready(function() {
 	}
 
 	$('#tabla1').dataTable({
-      "order": [[ 4, "desc" ]],
+      "order": [[ 5, "desc" ]],
         "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Lo siento, no se encontraron datos",

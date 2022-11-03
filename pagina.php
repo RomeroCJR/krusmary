@@ -51,8 +51,8 @@ $Busq = $conexion->query($Sql);
     <script type="text/javascript" src="js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="js/dataTables.buttons.js"></script>
 
-    <!-- <script type="text/javascript" src="js/jszip.js"></script> -->
-    <!-- <script type="text/javascript" src="js/pdfmake.js"></script> -->
+    <script type="text/javascript" src="js/jszip.js"></script>
+    <script type="text/javascript" src="js/pdfmake.js"></script>
     <script type="text/javascript" src="js/vfs_fonts.js"></script>
     <script type="text/javascript" src="js/buttons.print.js"></script>
     <script type="text/javascript" src="js/buttons.html5.js"></script>
@@ -173,7 +173,7 @@ $Busq = $conexion->query($Sql);
         <li><a href="#!" onclick="cargar('templates/pedidos/pedidos');" class="waves-effect waves-teal"><i class="material-icons-outlined">receipt</i>Pedidos</a></li>
         <li><div class="divider grey darken-3"></div></li>
         
-        <ul class="collapsible">
+        <ul class="collapsible" <?php if($_SESSION['rol'] == '2') {echo 'hidden';} ?>>
             <li >
                 <div class="collapsible-header waves-effect waves-teal texto-blanco" ><i class="material-icons-outlined" >admin_panel_settings</i>Administración</div>
                 <div class="collapsible-body blue-grey lighten-5">
@@ -202,8 +202,12 @@ $Busq = $conexion->query($Sql);
         <center><h5 class="roboto">Gasto diario:</h5></center>
         <p id="title_spend" class="roboto"></p>
         <div class="input-field">
-          <input type="text" mame="gasto" maxlength="5" minlength="1" onkeypress="return checkIt(event)" id="gasto" value="" >
-          <label for="gasto">Gasto diario</label>
+          <input type="text" mame="gasto" maxlength="5" minlength="1" onkeypress="return checkIt(event)" id="gasto" value="" required>
+          <label for="gasto">Monto de gasto:</label>
+        </div>
+        <div class="input-field">
+          <input type="text" mame="descripcion"  id="descripcion" value="" required>
+          <label for="gasto">Descripción del gasto:</label>
         </div>
       </div>
       <div class="modal-footer">
@@ -237,20 +241,20 @@ $Busq = $conexion->query($Sql);
       $('.modal').modal();
       $("#modal_gasto").modal({'dismissible':false});
 
-      $.ajax({
-        url: "recursos/stock/check_spend.php",
-        method: "GET",
-        success: function(response) {
-            if (response == '0') {
-              $("#modal_gasto").modal('open');
-            }else{
-              $("#gasto").val(response)
-            }
-        },
-        error: function(error) {
-            console.log(error)
-        }
-      })
+      // $.ajax({
+      //   url: "recursos/stock/check_spend.php",
+      //   method: "GET",
+      //   success: function(response) {
+      //       if (response == '0') {
+      //         $("#modal_gasto").modal('open');
+      //       }else{
+      //         $("#gasto").val(response)
+      //       }
+      //   },
+      //   error: function(error) {
+      //       console.log(error)
+      //   }
+      // })
 
       
       inicio();
@@ -270,24 +274,24 @@ $Busq = $conexion->query($Sql);
       //END DAILY_STOCK
     }
 
-    $("#enviar_gasto").click(function (e) {
+    document.getElementById('enviar_gasto').addEventListener('click', function () {
+
       let gasto = $("#gasto").val()
+      let descripcion = document.getElementById('descripcion').value;
       if( !$("#gasto").val() ) {
         return M.toast({html: "Inserte un monto válido."})
       }
-      $.ajax({
-        url: "recursos/stock/daily_spend.php?spend="+gasto,
-        method: "GET",
-        success: function(response) {
-            if (response == '1') {
-              M.toast({html: "Gasto diario agregado."})
-              $("#modal_gasto").modal('close')
-            }
-        },
-        error: function(error) {
-            console.log(error)
+
+      fetch("recursos/stock/daily_spend.php?spend="+gasto+"&desc="+descripcion)
+      .then(response => response.text())
+      .then(data => {
+        console.log(data);
+        if (data == '1') {
+          M.toast({html: "Gasto diario agregado."})
+          $("#modal_gasto").modal('close')
         }
       })
+      
     })
 
       //controlar overflow de la sidenav

@@ -148,9 +148,9 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
 <!-- onclick="reg_venta()" -->
 
   <!-- Modal Cliente -->
-  <div id="modal-cliente" class="modal" style="width:45%">
+  <div id="modal-cliente" class="modal" style="width:60%">
     <div class="modal-content">
-      <div class="container">
+      <div class="">
         <h4>Registrar venta e imprimir factura:</h4><br>
         <p>
           <span id="reg_total"></span>
@@ -176,26 +176,26 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
         </form>
       </div> -->
 
-      <div id="form_registro_venta_fisica" class="container" hidden>
+      <div id="form_registro_venta_fisica" class="" hidden>
         <form >
           <div class="row">
             <div class="input-field col s12">
-              <input id="reg_cedula" type="text" onKeyPress="return checkIt(event)" minlength="7" maxlength="7" class="validate">
+              <input id="reg_cedula" type="text" onKeyPress="return checkIt(event)" autocomplete="off" minlength="7" maxlength="7" class="validate">
               <label for="reg_cedula">Cédula de identidad (*)</label>
             </div>
-            <div class="input-field col s12">
+            <div class="input-field col s6">
               <input id="reg_nombres" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="20" class="validate">
               <label for="reg_nombres">Nombre (*)</label>
             </div>
-            <div class="input-field col s12">
+            <div class="input-field col s6">
               <input id="reg_apellido_p" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="20" class="validate">
               <label for="reg_apellido_p">Apellidos paterno</label>
             </div>
-            <div class="input-field col s12">
+            <div class="input-field col s6">
               <input id="reg_apellido_m" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="20" class="validate">
               <label for="reg_apellido_m">Apellido materno</label>
             </div>
-            <div class="input-field col s12">
+            <div class="input-field col s6">
               <input id="f_reg_telf" name="f_reg_telf" type="text" onKeyPress="return checkIt(event)" minlength="8" maxlength="8" class="validate">
               <label for="f_reg_telf">Teléfono/Celular</label>
             </div>
@@ -302,6 +302,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
  
   $(document).ready(function() {
      $('.modal').modal();
+
      $('#__cantidad').niceNumber({
       autoSize: true,
       autoSizeBuffer: 1,
@@ -318,6 +319,23 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
           document.getElementById('cod_producto').value = ui.item.id;
           document.getElementById('precio_producto').value = ui.item.precio;
           document.getElementById('stock_producto').value = ui.item.stock;
+          M.updateTextFields();
+        }
+      }).data('ui-autocomplete')._renderItem = function(ul, item){
+        return $("<li class='ui-autocomplete-row'></li>")
+        .data("item.autocomplete", item)
+        .append(item.label)
+        .appendTo(ul);
+      };
+      $('#reg_cedula').autocomplete({
+        source: "recursos/ventas/buscar_cliente.php",
+        minLength: 3,
+        select: function(event, ui){
+          console.log(ui.item);
+          document.getElementById('reg_nombres').value = ui.item.nombre_cliente;
+          document.getElementById('reg_apellido_p').value = ui.item.ap_paterno_cliente;
+          document.getElementById('reg_apellido_m').value = ui.item.ap_materno_cliente;
+          document.getElementById('f_reg_telf').value = ui.item.nro_celular_cliente;
           M.updateTextFields();
         }
       }).data('ui-autocomplete')._renderItem = function(ul, item){

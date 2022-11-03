@@ -47,7 +47,7 @@ move_uploaded_file($archivo, $ruta);
 $ruta2 = "images/".$nombreimg;
 
 $mensaje = $_POST['dedicatoria'];
-
+$excepciones = $_POST['excepciones'];
 
 
 if(empty($nombreimg)){
@@ -55,6 +55,9 @@ if(empty($nombreimg)){
 }
 if(empty($mensaje)){
 	$mensaje = NULL;
+}
+if(empty($excepciones)){
+	$excepciones = NULL;
 }
 
 // die($ruta2."---".$mensaje);
@@ -100,7 +103,7 @@ if (intval($telf) < 40000000) {
 }
 
 
-$result = $conexion->query("INSERT INTO pedido (cod_cliente, total_pedido, dedicatoria, foto_personalizada) VALUES ('".$id_cli."', '".$subtotal."', '".$mensaje."', '".$ruta2."')");
+$result = $conexion->query("INSERT INTO pedido (cod_cliente, total_pedido, dedicatoria, excepciones, foto_personalizada) VALUES ('".$id_cli."', '".$subtotal."', '".$mensaje."', '".$excepciones."', '".$ruta2."')");
 
 // die(mysqli_error($conexion)."---- error");
 

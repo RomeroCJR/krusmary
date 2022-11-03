@@ -1,7 +1,7 @@
 <?php
 require('../../recursos/conexion.php');
 session_start();
-$Sql = "SELECT a.cod_pedido, a.cod_cliente, b.ci_cliente as cedula, a.total_pedido, a.fecha_pedido, a.dedicatoria, a.foto_personalizada, a.estado_pedido, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos,b.nro_celular_cliente, a.dedicatoria, a.foto_personalizada, b.estado_cliente FROM pedido a, cliente b WHERE a.cod_cliente = b.cod_cliente ;";
+$Sql = "SELECT a.cod_pedido, a.cod_cliente, b.ci_cliente as cedula, a.total_pedido, a.fecha_pedido, a.dedicatoria, a.excepciones, a.foto_personalizada, a.estado_pedido, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos,b.nro_celular_cliente, a.dedicatoria, a.foto_personalizada, b.estado_cliente FROM pedido a, cliente b WHERE a.cod_cliente = b.cod_cliente ;";
 $Busq = $conexion->query($Sql);
 $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 // while($arr = $Busq->fetch_array())
@@ -67,7 +67,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
           <td class="center">
             <!-- <a onclick="" class="btn-floating modal-trigger"><i class="material-icons">build</i></a> -->
             <a href="#!" onclick="eliminar_pedido('<?php echo $valor['cod_pedido']?>')" class="btn-floating"><i class="material-icons">delete</i></a>
-            <a onclick="vped('<?php echo $valor["cod_pedido"]?>', '<?php echo $valor["cod_cliente"]?>', '<?php echo $valor["cedula"]?>','<?php echo $valor["nombre_cliente"]?>', '<?php echo $valor["apellidos"]?>','<?php echo $valor["nro_celular_cliente"]?>','<?php echo $valor["estado_pedido"]?>',`<?php echo $valor["dedicatoria"]?>`,'<?php echo $valor["foto_personalizada"]?>', '<?php echo $valor["estado_cliente"]?>');"  class="btn-floating"><i class="material-icons">search</i></a>
+            <a onclick="vped('<?php echo $valor["cod_pedido"]?>', '<?php echo $valor["cod_cliente"]?>', '<?php echo $valor["cedula"]?>','<?php echo $valor["nombre_cliente"]?>', '<?php echo $valor["apellidos"]?>','<?php echo $valor["nro_celular_cliente"]?>','<?php echo $valor["estado_pedido"]?>',`<?php echo $valor["dedicatoria"]?>`,`<?php echo $valor["excepciones"]?>`,'<?php echo $valor["foto_personalizada"]?>', '<?php echo $valor["estado_cliente"]?>');"  class="btn-floating"><i class="material-icons">search</i></a>
           </td>
         </tr>
         <?php } ?>
@@ -94,7 +94,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
 
 
 <!-- Modal Ver Pedidos -->
-<div id="modal2" class="modal modal-fixed-footer">
+<div id="modal2" class="modal modal-fixed-footer" style="width:70%">
     <div style="position:absolute; top:1px;right:1px;">
       <a href="#!" class=" modal-action modal-close waves-effect btn-floating waves-light red" ><i class="material-icons">close</i></a>
     </div>
@@ -114,16 +114,20 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
     <hr>
     <div class="row">
       <!-- <h5>Extras:</h5> -->
-      <div class="col s6">
+      <div class="col s4">
         <h6><b>Foto personalizada:</b></h6>
         <div class="center">
           <div id="foto_detalle1"><center><img id="foto_personalizada" width="50%" src="" alt=""></center></div>
           <div id="foto_detalle2"><center><span class="red-text">Sin foto...</span></center></div>
         </div>
       </div>
-      <div class="col s6">
+      <div class="col s4">
         <h6><b>Dedicatoria:</b></h6>
         <span class="dedicatoria" id="dedicatoria"></span>
+      </div>
+      <div class="col s4">
+        <h6><b>Instrucciones especiales:</b></h6>
+        <span class="excepciones" id="excepciones"></span>
       </div>
     </div>
     <hr>
@@ -290,8 +294,8 @@ document.getElementById('bloquear_cliente').addEventListener('click', ()=> {
 
 })
 
-function vped(cod, cliente, cedula, nombre, apellidos, telf, estado, dedicatoria, foto, estado_cliente) {
-  // return console.log(dedicatoria, foto);
+function vped(cod, cliente, cedula, nombre, apellidos, telf, estado, dedicatoria, excepciones,foto, estado_cliente) {
+  // return console.log(excepciones);
   if(foto.length !== 0){
     document.getElementById('foto_personalizada').src = foto;
     document.getElementById('foto_detalle1').hidden = false;
@@ -305,6 +309,12 @@ function vped(cod, cliente, cedula, nombre, apellidos, telf, estado, dedicatoria
   }else{
     document.getElementById('dedicatoria').innerHTML = `<span>${dedicatoria}</span>`;
   }
+  if(excepciones.length === 0){
+    document.getElementById('excepciones').innerHTML = `<center><span class="red-text">Sin instrucciones...</span></center>`;
+  }else{
+    document.getElementById('excepciones').innerHTML = `<span>${excepciones}</span>`;
+  }
+
   let element = document.getElementById('bloquear_cliente');
   if(estado_cliente == '1'){
     element.classList.remove('green');
