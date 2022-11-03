@@ -139,6 +139,22 @@
 <input type="text" id="existe" value="false" hidden>
 <script>
 
+	document.getElementById('form_ingreso').addEventListener('submit', function (e) {
+		e.preventDefault();
+		formData = new FormData(document.getElementById('form_ingreso'));
+		fetch(`recursos/app/acceder.php`, {method: 'post', body: formData})
+		.then(response => response.text())
+		.then(data => {
+			console.log(data);
+			if (data == 1) {
+				window.location.replace("pedidos.php");
+			}else{
+				M.toast({html: 'Datos de acceso incorrectos.'})
+			}
+		})		
+	});
+
+
 	document.getElementById('registro').addEventListener('click', function (e) {
 		document.getElementById('section_1').hidden = true;
 		document.getElementById('section_2').hidden = false;
@@ -158,7 +174,7 @@
 				document.getElementById('form_registro').reset();
 			}
 			if(data == '0'){
-				return M.toast({html: 'Usuario registrado previamente.'});
+				return M.toast({html: '<b>Ya existe un usuario con esa cédula de identidad.</b>'});
 			}else{
 				console.log(data);
 			}

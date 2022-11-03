@@ -1,6 +1,6 @@
 <?php
 	require('../../recursos/conexion.php');
-    
+    session_start();
 
 	$mes_actual = date("Y-m");
 
@@ -131,40 +131,36 @@
 			</div>
 		</div>
 
-		<div id="modal_cliente" class="modal ubuntu" style="width:35%"> <!-- arreglar esta wea -->
+		<div id="modal_cliente" class="modal ubuntu" style="width:30%"> <!-- arreglar esta wea -->
 			<div class="modal-content" id="modal_cliente_content">
-				<h5>Por favor ingresa tus datos</h5>
+				<h5><b>Confirmar pedido:</b></h5>
 				
 				<div class="row">
 					<div class="col s12">
 					  <form id="form_pedido">
-					  	<div class="input-field col s12">
-						  <input type="text" id="tot_ped" name="tot_ped" value="" hidden>
-						  <input type="text" id="ci" onKeyPress="return checkIt(event)" name="ci" class="validate" required>
-						  <label for="ci">Cédula de identidad:</label>
+						<input type="text" id="tot_ped" name="tot_ped" value="" hidden>
+						
+						<div id="fecha_hora">
+							<div class="col s12">
+								<label for="fecha_hora">Fecha y Hora en la que se recogerán los productos:</label>
+							</div>
+							<div class="input-field col s6" >
+								<input type="date" id="fecha" name="fecha"  placeholder="fecha" required>
+								<!-- <label for="fecha">Fecha:</label> -->
+							</div>
+							<div class="input-field col s6" >
+								<input type="time" id="hora" name="hora"  placeholder="fecha">
+								<!-- <label for="fecha">Hora:</label> -->
+							</div>
 						</div>
 
-						<div class="input-field col s12">
-						  <input type="text" id="nombre" name="nombre" class="validate" required>
-						  <label for="nombre">Nombre:</label>
-						</div>
-
-						<div class="input-field col s12">
-						  <input type="text" id="apellidos" name="apellidos" class="validate" required>
-						  <label for="apellidos">Apellidos:</label>
-						</div>
-
-						<div class="input-field col s12">
-						  <input type="text" id="celular" name="celular" onKeyPress="return checkIt(event)" class="validate" required>
-						  <label for="celular">Celular:</label>
-						</div>
 
 						<div id="torta_personalizada" hidden>
 							<div class="input-field col s12" id="div_instrucciones_torta" style="margin-bottom:0px">
 								<p>
 									<label>
 										<input type="checkbox" id="check_instrucciones" />
-										<span>Instrucciones especiales:</span>
+										<span>Instrucciones especiales (para la torta):</span>
 									</label>
 								</p>
 							</div>
@@ -232,6 +228,8 @@
 	var total = 0;
 	$(document).ready(function() {
 		$('.modal').modal();
+		$('.datepicker').datepicker();
+		$('.timepicker').timepicker();
 		$('.fixed-action-btn').floatingActionButton();
 		$('input[type="number"]').niceNumber({
 			autoSize: true,
@@ -402,8 +400,9 @@
 		// 	return M.toast({html: 'Escribe una dirección válida.'})
 		// }
 
-		// let telf = "echo $_SESSION['telf']; ";
+		let cod_cliente = "<?php echo $_SESSION['cod_cliente']; ?>";
 		var formData = new FormData(document.getElementById('form_pedido')); //esto debe ser tomado desde formulario
+		formData.append('cod_cliente', cod_cliente);
 
 		let subtotal = total;
 		// colat = $("#coordLat").val()
@@ -429,7 +428,8 @@
 		formData.append('subtotal', subtotal);
 		formData.append('json_detalle', json_detalle);
 
-        let cliente = document.getElementById('nombre').value+" "+document.getElementById('apellidos').value;
+		let cliente = "<?php echo $_SESSION['nombre_cliente'].' '.$_SESSION['apellidos_cliente']; ?>"
+        // let cliente = document.getElementById('nombre').value+" "+document.getElementById('apellidos').value;
         cliente = "```"+cliente+"```";
 		
 

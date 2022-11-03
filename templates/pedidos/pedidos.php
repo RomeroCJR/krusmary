@@ -137,7 +137,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
           <tr>
           <th>Nombre</th>
           <th>Cantidad</th>
-          <th>Precio</th>
+          <th>Precio (Bs.)</th>
         </tr>
       </thead>
       <tbody>
@@ -529,7 +529,7 @@ var miHtml = `
   <body>
   
     <center>Repostería KRUS-MARY</center>
-    <center>Calle Independencia esq. Cochabamba. #395</center>
+    <center>Calle Indep. esq. Cochabamba. #395</center>
     <center>Telf.: 7189635-67673738 </center>
     <center>VILLAZON - BOLIVIA</center>
     <center>FACTURA</center>

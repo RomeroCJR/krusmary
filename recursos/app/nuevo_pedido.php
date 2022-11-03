@@ -10,29 +10,30 @@ date_default_timezone_set("America/La_Paz");
 // $id = $_SESSION['id_cliente'];
 
 
-$ci = $_POST['ci'];
-$telf = $_POST['celular'];
-$nombre = $_POST['nombre'];
+// $ci = $_POST['ci'];
+// $telf = $_POST['celular'];
+// $nombre = $_POST['nombre'];
 $subtotal = $_POST['subtotal'];
-$apellidos = $_POST['apellidos'];
-$ap_paterno = "";
-$ap_materno = "";
+$id_cli = $_POST['cod_cliente'];
+// $apellidos = $_POST['apellidos'];
+// $ap_paterno = "";
+// $ap_materno = "";
 
-$pos = strpos($apellidos, " ");
+// $pos = strpos($apellidos, " ");
 
-if(!strpos($apellidos, " ")){
-	$apellidos = explode(" ", $apellidos);
-	// die(var_dump($apellidos));
-	$ap_paterno = $apellidos[0];
-	if(isset($apellidos[1])){
-		$ap_materno = $apellidos[1];
-	}else{
-		$ap_materno = "";
-	}
+// if(!strpos($apellidos, " ")){
+	// $apellidos = explode(" ", $apellidos);
+	// // die(var_dump($apellidos));
+	// $ap_paterno = $apellidos[0];
+	// if(isset($apellidos[1])){
+		// $ap_materno = $apellidos[1];
+	// }else{
+		// $ap_materno = "";
+	// }
 	
-}else{
-	$ap_paterno = $apellidos;
-}
+// }else{
+	// $ap_paterno = $apellidos;
+// }
 
 
 $json = $_POST['json_detalle'];
@@ -62,18 +63,18 @@ if(empty($excepciones)){
 
 // die($ruta2."---".$mensaje);
 
-$result = $conexion->query('SELECT * FROM cliente WHERE ci_cliente = "'.$ci.'"');
-$res = mysqli_num_rows($result);
-$result = $result->fetch_all(MYSQLI_ASSOC);
+// $result = $conexion->query('SELECT * FROM cliente WHERE ci_cliente = "'.$ci.'"');
+// $res = mysqli_num_rows($result);
+// $result = $result->fetch_all(MYSQLI_ASSOC);
 
-$id_cli = "";
-if($res > 0){
-	$id_cli = $result[0]['cod_cliente'];
-	$conexion->query("UPDATE `cliente` SET `nombre_cliente`='".$nombre."',`ap_paterno_cliente`='".$ap_paterno."',`ap_materno_cliente`='".$ap_materno."',`nro_celular_cliente`='".$telf."' WHERE cod_cliente = ".$id_cli);
-}else{
-	$conexion->query("INSERT INTO `cliente`(`ci_cliente`, `nombre_cliente`, `ap_paterno_cliente`, `ap_materno_cliente`, `nro_celular_cliente`) VALUES ('".$ci."','".$nombre."','".$ap_paterno."','".$ap_materno."','".$telf."')");
-	$id_cli = mysqli_insert_id($conexion);
-}
+// $id_cli = "";
+// if($res > 0){
+// 	$id_cli = $result[0]['cod_cliente'];
+// 	$conexion->query("UPDATE `cliente` SET `nombre_cliente`='".$nombre."',`ap_paterno_cliente`='".$ap_paterno."',`ap_materno_cliente`='".$ap_materno."',`nro_celular_cliente`='".$telf."' WHERE cod_cliente = ".$id_cli);
+// }else{
+// 	$conexion->query("INSERT INTO `cliente`(`ci_cliente`, `nombre_cliente`, `ap_paterno_cliente`, `ap_materno_cliente`, `nro_celular_cliente`) VALUES ('".$ci."','".$nombre."','".$ap_paterno."','".$ap_materno."','".$telf."')");
+// 	$id_cli = mysqli_insert_id($conexion);
+// }
 
 
 $consultaVP = "SELECT a.* FROM pedido a WHERE a.cod_cliente = '".$id_cli."' ORDER BY a.cod_pedido DESC LIMIT 1";
@@ -98,9 +99,9 @@ if(mysqli_num_rows($resultadoVP)>0){
 
 
 
-if (intval($telf) < 40000000) {
-	die('<script>M.toast({html: "Ingrese un número de teléfono válido."});</script>');
-}
+// if (intval($telf) < 40000000) {
+// 	die('<script>M.toast({html: "Ingrese un número de teléfono válido."});</script>');
+// }
 
 
 $result = $conexion->query("INSERT INTO pedido (cod_cliente, total_pedido, dedicatoria, excepciones, foto_personalizada) VALUES ('".$id_cli."', '".$subtotal."', '".$mensaje."', '".$excepciones."', '".$ruta2."')");

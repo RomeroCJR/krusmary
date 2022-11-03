@@ -4,36 +4,30 @@
 require('../conexion.php');
 
 //Obtenemos los datos del formulario de acceso
-$telf = $_GET["telf"]; 
-$telf = "+".$telf;
+$ci_cliente = $_POST['usuario'];
+$pass = $_POST['pass'];
 
-//Consulta registrar numero de celular si es que no existe
-$result = $conexion->query("INSERT INTO `cliente`(`Telefono`) VALUES ('".$telf."')");
 
-if($result == 1){
+$result = $conexion->query("SELECT * FROM cliente WHERE ci_cliente = '".$ci_cliente."' AND clave_cliente = '".$pass."'");
+$res = $result->fetch_all(MYSQLI_ASSOC);
+if(mysqli_num_rows($result) > 0){
 
 	session_start();
-	// $_SESSION['telfcli'] = $telf;
-	// $consultaNA = "SELECT Nombre, Apellidos, Telefono FROM cliente WHERE Telefono = ".$telf;
-	// $resultadoNA = mysqli_query($conexion, $consultaNA);
-	// if(empty($resultadoNA)){
-	// 	$datosNA = array('Nombre' => '', 'Apellidos' => '', 'Telefono' => '', 'estado' => '');
-	// }else{
-	// 	$datosNA = mysqli_fetch_array($resultadoNA) or die("Error...");
-	// }
-	
-	// $_SESSION['Nombre'] = $datosNA['Nombre'];
-	// $_SESSION['Apellidos'] = $datosNA['Apellidos'];
 
-	$_SESSION['id_cliente'] = mysqli_insert_id($conexion); 
-	$_SESSION['estado_app'] = 'Autenticado';
-	// $_SESSION['telf'] = $telf;
+	$_SESSION['cod_cliente'] = $res[0]['cod_cliente'];
+	$_SESSION['nombre_cliente'] = $res[0]['nombre_cliente'];
+	$_SESSION['apellidos_cliente'] = $res[0]['ap_paterno_cliente']." ".$res[0]['ap_materno_cliente'];
+	$_SESSION['ap_paterno_cliente'] = $res[0]['ap_paterno_cliente'];
+	$_SESSION['ap_materno_cliente'] = $res[0]['ap_materno_cliente'];
+	$_SESSION['telf_cliente'] = $res[0]['nro_celular_cliente'];
+	$_SESSION['clave_cliente'] = $res[0]['clave_cliente'];
+	$_SESSION['estado_app'] = 'Autenticadox';
 
-	die("1");
+	die('1');
 	/* Sesión iniciada, si se desea, se puede redireccionar desde el servidor */
 
 } else {
-	die('<script>console.log("ocurrió algun tipo de error")</script>');
+	die(mysqli_error($conexion));
 }
 
 ?>

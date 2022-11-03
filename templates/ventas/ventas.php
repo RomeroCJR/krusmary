@@ -275,7 +275,7 @@ let numfac; let ci; let nombres; let fecha; let hora; let total; let codctrl; le
             <body>
             
               <center>Reposteria "KRUS-MARY"</center>
-              <center>Calle Independencia esq. Cochabamba. #395</center>
+              <center>Calle Indep. esq. Cochabamba. #395</center>
               <center>Telf.: 7189635-67673738 </center>
               <center>VILLAZON - BOLIVIA</center>
               <center>FACTURA</center>

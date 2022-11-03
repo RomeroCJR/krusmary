@@ -1,6 +1,6 @@
 <?php
 	require('recursos/conexion.php');
-    
+    require('recursos/sesiones.php');
 
 	$mes_actual = date("Y-m");
 
@@ -217,11 +217,11 @@
 				<li><a href="#!" onclick="sidenav_navi('templates/app/rev_pedido.php')" class="waves-effect waves-purple"><i class="material-icons">assignment</i>Mi pedido</a></li>
 
 				<li>
-					<!-- <div class="divider"></div> -->
+					<div class="divider"></div>
 				</li>
 
 			<li>
-				<!-- <a class="waves-effect waves-red" href="recursos/app/salir.php"><i class="material-icons">logout</i>Salir</a> -->
+				<a class="waves-effect waves-red" href="recursos/app/salir.php"><i class="material-icons">logout</i>Salir</a>
 			</li>
 		</ul>
 

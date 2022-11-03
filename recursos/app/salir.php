@@ -19,7 +19,7 @@ header("Location: ../../registro.php");
 die();
 ?>
 <!doctype html>
-<html>
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <title>Cerrando sesión...</title>
