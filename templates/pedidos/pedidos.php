@@ -1,7 +1,7 @@
 <?php
 require('../../recursos/conexion.php');
 session_start();
-$Sql = "SELECT a.cod_pedido, a.cod_cliente, b.ci_cliente as cedula, a.total_pedido, a.fecha_pedido, a.dedicatoria, a.excepciones, a.foto_personalizada, a.estado_pedido, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos,b.nro_celular_cliente, a.dedicatoria, a.foto_personalizada, b.estado_cliente FROM pedido a, cliente b WHERE a.cod_cliente = b.cod_cliente ;";
+$Sql = "SELECT a.cod_pedido, a.cod_cliente, b.ci_cliente as cedula, a.total_pedido, a.fecha_pedido, a.dedicatoria, a.excepciones, a.foto_personalizada, a.estado_pedido, b.nombre_cliente, CONCAT(b.ap_paterno_cliente,' ',b.ap_materno_cliente) AS apellidos,b.nro_celular_cliente, a.dedicatoria, a.foto_personalizada, b.estado_cliente, a.fecha_entrega, a.hora_entrega FROM pedido a, cliente b WHERE a.cod_cliente = b.cod_cliente ;";
 $Busq = $conexion->query($Sql);
 $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 // while($arr = $Busq->fetch_array())
@@ -67,7 +67,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
           <td class="center">
             <!-- <a onclick="" class="btn-floating modal-trigger"><i class="material-icons">build</i></a> -->
             <a href="#!" onclick="eliminar_pedido('<?php echo $valor['cod_pedido']?>')" class="btn-floating"><i class="material-icons">delete</i></a>
-            <a onclick="vped('<?php echo $valor["cod_pedido"]?>', '<?php echo $valor["cod_cliente"]?>', '<?php echo $valor["cedula"]?>','<?php echo $valor["nombre_cliente"]?>', '<?php echo $valor["apellidos"]?>','<?php echo $valor["nro_celular_cliente"]?>','<?php echo $valor["estado_pedido"]?>',`<?php echo $valor["dedicatoria"]?>`,`<?php echo $valor["excepciones"]?>`,'<?php echo $valor["foto_personalizada"]?>', '<?php echo $valor["estado_cliente"]?>');"  class="btn-floating"><i class="material-icons">search</i></a>
+            <a onclick="vped('<?php echo $valor["cod_pedido"]?>', '<?php echo $valor["cod_cliente"]?>', '<?php echo $valor["cedula"]?>','<?php echo $valor["nombre_cliente"]?>', '<?php echo $valor["apellidos"]?>','<?php echo $valor["nro_celular_cliente"]?>','<?php echo $valor["estado_pedido"]?>',`<?php echo $valor["dedicatoria"]?>`,`<?php echo $valor["excepciones"]?>`,'<?php echo $valor["foto_personalizada"]?>', '<?php echo $valor["estado_cliente"]?>', '<?php echo $valor["fecha_entrega"]?>', '<?php echo $valor["hora_entrega"]?>');"  class="btn-floating"><i class="material-icons">search</i></a>
           </td>
         </tr>
         <?php } ?>
@@ -102,10 +102,11 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
     <h4 class="center"><b>Detalle de pedido</b></h4>
     <input type="text" id="__idcli" hidden>
     <input type="text" id="__status" hidden>
+    
     <p class="marginless" id="__telf"></p>
     <p class="marginless" id="__ci"></p>
     <p class="marginless" id="__cli"></p>
-    <p class="marginless" id="__dir"></p>
+    <p class="marginless" id="__fecha"></p>
     
     <div class="btn-bloquear_cliente">
       <a id="bloquear_cliente" class="btn-large waves-effect red waves-light">BLOQUEAR CLIENTE</a>
@@ -294,7 +295,7 @@ document.getElementById('bloquear_cliente').addEventListener('click', ()=> {
 
 })
 
-function vped(cod, cliente, cedula, nombre, apellidos, telf, estado, dedicatoria, excepciones,foto, estado_cliente) {
+function vped(cod, cliente, cedula, nombre, apellidos, telf, estado, dedicatoria, excepciones,foto, estado_cliente, fecha_entrega, hora_entrega) {
   // return console.log(excepciones);
   if(foto.length !== 0){
     document.getElementById('foto_personalizada').src = foto;
@@ -335,7 +336,7 @@ function vped(cod, cliente, cedula, nombre, apellidos, telf, estado, dedicatoria
   $("#__ci").html("<b>Cédula: </b>"+cedula);
   $("#__telf").html("<b>Teléfono: </b>"+telf);
   $("#__cli").html("<b>Nombres: </b>"+nombre+" "+apellidos);
-
+  $("#__fecha").html("<b>Fecha y Hora de entrega: </b>"+fecha_entrega+" "+hora_entrega)
   $("#__codiped").val(cod);
 
   //PARA EL MAPA

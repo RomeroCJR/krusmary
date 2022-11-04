@@ -12,7 +12,7 @@ if(isset($_SESSION['cod_cliente']) and $_SESSION['estado_app'] == 'Autenticadox'
 	include('templates/app/principal.php');
 	die();
 } else {
-	include('registro.php');
+	include('inicio.php');
 	die();
 };
 ?>

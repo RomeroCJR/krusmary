@@ -181,6 +181,7 @@ $Busq = $conexion->query($Sql);
                     <li><a href="#!" onclick="cargar('templates/usuarios/usuarios');"><i class="material-icons-outlined">people</i> Usuarios</a></li>
                     <li><a href="#!" onclick="cargar('templates/clientes/clientes');"><i class="material-icons-outlined">airline_seat_recline_normal</i> Clientes</a></li>
                     <li><a href="#!" onclick="cargar('templates/roles/roles');"><i class="material-icons-outlined">switch_account</i> Roles</a></li>
+                    <li><a href="#!" onclick="cargar('templates/pagos/pagos');"><i class="material-icons-outlined">local_atm</i> Gastos</a></li>
                     <li><a href="#!" onclick="cargar('templates/facturas/facturacion');"><i class="material-icons-outlined">receipt</i> Facturación</a></li>
                     <li><a href="#!" onclick="cargar('templates/reportes/reportes');"><i class="material-icons-outlined">assignment</i> Reportes</a></li>
                   </ul>

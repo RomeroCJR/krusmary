@@ -131,7 +131,7 @@
 			</div>
 		</div>
 
-		<div id="modal_cliente" class="modal ubuntu" style="width:30%"> <!-- arreglar esta wea -->
+		<div id="modal_cliente" class="modal  ubuntu" style="width:30%"> <!-- arreglar esta wea -->
 			<div class="modal-content" id="modal_cliente_content">
 				<h5><b>Confirmar pedido:</b></h5>
 				
@@ -145,11 +145,11 @@
 								<label for="fecha_hora">Fecha y Hora en la que se recogerán los productos:</label>
 							</div>
 							<div class="input-field col s6" >
-								<input type="date" id="fecha" name="fecha"  placeholder="fecha" required>
+								<input type="date"  id="fecha" name="fecha"  placeholder="fecha" required>
 								<!-- <label for="fecha">Fecha:</label> -->
 							</div>
 							<div class="input-field col s6" >
-								<input type="time" id="hora" name="hora"  placeholder="fecha">
+								<input type="time"  id="hora" name="hora"  placeholder="fecha" required>
 								<!-- <label for="fecha">Hora:</label> -->
 							</div>
 						</div>
@@ -316,7 +316,7 @@
 			if (disp < cantp) {
 				return M.toast({html: "Cantidad solicitada insuficiente en stock, "+disp+" disponible."})
 			}else{
-				M.toast({html: "Agregado al detalle de compra."})
+				M.toast({html: "Agregado al detalle de compra.", displayLength: 1500})
 			}
 
 			var cp = $("#__datosp").attr("cp");

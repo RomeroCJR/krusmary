@@ -6,7 +6,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no">
-	<link rel="icon" type="image/x-icon" href="img/icono.ico" />
+	<link rel="icon" type="image/x-icon" href="images/logo.png" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" >
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 	<!-- Compiled and minified CSS -->
@@ -39,7 +39,7 @@
 			max-height: 200px;
 		}
 	}
-	@media only screen and (max-width : 1200px) {
+	@media only screen and (min-width : 992px) {
 		#img_logo{
 			max-height: 200px;
 		}
@@ -65,11 +65,11 @@
 						<div class="input-field">
 							<i class="material-icons-outlined prefix">person</i>
 							<input class="tam" type="text" id="usuario" name="usuario" required />
-							<label for="usuario" class="tam">Usuario</label>
+							<label for="usuario" class="tam">Cédula de identidad</label>
 						</div>
 						<div class="input-field">
 							<i class="material-icons-outlined prefix">lock</i>
-							<input class="tam" type="text" id="pass" name="pass" required />
+							<input class="tam" type="password" id="pass" name="pass" required />
 							<label for="pass" class="tam">Contraseña</label>
 						</div>
 					</div>

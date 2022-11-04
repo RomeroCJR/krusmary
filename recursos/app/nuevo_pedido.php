@@ -13,6 +13,8 @@ date_default_timezone_set("America/La_Paz");
 // $ci = $_POST['ci'];
 // $telf = $_POST['celular'];
 // $nombre = $_POST['nombre'];
+$fecha = $_POST['fecha'];
+$hora = $_POST['hora'];
 $subtotal = $_POST['subtotal'];
 $id_cli = $_POST['cod_cliente'];
 // $apellidos = $_POST['apellidos'];
@@ -104,7 +106,7 @@ if(mysqli_num_rows($resultadoVP)>0){
 // }
 
 
-$result = $conexion->query("INSERT INTO pedido (cod_cliente, total_pedido, dedicatoria, excepciones, foto_personalizada) VALUES ('".$id_cli."', '".$subtotal."', '".$mensaje."', '".$excepciones."', '".$ruta2."')");
+$result = $conexion->query("INSERT INTO pedido (cod_cliente, total_pedido, dedicatoria, excepciones, foto_personalizada, fecha_entrega, hora_entrega) VALUES ('".$id_cli."', '".$subtotal."', '".$mensaje."', '".$excepciones."', '".$ruta2."', '".$fecha."', '".$hora."')");
 
 // die(mysqli_error($conexion)."---- error");
 
