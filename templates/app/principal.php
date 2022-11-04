@@ -174,7 +174,7 @@
 }
 	</style>
 	<body>
-		<nav style="background: rgba(255, 255, 255, 0.5); ">
+		<nav style="background: rgba(236, 64, 122, 0.5); ">
 			<div class="nav-wrapper">
 				<a href="#" id="menu_triger" data-target="slide-out" class="sidenav-trigger show-on-large" style="color:black"><i class="material-icons">menu</i></a>
 				<a href="#" style="margin-left: 10px;" id="cart_return" class="black-text left" onclick="regresar_prod()" hidden><i class="material-icons">keyboard_return</i></a>

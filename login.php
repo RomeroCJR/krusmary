@@ -86,35 +86,35 @@
 		</div>
 		<!-- Modal Structure -->
 		<div class="row row-form " >
-			<div id="ingreso"  class="col s10 offset-s1  m4 offset-m1 white">
+			<div id="ingreso"  class="col s10 offset-s1  m4 offset-m1 ">
 				<div class="formulario-acceso">
 					<div class="row">
-						<div class="col s10 offset-s1">
+						<div class="col s12">
 						<h4 class="fuente rubik" style="text-align:center;"><b>Acceso al Sistema</b></h4>
 						</div>
 					</div>
 					<div class="row">
 						<form method="POST" id="acceso" action="" accept-charset="utf-8">
 							<div class="row">
-								<div class="input-field col s9 offset-s1">
+								<div class="input-field col s12">
 									<i class="material-icons prefix">account_circle</i>
 									<input type="text" name="userAcceso" class="acceso validate" id="userAcceso"  autocomplete="off" maxlength="20">
 									<label for="userAcceso">Login</label>
 								</div>
 							</div>
 							<div class="row">
-								<div class="input-field col s9 offset-s1">
+								<div class="input-field col s12">
 									<i class="material-icons prefix">https</i>
 									<input type="password" name="passAcceso" class="acceso" id="passAcceso"  autocomplete="off" maxlength="20">
 									<label for="passAcceso">Contraseña</label>
 								</div>
 							</div>
-							<div class="row">
-								<div class="input-field col s9 offset-s1">
-									<button class="btn waves-effect waves-light right" type="submit" name="acceso">Ingresar
+							<!-- <div class="row"> -->
+								<div class="input-field center">
+									<button class="btn-large waves-effect waves-light right" type="submit" name="acceso">Ingresar
 									<i class="material-icons right">lock</i></button>
 								</div>
-							</div>
+							<!-- </div> -->
 							
 						</form>
 					</div>

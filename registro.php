@@ -47,6 +47,11 @@
 </style>
 
 <body id="cuerpo">
+	<div id="regresar_inicio">
+		
+		<a href="inicio.php" class="btn-flat btn-large waves-effect waves-red"><i class="material-icons-outlined">keyboard_return</i></a>
+	</div>
+
 	<div id="section_1">
 		<div class="container" style="margin-top: 1%;">
 			<div class="row">

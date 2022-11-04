@@ -15,7 +15,7 @@ session_destroy();
 mysqli_close($conexion);
 
 //Redireccionamos a el index
-header("Location: ../../registro.php");
+header("Location: ../../pedidos.php");
 die();
 ?>
 <!doctype html>
