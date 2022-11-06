@@ -10,6 +10,7 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">    
     <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/butter.js"></script>
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
    
@@ -100,7 +101,8 @@
 
 
 </style>
-<body>
+<body >
+    <div id="butter">
     <ul id="dropdown1" class="dropdown-content" >
         <li><a href="#section-1" class="waves-effect waves-light black-text">Inicio</a></li>
         <li><a href="#section-2" class="waves-effect waves-light black-text">Galería</a></li>
@@ -138,8 +140,8 @@
                     </div>
                 </li>
                 <li>
-                    <img src="images/fondo1.jpg"> <!-- random image -->
-                    <div class="caption center-align ">
+                    <img src="images/torta_tres_leches_8910_orig.jpg"> <!-- random image -->
+                    <div class="caption center-align black-text">
                     <!-- <h3>Repostería KRUS-MARY!</h3> -->
                     <h5 class=""><b>Tortas y Pasteles, preparados a gusto y necesidad del cliente.</b></h5>
                     </div>
@@ -153,7 +155,7 @@
                 </li>
                 <li>
                     <img src="images/fondo3.jpg"> <!-- random image -->
-                    <div class="caption center-align black-text">
+                    <div class="caption right-align black-text">
                     <!-- <h3>Repostería KRUS-MARY!</h3> -->
                     <br><br><br><br><br>
                     <h5 class=""><b>Llámanos o haz una reserva desde la página</b> &#128512;.</h5>
@@ -196,43 +198,73 @@
         <div class="" style="background-color: #fce4ec">
             <div class="container row" id="cards_row" >
             <h3 class="rubik">Nuestros productos</h3>
-                <div class="col s12 m4">
-                    <div class="card-panel light-blue darken-2">
-                        <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-                        </span>
+                <div class="col s12 m4" style="padding-top:20px;">
+                    <div class="col s12 ">
+                        <center><img src="images/icon1.png" width="50%"  alt=""></center>
+                    </div>
+                    <div class="col s12">
+                        <div class="card-panel light-blue darken-2">
+                            <span class="white-text">Repostería de alta calidad: tortas y pasteles a pedido del cliente, contamos con foto tortas e impresiones de alta calidad, también puedes agregar dedicatorias personalizadas.</span>
+                        </div>
                     </div>
                 </div>
-                <div class="col s12 m4">
-                    <div class="card-panel light-blue darken-2">
-                        <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-                        </span>
+                <div class="col s12 m4" style="padding-top:20px;">
+                    <div class="col s12 ">
+                        <center><img src="images/icon2.png" width="50%"  alt=""></center>
+                    </div>
+                    <div class="col s12">
+                        <div class="card-panel light-blue darken-2">
+                            <span class="white-text">Queques, masitas, postres y una gran variedad de productos a tu elección preparados de manera artesanal, nuestros famosos postres te van a encantar!</span>
+                        </div>
                     </div>
                 </div>
-                <div class="col s12 m4">
-                    <div class="card-panel light-blue darken-2">
-                        <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-                        </span>
+                <div class="col s12 m4" style="padding-top:20px;">
+                    <div class="col s12 ">
+                            <center><img src="images/icon3.png" width="50%"  alt=""></center>
+                    </div>
+                    <div class="col s12">
+                        <div class="card-panel light-blue darken-2">
+                            <span class="white-text">Nuestros productos al ser preparados artesanalmente, no contienen ningún tipo de conservantes u otros ingredientes que pudieran perjudicarte.
+                                <br>Cuidamos tu salud. &#128522;
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-</body>
-
-<footer class="page-footer pink lighten-1" id="section-4">
+    <section id="section-4">
+        <div class="container">
+            <h3 class="rubik">Contáctanos</h3>
+            <div class="form_contact">
+                <p><a href="tel:+59167673738"><i class="material-icons-outlined left">call</i>+591 67673738</a></p>    
+                <p><i class="material-icons-outlined left">location_on</i>Nuestra dirección</p>
+                
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1744.7512672633209!2d-65.59398282854221!3d-22.08787750842093!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9406a5f2313e0d1f%3A0x6666d4c71bedca0d!2sREPOSTERIA%20%22KRUSMARI%22!5e0!3m2!1ses-419!2sbo!4v1667683772221!5m2!1ses-419!2sbo" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            
+            </div>
+        </div>
+    </section>
+    <br>
+    <footer class="page-footer pink lighten-1" id="section-5">
     <div class="container">
         <div class="row">
 
-            <div class="col s12">
-                <h5 class="white-text">Redes sociales:</h5>
+            <div class="col s6">
+                <h5>Redes:</h5>
                 <ul >
                     <li class="footer_redes" style="height:30px;" ><a  class="grey-text text-lighten-3" href="https://www.facebook.com/REPOSTERIAKRUSMARY"><i class="left"><img style="height:22px;" src="https://img.icons8.com/color/48/null/facebook-new.png"/></i> Facebook</a></li>
                     <li class="footer_redes" style="height:30px;" ><a  class="grey-text text-lighten-3" href="https://wa.me/59163757600?text=Hola..."><i class="left"><img style="height:22px;" src="https://img.icons8.com/color/48/null/whatsapp--v1.png"/></i>WhatsApp</a></li>
                     <!-- <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li> -->
                     <!-- <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li> -->
+                </ul>
+            </div>
+            <div class="col s6">
+                <h5>Dirección:</h5>
+                <ul>
+                    <li>
+                        <span>Calle independencia esquina cochabamba #395 Villazón, Bolivia</span>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -244,17 +276,22 @@
         </div>
     </div>
 </footer>
+</div>
+</body>
+
+
 </html>
 
 <script>
-    
-  document.addEventListener('DOMContentLoaded', function() {
-    // let options = {'height': '300'}
-    var elems = document.querySelectorAll('.slider');
-    var instances = M.Slider.init(elems);
-    var elem = document.querySelectorAll('.materialboxed');
-    var instance = M.Materialbox.init(elem);
-    $(".dropdown-trigger").dropdown();
-  });
+    butter.init({cancelOnTouch: true});
+    document.addEventListener('DOMContentLoaded', function() {
+        // let options = {'height': '300'}
+        var elems = document.querySelectorAll('.slider');
+        var instances = M.Slider.init(elems);
+        var elem = document.querySelectorAll('.materialboxed');
+        var instance = M.Materialbox.init(elem);
+        $(".dropdown-trigger").dropdown();
+    });
+
 
 </script>

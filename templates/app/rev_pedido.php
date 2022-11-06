@@ -1,11 +1,8 @@
 <?php
 require('../../recursos/conexion.php');
-$Sql = "SELECT a.Codped, b.Nombre as nompla, a.Cant, b.Precio, c.idcli, d.Nombre, d.Apellidos FROM det_ped a, plato b, pedido c, cliente d WHERE a.Estado = 1 AND a.Codpla = b.Codpla AND a.Codped = c.Codped AND c.idcli = d.id";
+$Sql = "SELECT a.cod_pedido, b.nombre_producto, a.cant_producto, b.precio_producto, c.cod_cliente, d.nombre_cliente, CONCAT(d.ap_paterno_cliente,' ',d.ap_materno_cliente) as apellidos_cliente, d.ap_paterno_cliente, d.ap_materno_cliente FROM detalle_pedido a, producto b, pedido c, cliente d WHERE a.estado_det_pedido = 1 AND a.cod_producto = b.cod_producto AND a.cod_pedido = c.cod_pedido AND c.cod_cliente = d.cod_cliente";
 $Busq = $conexion->query($Sql);
-while($arr = $Busq->fetch_array())
-{
-$fila[] = array('cod'=>$arr['Codped'], 'nombre'=>$arr['nompla'], 'cant'=>$arr['Cant'], 'precio'=>$arr['Precio'], 'idcli'=>$arr['idcli'], 'nombrecli'=>$arr['Nombre'], 'apcli'=>$arr['Apellidos']);
-}
+$fila = $Busq->fetch_all(MYSQLI_ASSOC);
 ?>
 
 
@@ -13,7 +10,7 @@ $fila[] = array('cod'=>$arr['Codped'], 'nombre'=>$arr['nompla'], 'cant'=>$arr['C
 <style>
 	body{
 		/*font-family: 'Segoe UI Light';*/
-		background-color: #ffbb00;
+		background-color: #ffcdd2;
 	}
 	.textrev{
 		color: #eeee00;
@@ -46,15 +43,15 @@ $fila[] = array('cod'=>$arr['Codped'], 'nombre'=>$arr['nompla'], 'cant'=>$arr['C
 	<div class="col s12">
 		<table class="det rubik z-depth-4">
 			<tr>
-				<th>Estado: </th>
+				<!-- <th>Estado: </th> -->
 				<td><span id="actped"></span></td>
 			</tr>
 			<tr>
-				<th>Fecha: </th>
+				<!-- <th>Fecha: </th> -->
 				<td><span id="fecha_ped"></span></td>
 			</tr>
 			<tr>
-				<th>Hora: </th>
+				<!-- <th>Hora: </th> -->
 				<td><span id="hora_ped"></span></td>
 			</tr>
 		</table>
@@ -127,8 +124,8 @@ $fila[] = array('cod'=>$arr['Codped'], 'nombre'=>$arr['nompla'], 'cant'=>$arr['C
 					// $('#actped').css('color', '#f6e58d');
 					$('#actped').html('Tienes 1 pedido pendiente, tu pedido aun no ha sido aceptado.');
 					$('#totped').html('<b>Total:</b> '+arr[0]+'Bs.');
-					$('#fecha_ped').html(arr[4]);
-					$("#hora_ped").html(arr[5]);
+					$('#fecha_ped').html("Fecha de entrega: "+arr[4]);
+					$("#hora_ped").html("A horas: "+arr[5]);
 					// $("#boton-cancelar").html("<a class='btn-large red' onclick='cancelar_pedido("+arr[2]+")'>CANCELAR MI PEDIDO</a>");
 					$("#boton-cancelar").show();
 					$("#boton-cancelar").attr("onclick","cancelar_pedido("+arr[2]+")");
@@ -136,10 +133,10 @@ $fila[] = array('cod'=>$arr['Codped'], 'nombre'=>$arr['nompla'], 'cant'=>$arr['C
 				}
 				if (arr[3] == "ACEPTADO"){
 					$('#actped').css('color', '#329f21');
-					$('#actped').html('Tu pedido ha sido aceptado, y enviado.');
+					$('#actped').html('Tu pedido ha sido aceptado.');
 					$('#totped').html('<b>Total:</b> '+arr[0]+'Bs.');
-					$('#fecha_ped').html(arr[4]);
-					$("#hora_ped").html(arr[5]);
+					$('#fecha_ped').html("Pasa a recogerlo hasta el día "+arr[4]);
+					$("#hora_ped").html("A horas "+arr[5]);
 					// $("#boton-cancelar").html("");
 					$("#boton-cancelar").hide();
 					tabla_llenar(arr[2]);
@@ -149,8 +146,8 @@ $fila[] = array('cod'=>$arr['Codped'], 'nombre'=>$arr['nompla'], 'cant'=>$arr['C
 					$('#actped').css('color', 'orange');
 					$('#actped').html('Tu pedido fue rechazado.');
 					$('#totped').html('<b>Total:</b> '+arr[0]+'Bs.');
-					$('#fecha_ped').html(arr[4]);
-					$("#hora_ped").html(arr[5]);
+					// $('#fecha_ped').html(arr[4]);
+					// $("#hora_ped").html(arr[5]);
 					// $("#boton-cancelar").html("<a class='btn-large red' onclick='cancelar_pedido("+arr[2]+")'>CANCELAR MI PEDIDO</a>");
 					// $("#boton-cancelar").show();
 					// $("#boton-cancelar").attr("onclick","cancelar_pedido("+arr[2]+")");
@@ -172,11 +169,11 @@ $fila[] = array('cod'=>$arr['Codped'], 'nombre'=>$arr['nompla'], 'cant'=>$arr['C
 		var table = $("#pedidos_cliente tbody")[0];
 
 		"<?php foreach($fila as $a  => $valor){ ?>";
-			if(cod == "<?php echo $valor['cod'] ?>"){
+			if(cod == "<?php echo $valor['cod_pedido'] ?>"){
 				var row = table.insertRow(-1);
-				row.insertCell(0).innerHTML = "<?php echo $valor['nombre'] ?>";
-				row.insertCell(1).innerHTML = "<?php echo $valor['cant'] ?>";
-				row.insertCell(2).innerHTML = "<?php echo $valor['precio'] ?>";
+				row.insertCell(0).innerHTML = "<?php echo $valor['nombre_producto'] ?>";
+				row.insertCell(1).innerHTML = "<?php echo $valor['cant_producto'] ?>";
+				row.insertCell(2).innerHTML = "<?php echo $valor['precio_producto'] ?>";
 			}
 		"<?php } ?>";
 	}
@@ -191,25 +188,22 @@ $fila[] = array('cod'=>$arr['Codped'], 'nombre'=>$arr['nompla'], 'cant'=>$arr['C
 	function confirmar_cancel() {
 
 		let cod = $("#codigo_ped").val();
-		$.ajax({
-            url: "recursos/app/cancel_ped.php?cod="+cod,
-            method: "GET",
-            success: function(response) {
-                console.log(response)
-                if (response == '11') {
-                	M.toast({html:'Su pedido ha sido cancelado.'}); 
-					$('#modal_cancelar_pedido').modal('close');
-					$('#actped').css('color', 'red');
-					$('#actped').html("Pedido cancelado, no tienes pedidos activos.");
-					$('#totped').html("");
-					$('#fecha_ped').html("");
-					$('#boton-cancelar').hide();
-                }
-            },
-            error: function(error) {
-                console.log(error)
-            }
-	    })
+		fetch("recursos/app/cancel_ped.php?cod="+cod)
+		.then(response => response.text())
+		.then(data => {
+			console.log(data)
+			if (data == '1') {
+				M.toast({html:'Su pedido ha sido cancelado.'}); 
+				$('#modal_cancelar_pedido').modal('close');
+				$('#actped').css('color', 'red');
+				$('#actped').html("Pedido cancelado, no tienes pedidos activos.");
+				$('#totped').html("");
+				$('#fecha_ped').html("");
+				$("#hora_ped").html("");
+				$('#boton-cancelar').hide();
+				
+			}
+		})
 
 	}
 

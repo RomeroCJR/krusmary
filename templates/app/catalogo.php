@@ -238,7 +238,8 @@
 			buttonIncrement: "+",
 			buttonPosition: 'around'
 		});
-
+		var today = new Date().toISOString().split('T')[0];
+		document.getElementById("fecha").setAttribute('min', today);
 		document.getElementById('form_pedido').reset();
 	});
 	function direrc(){
@@ -465,6 +466,8 @@
 		}
 	})
 
+
+	
 
 	document.getElementById('check_fototorta').addEventListener('click', () => {
 		let check = document.getElementById('check_fototorta');

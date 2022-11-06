@@ -2,9 +2,9 @@
 	require("../../recursos/conexion.php");
 	// require("../../recursos/sesiones.php");
 	session_start();
-	$id = $_SESSION['id_cliente'];
+	$id = $_SESSION['cod_cliente'];
 
-	$res = $conexion->query("SELECT * FROM cliente WHERE id = ".$id);
+	$res = $conexion->query("SELECT * FROM cliente WHERE cod_cliente = ".$id);
 	$res = $res->fetch_all(MYSQLI_ASSOC);
 	// echo var_dump($res)
 ?>
@@ -19,42 +19,53 @@
 		bottom: 10px;
 	}
 </style>
-<div class="container">
+<!-- <div class="container"> -->
 	<div class="row">
 	    <form class="col s12 back-color z-depth-4" id="form_client">
-	    <h4 class="roboto">Mi perfil</h4>
+	    <h4 class="roboto">Mis datos</h4>
 	      <div class="row">
 	        <div class="input-field col s12">
-	          <input id="cedula" name="cedula" type="text" minlength="1" maxlength="8" onkeypress="return checkIt(event)" class="validate" value="<?php echo $res[0]['Ci']?>">
-	          <label for="cedula">Cédula</label>
+	          <input id="cedula" name="cedula" type="text" minlength="1" maxlength="8" onkeypress="return checkIt(event)" class="validate" value="<?php echo $res[0]['ci_cliente']?>">
+	          <label for="cedula">Cédula de identidad</label>
 	        </div>
 
 	        <div class="input-field col s12">
-	          <input id="nombre" name="nombre" type="text" class="validate" onkeypress="return checkText(event)" minlength="3" maxlength="20" value="<?php echo $res[0]['Nombre']?>">
+	          <input id="nombre" name="nombre" type="text" class="validate" onkeypress="return checkText(event)" minlength="3" maxlength="20" value="<?php echo $res[0]['nombre_cliente']?>">
 	          <label for="nombre">Nombre</label>
 	        </div>
 
 	        <div class="input-field col s12">
-	          <input id="apellidos" name="apellidos" type="text" class="validate" onkeypress="return checkText(event)" minlength="3" maxlength="20" value="<?php echo $res[0]['Apellidos']?>">
+	          <input id="apellidos" name="apellidos" type="text" class="validate" onkeypress="return checkText(event)" minlength="3" maxlength="20" value="<?php echo $res[0]['ap_paterno_cliente'].' '.$res[0]['ap_materno_cliente']?>">
 	          <label for="apellidos">Apellidos</label>
 	        </div>
 
 	        <div class="input-field col s12">
-	          <input id="telf" name="telf" type="text" class="validate" minlength="8" maxlength="8" onkeypress="return checkIt(event)" value="<?php echo substr($res[0]['Telefono'], 4)?>">
-	          <label for="telf">Teléfono/Celular</label>
+	          <input id="telf" name="telf" type="text" class="validate" minlength="8" maxlength="8" onkeypress="return checkIt(event)" value="<?php echo$res[0]['nro_celular_cliente']?>">
+	          <label for="telf">Celular</label>
 	        </div>
-	      </div>
-	      <div class="bt row">
-	      	<div class="col s7">
-	      		<small style="color:red"><p>Los datos del ingresados serán utilizados en la factura.</p></small>
-	      	</div>
-	      	<div class="col s4 offset-s1">
-	      		<button type="submit" class="btn waves-effect waves-light right">Guardar</button>
-	      	</div>
-	      </div>
+
+			<div class="input-field col s10">
+	          <input id="clave" name="clave" type="password" class="validate" minlength="4" maxlength="8" value="<?php echo$res[0]['clave_cliente']?>">
+	          <label for="clave">Contraseña</label>
+	        </div>
+			<div class="input-field col s2">
+				<a href="#!" id="visible" class="btn-small waves-effect waves-light red"><i class="material-icons-outlined">visibility</i></a>
+			</div>
+	    </div>
+		<div class="bt row">
+			<div class="col s12">
+				<small style="color:red"><p>Los datos del formulario serán utilizados en la factura.</p></small>
+			</div>
+		</div>
+		<div class="row">
+		  	<div class="col s12">
+				<button type="submit" form="form_client" class="btn waves-effect waves-light right">Guardar</button>
+			</div>
+		</div>
 	    </form>
+		
   	</div>
-</div>
+<!-- </div> -->
 
 <script>
 	$(document).ready(function() {
@@ -80,21 +91,26 @@
       }
     }
 
-   	$("#form_client").on("submit", function(e){
+	document.getElementById('form_client').addEventListener('submit', function (e) {
    		e.preventDefault();
-   		var data = new FormData(document.getElementById("form_client"));
-   		$.ajax({
-			url: "recursos/app/form_client.php",
-			method: "post",
-			data: data,
-			contentType: false,
-    		processData: false
-		}).done(function(echo){
-			console.log(echo)
-			if (echo == "1") {
-				console.log(echo)
-				M.toast({html: "Datos de perfil modificados."})
+		var data = new FormData(document.getElementById("form_client"));
+		fetch("recursos/app/form_client.php", {method:'post', body: data})
+   		.then(response => response.text())
+		.then(data => {
+			console.log(data)
+			if (data == "1") {
+				console.log(data)
+				M.toast({html: "Datos guardados."})
 			}
-		});
+		})
     })
+
+	document.getElementById('visible').addEventListener('click', function () {
+		var tipo = document.getElementById('clave').type
+		if(tipo == 'password'){
+			document.getElementById('clave').type = 'text'
+		}else{
+			document.getElementById('clave').type = 'password'
+		}
+	});
 </script>

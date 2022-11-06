@@ -211,7 +211,7 @@
 					<div><center><a href="#email"><span class="black-text email"><b>krusmary@gmail.com</b></span></a></center></div>
 				</div>
 			</li>
-				<li><a href="#!" onclick="location.reload()" class="waves-effect waves-purple"><i class="material-icons">home</i>Inicio</a></li>
+				<!-- <li><a href="#!" onclick="location.reload()" class="waves-effect waves-purple"><i class="material-icons">home</i>Inicio</a></li> -->
 				<li><a href="#!" onclick="sidenav_navi('templates/app/catalogo.php')" class="waves-effect waves-purple"><i class="material-icons">cake</i>Catálogo</a></li>
 				<li><a href="#!" onclick="sidenav_navi('templates/app/perfil.php')" class="waves-effect waves-purple"><i class="material-icons">face</i>Mi perfil</a></li>
 				<li><a href="#!" onclick="sidenav_navi('templates/app/rev_pedido.php')" class="waves-effect waves-purple"><i class="material-icons">assignment</i>Mi pedido</a></li>
@@ -241,8 +241,9 @@
 	$(document).ready(function() {
 		$('.modal').modal();
 		
-
+		
 		$('.sidenav').sidenav();
+		$("#cuerpo").load('templates/app/catalogo.php');
 
 	});
 	

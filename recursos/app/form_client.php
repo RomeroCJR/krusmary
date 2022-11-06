@@ -1,18 +1,24 @@
 <?php 
 	require("../conexion.php");
 	session_start();
-	$id = $_SESSION['id_cliente'];
+	$id = $_SESSION['cod_cliente'];
 	$ci = $_POST['cedula'];
 	$nombre = $_POST['nombre'];
 	$apellidos = $_POST['apellidos'];
 	$telf = $_POST['telf'];
-	
-	$telf = "+591".$telf;
+	$clave = $_POST['clave'];
+	$apellidos = explode(" ",$apellidos);
+	$ap_paterno = $apellidos[0];
+	$ap_materno = NULL;
+	if(isset($apellidos[1])){
+		$ap_materno = $apellidos[1];
+	}
 
-	$res = $conexion->query("UPDATE `cliente` SET `Ci`= ".$ci.",`Nombre`='".$nombre."',`Apellidos`='".$apellidos."',`Telefono`='".$telf."' WHERE id = ".$id);
+
+	$res = $conexion->query("UPDATE `cliente` SET `ci_cliente`= ".$ci.",`nombre_cliente`='".$nombre."',`ap_paterno_cliente`='".$ap_paterno."',`ap_materno_cliente`='".$ap_materno."',`nro_celular_cliente`='".$telf."',`clave_cliente`='".$clave."' WHERE cod_cliente = ".$id);
 
 	if ($res) {
-		echo "1";
+		echo $res;
 	}else{
 		echo mysqli_error($conexion);
 	}

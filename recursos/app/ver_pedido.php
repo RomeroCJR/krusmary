@@ -4,7 +4,7 @@ require('../conexion.php');
 session_start();
 date_default_timezone_set("America/La_Paz");
 $fecha_actual = date("Y-m-d H:i:s");
-$id = $_SESSION['id_cliente'];
+$id = $_SESSION['cod_cliente'];
 
 
 function fechaString ($fecha) {
@@ -23,29 +23,31 @@ $meses_ES = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"
 }
 
 
-$consulta = "SELECT * FROM pedido WHERE idcli = '".$id."' ORDER BY Codped DESC LIMIT 1;";
+$consulta = "SELECT * FROM pedido WHERE cod_cliente = '".$id."' ORDER BY cod_pedido DESC LIMIT 1;";
 $resultadoVP = mysqli_query($conexion, $consulta) or die(mysqli_error($conexion));
 $rvp = mysqli_fetch_array($resultadoVP);
 
 // $_SERVER["REQUEST_TIME"]
 
-$nuevo = strtotime($fecha_actual) - strtotime($rvp['Fecha']);
+$nuevo = strtotime($rvp['fecha_entrega'].' '.$rvp['hora_entrega']) - strtotime($fecha_actual);
+// die(strtotime($rvp['fecha_entrega'].' '.$rvp['hora_entrega']).'-----------'.strtotime($fecha_actual));
+// die($nuevo.'---'.$fecha_actual.'----'.$rvp['fecha_entrega'].' '.$rvp['hora_entrega']);
 
-if (($nuevo < 1800)  && ($rvp['Estado'] == '0')) {
-	$array = $rvp['Total'].",".$rvp['Fecha'].",".$rvp['Codped'].",ACEPTADO,".fechaString($rvp['Fecha']).",".date("H:m:s", strtotime($rvp['Fecha']));
+if (($nuevo > 1800)  && ($rvp['estado_pedido'] == '0')) {
+	$array = $rvp['total_pedido'].",".$rvp['fecha_pedido'].",".$rvp['cod_pedido'].",ACEPTADO,".fechaString($rvp['fecha_entrega']).",".date("H:m:s", strtotime($rvp['hora_entrega']));
 	die($array);
 }
 
 
-if ($rvp['Estado'] == 1) {
+if ($rvp['estado_pedido'] == 1) {
 
-	$array = $rvp['Total'].",".$rvp['Fecha'].",".$rvp['Codped'].",PENDIENTE,".fechaString($rvp['Fecha']).",".date("H:m:s", strtotime($rvp['Fecha']));
+	$array = $rvp['total_pedido'].",".$rvp['fecha_pedido'].",".$rvp['cod_pedido'].",PENDIENTE,".fechaString($rvp['fecha_entrega']).",".date("H:m:s", strtotime($rvp['hora_entrega']));
 	die($array);
 }
 
-if ($rvp['Estado'] == 2) {
+if ($rvp['estado_pedido'] == 2) {
 
-	$array = $rvp['Total'].",".$rvp['Fecha'].",".$rvp['Codped'].",RECHAZADO,".fechaString($rvp['Fecha']).",".date("H:m:s", strtotime($rvp['Fecha']));
+	$array = $rvp['total_pedido'].",".$rvp['fecha_pedido'].",".$rvp['cod_pedido'].",RECHAZADO,".fechaString($rvp['fecha_entrega']).",".date("H:m:s", strtotime($rvp['hora_entrega']));
 	die($array);
 }else{
 	die("sinpedidos");
