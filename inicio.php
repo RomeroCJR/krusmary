@@ -190,9 +190,11 @@
                 <div class="z-depth-3 grid-item" style="background-size: 100%; background-repeat: no-repeat;background-image: url('images/f35c10d7-72b1-4168-934b-f618b97a9f9a.jpg')"></div>
                 <div class="z-depth-3 grid-item " style="background-size: 100%; background-repeat: no-repeat;background-image: url('images/PXL_20220722_232513850.MP.jpg')"></div>
                 <div class="z-depth-3 grid-item " style="background-size: 100%; background-repeat: no-repeat;background-image: url('images/18581799_501200553604866_5054816197699773601_n.jpg')"></div>
-                <div class="z-depth-3 grid-item wide tall" style="background-size: 100%; background-repeat: no-repeat;background-image: url('images/119743793_1453578671700378_8355588776018510533_n.jpg')"></div>
+                <div class="z-depth-3 grid-item " style="background-size: 100%; background-repeat: no-repeat;background-image: url('images/119743793_1453578671700378_8355588776018510533_n.jpg')"></div>
                 <div class="z-depth-3 grid-item wide" style="background-size: 100%; background-repeat: no-repeat;background-image: url('images/b08facb7-faeb-47fe-bfd4-01cc9a1d8180.jpg')"></div>
                 <div class="z-depth-3 grid-item" style="background-size: 100%; background-repeat: no-repeat;background-image: url('images/torta_tres_leches_8910_orig - copia.jpg')"></div>
+                <div class="z-depth-3 grid-item wide tall" style="background-size: 100%; background-repeat: no-repeat;background-image: url('images/torta-amor-receta-lo-mismo-pero-sano.jpg')"></div>
+                <div class="z-depth-3 grid-item" style="background-size: 100%; background-repeat: no-repeat;background-image: url('images/fondo1.jpg')"></div>
                 
             </div>
         </div>
