@@ -283,7 +283,7 @@ $Busq = $conexion->query($Sql);
         return M.toast({html: "Inserte un monto válido."})
       }
 
-      fetch("recursos/stock/daily_spend.php?spend="+gasto+"&desc="+descripcion)
+      fetch("recursos/gastos/daily_spend.php?spend="+gasto+"&desc="+descripcion)
       .then(response => response.text())
       .then(data => {
         console.log(data);

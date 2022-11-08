@@ -451,6 +451,7 @@
                     let texto = `*Hola, me llamo:*%0A${cliente}%0A*Quiero realizar un pedido:*%0A${detalle}*Monto a pagar:* ${subtotal} Bs.%0A`;
 					M.toast({html:'<span style="color: #2ecc71">Pedido realizado, puedes ver tu pedido en la sección de Mi pedido</span>', displayLength: 5000, classes: 'rounded'})
 					$("#modal_cliente").modal('close')
+					document.getElementById('menu_triger').hidden = false
                     document.getElementById('cart_return').hidden = true
 					$("#cuerpo").load('templates/app/catalogo.php')
                     window.location.href = "https://wa.me/59163757600?text="+texto;

@@ -2,7 +2,7 @@
 <?php
 require('../../recursos/conexion.php');
 
-$Sql = "SELECT cod_cliente AS id, ci_cliente AS ci, nombre_cliente AS nombre, CONCAT(ap_paterno_cliente,' ', ap_materno_cliente) AS apellidos, ap_paterno_cliente AS ap_paterno, ap_materno_cliente AS ap_materno,  nro_celular_cliente AS telefono FROM `cliente` where estado_cliente = 1;"; 
+$Sql = "SELECT * FROM caja WHERE estado_caja = 1"; 
 $Busq = $conexion->query($Sql); 
 $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 
@@ -21,11 +21,9 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 </style>
 
 <div class="row" style="margin-top:20px;">
-  <div class="col s4">
-      <a class="waves-effect waves-light btn-large orange darken-4 modal-trigger rubik" id="modal_nuevo_cliente" href="#modal1"><i class="material-icons left">add</i><b>Cliente</b></a>
-  </div>
 
-  <div class="col s4 offset-s4">
+
+  <div class="col s4 offset-s8">
     <div class="right">  
       <p>
         <label>
@@ -46,24 +44,25 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
    <table id="tabla1" class="content-table">
       <thead>
          <tr>
-         	<th class="center">Ci</th>
-            <th class="center">Nombre</th>
-            <th class="center">Teléfono</th>
+         	<th class="center">Código</th>
+            <th class="center">Monto de gasto</th>
+            <th class="center">Descripción del gasto</th>
+            <th class="center">Fecha del gasto</th>
             <th class="center">Acciones</th>
          </tr>          
       </thead>
       <tbody>
       	<?php foreach($fila as $a  => $valor){ ?> 
          <tr>
-            <td class="center"><?php echo $valor["ci"] ?></td>
-            <td class="center"><?php echo $valor["nombre"]." ".$valor["apellidos"] ?></td>
-            <td class="center"><?php echo $valor["telefono"] ?></td>
+            <td class="center"><?php echo $valor["cod_caja"] ?></td>
+            <td class="center"><?php echo $valor["monto_caja"] ?></td>
+            <td class="center"><?php echo $valor["descripcion_caja"] ?></td>
+            <td class="center"><?php echo $valor["fecha_caja"] ?></td>
 
             <td class="center">
-              <a href="#" class="btn-small btn-floating" onclick="mod_cliente('<?php echo $valor['id'] ?>', '<?php echo $valor['ci'] ?>', '<?php echo $valor['nombre'] ?>', '<?php echo $valor['ap_paterno'] ?>', '<?php echo $valor['ap_materno'] ?>', '<?php echo $valor['telefono'] ?>')"><i class="material-icons">build</i></a>
-  	          <a href="#" class="btn-small btn-floating" onclick="delete_client('<?php echo $valor['id'] ?>')"><i class="material-icons">delete</i></a>
-  	          <a href="#" onclick="vcli('<?php echo $valor['ci'] ?>', '<?php echo $valor['nombre'] ?>', '<?php echo $valor['apellidos'] ?>', '<?php echo $valor['telefono'] ?>');" class="btn-small btn-floating"><i class="material-icons">search</i></a></td>
-            </td>
+              <a href="#" class="btn-small btn-floating" onclick="mod_gasto('<?php echo $valor['cod_caja'] ?>', '<?php echo $valor['monto_caja'] ?>', '<?php echo $valor['descripcion_caja'] ?>')"><i class="material-icons">build</i></a>
+  	          <a href="#" class="btn-small btn-floating" onclick="borrar_gasto('<?php echo $valor['cod_caja'] ?>')"><i class="material-icons">delete</i></a>
+  	        </td>
          </tr>
          <?php } ?>	
       </tbody>
@@ -108,36 +107,23 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 
 <!-- Modal formulario modificar cliente -->
   <div id="modal2" class="modal" style="width: 30%;">
-    <div class="modal-content">
-      <h4>Modificar Cliente</h4>
-      <form id="form_mod_cliente" action="" method="POST" accept-charset="utf-8">
+    <div class="modal-content rubik">
+      <h4>Modificar gasto</h4>
+      <form id="form_mod_caja" action="" method="POST" accept-charset="utf-8">
         <div class="input-field col s12 m12">
           <input type="text" id="mod_id" name="mod_id" hidden>
-          <input id="mod_ci" name="mod_ci" type="text" onKeyPress="return checkIt(event)" onpaste="return false" class="validate" minlength="7" maxlength="7" required>
-          <label for="mod_ci"># Cédula</label>
+          <input id="mod_monto" name="mod_monto" type="text" onKeyPress="return checkIt(event)" onpaste="return false" class="validate" minlength="1" maxlength="7" required>
+          <label for="mod_monto">Monto del gasto</label>
         </div>
         <div class="input-field col s12 m12">
-          <input id="mod_nombre" name="mod_nombre" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" required>
-          <label for="mod_nombre">Nombre</label>
-        </div>
-        <div class="input-field col s12 m12">
-          <input id="mod_ap_paterno" name="mod_ap_paterno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" required>
-          <label for="mod_ap_paterno">Apellido paterno</label>
-        </div>
-        <div class="input-field col s12 m12">
-          <input id="mod_ap_materno" name="mod_ap_materno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" required>
-          <label for="mod_ap_materno">Apellido materno</label>
-        </div>
-
-        <div class="input-field col s12 m12">
-          <input id="mod_telefono" onKeyPress="return checkIt(event)" name="mod_telefono" type="text" minlength="8" maxlength="8" onpaste="return false" class="validate">
-          <label for="mod_telefono">Teléfono</label>
-        </div>    
+          <input id="mod_descripcion" name="mod_descripcion" type="text" class="validate" required>
+          <label for="mod_descripcion">Descripción</label>
+        </div>  
       </form>
     </div>
 
     <div class="modal-footer col s12">
-        <button class="btn waves-effect waves-light right" type="submit" form="form_mod_cliente" name="acceso">Modificar</button>
+        <button class="btn waves-effect waves-light right" type="submit" form="form_mod_caja" name="acceso">Modificar</button>
         <a href="#!" class=" modal-action modal-close waves-effect waves-red btn red left">Cancelar</a>
     </div>
   </div>
@@ -166,13 +152,13 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 <!-- Modal Structure -->
 <div id="modal3" class="modal">
   <div class="modal-content">
-    <h4>Dar de baja cliente:</h4>
-    <p>Se dará de baja al cliente seleccionado.</p>
+    <h4>Borrar gasto:</h4>
+    <p>Se dará de baja el gasto seleccionado.</p>
     <input type="text" id="del_id" hidden>
   </div>
   <div class="modal-footer">
     <a href="#!" class=" modal-action modal-close waves-effect waves-red btn red left">Cancelar</a>
-    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn" id="delete_client">Aceptar</a>
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn" id="delete_gasto">Aceptar</a>
   </div>
 </div>
 
@@ -199,20 +185,20 @@ $(document).ready(function() {
 });
 
 
-function delete_client(id) {
+function borrar_gasto(id) {
   $("#del_id").val(id)
   $("#modal3").modal('open')
 }
 
-document.getElementById('delete_client').addEventListener('click', ()=> {
+document.getElementById('delete_gasto').addEventListener('click', ()=> {
   let id = $("#del_id").val()
 
-  fetch("recursos/clientes/delete_client.php?id="+id)
+  fetch("recursos/gastos/borrar_gasto.php?id="+id)
   .then(response => response.text())
   .then(data => {
     if(data == '1'){
-      M.toast({html: "¡Cliente dado de baja!"});
-      $("#cuerpo").load("templates/clientes/clientes.php");
+      M.toast({html: "<b>¡Gasto eliminado!</b>"});
+      $("#cuerpo").load("templates/gastos/gastos.php");
     }else{
       console.log(data);
     }
@@ -220,30 +206,28 @@ document.getElementById('delete_client').addEventListener('click', ()=> {
 
 })
 
-function mod_cliente(id, ci, nombre, ap_paterno, ap_materno, telf) {
-  $("#mod_id").val(id)
-  $("#mod_ci").val(ci)
-  $("#mod_nombre").val(nombre)
-  $("#mod_ap_paterno").val(ap_paterno)
-  $("#mod_ap_materno").val(ap_materno)
-  $("#mod_telefono").val(telf)
+function mod_gasto(cod_caja, monto, descripcion) {
+  $("#mod_id").val(cod_caja)
+  $("#mod_monto").val(monto)
+  $("#mod_descripcion").val(descripcion)
   M.updateTextFields()
   $("#modal2").modal('open')
 }
 
-document.getElementById('form_mod_cliente').addEventListener('submit', function(e){
+document.getElementById('form_mod_caja').addEventListener('submit', function(e){
   e.preventDefault();
 
-  var formData = new FormData(document.getElementById("form_mod_cliente"));
-  fetch("recursos/clientes/mod_cliente.php", {method:'post', body: formData})
+  var formData = new FormData(document.getElementById("form_mod_caja"));
+  fetch("recursos/gastos/mod_gasto.php", {method:'post', body: formData})
   .then(response => response.text())
   .then(data => {
+    // console.log(data);
     if (data == '1') {
       $("#modal2").modal('close')
-      M.toast({html: "Datos de cliente modificados."})
-      $("#cuerpo").load("templates/clientes/clientes.php")
+      M.toast({html: "<b>Gasto modificado.</b>"})
+      $("#cuerpo").load("templates/gastos/gastos.php")
     }else{
-      console.log(echo)
+      console.log(data)
     }
   })
 });
@@ -286,6 +270,6 @@ function vcli(ci, nombre, apellidos, telefono) {
 
 document.getElementsByClassName('radios')[1].addEventListener('click', ()=> {
   console.log(document.getElementsByName('group1')[1].value)
-  $("#cuerpo").load("templates/clientes/clientes_bajas.php");
+  $("#cuerpo").load("templates/gastos/gastos_bajas.php");
 })
 </script>
