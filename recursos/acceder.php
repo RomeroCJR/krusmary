@@ -34,6 +34,9 @@ $consulta = "SELECT a.login, a.clave, b.ci_usuario FROM datos a, usuario b WHERE
 
 //Obtenemos los resultados
 $resultado = mysqli_query($conexion, $consulta);
+if(mysqli_num_rows($resultado) < 1){
+	die("error");
+}
 $datos = mysqli_fetch_array($resultado);
 
 //Guardamos los resultados del nombre de usuario en minúsculas

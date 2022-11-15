@@ -7,16 +7,16 @@ $gestion = $_GET['ges'];
 $mes = $_GET['per'];
 
 if ($mes == 0) {
-	$result = $conexion->query("SELECT a.cod_venta, a.fecha_venta, a.total_venta, a.cod_usuario, c.ci_usuario, IF((IFNULL((a.cod_pedido),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.nombre_cliente,' ',b.ap_paterno_cliente,' ', (SELECT IFNULL(b.ap_materno_cliente, ' '))) as cliente FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1 AND a.fecha_venta LIKE '".$gestion."%'");
+	$result = $conexion->query("SELECT a.cod_venta, a.fecha_venta, a.total_venta, a.cod_usuario, c.ci_usuario, CONCAT(c.nombre_usuario,' ',c.ap_paterno_usuario) as user,IF((IFNULL((a.cod_pedido),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.nombre_cliente,' ',b.ap_paterno_cliente,' ', (SELECT IFNULL(b.ap_materno_cliente, ' '))) as cliente FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1 AND a.fecha_venta LIKE '".$gestion."%'");
 }else{
-	$result = $conexion->query("SELECT a.cod_venta, a.fecha_venta, a.total_venta, a.cod_usuario, c.ci_usuario, IF((IFNULL((a.cod_pedido),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.nombre_cliente,' ',b.ap_paterno_cliente,' ', (SELECT IFNULL(b.ap_materno_cliente, ' '))) as cliente FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1 AND a.fecha_venta LIKE '".$gestion."-".$mes."%'");
+	$result = $conexion->query("SELECT a.cod_venta, a.fecha_venta, a.total_venta, a.cod_usuario, c.ci_usuario, CONCAT(c.nombre_usuario,' ',c.ap_paterno_usuario) as user,IF((IFNULL((a.cod_pedido),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.nombre_cliente,' ',b.ap_paterno_cliente,' ', (SELECT IFNULL(b.ap_materno_cliente, ' '))) as cliente FROM venta a, cliente b, usuario c WHERE a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1 AND a.fecha_venta LIKE '".$gestion."-".$mes."%'");
 }
 	$cant_local = 0;
 	$cant_pedido = 0;
 	$ingreso_total = 0;
 	if((mysqli_num_rows($result))>0){
 	  while($arr = $result->fetch_array()){ 
-	        $fila[] = array('codv'=>$arr['cod_venta'], 'cliente'=>$arr['cliente'], 'fecha'=>$arr['fecha_venta'], 'tipo'=>$arr['Tipo'], 'total'=>$arr['total_venta'], 'ciusu'=>$arr['ci_usuario']); 
+	        $fila[] = array('codv'=>$arr['cod_venta'], 'cliente'=>$arr['cliente'], 'fecha'=>$arr['fecha_venta'], 'tipo'=>$arr['Tipo'], 'total'=>$arr['total_venta'], 'ciusu'=>$arr['ci_usuario'], 'user'=>$arr['user']); 
 	        $ingreso_total = $ingreso_total + (int)$arr['total_venta'];
 	        if ($arr['Tipo'] == 'local') {
 	        	$cant_local++;
@@ -25,7 +25,7 @@ if ($mes == 0) {
 	        }
 	  }
 	}else{
-	        $fila[] = array('codv'=>'---', 'cliente'=>'---', 'fecha'=>'---', 'tipo'=>'---','total'=>'---', 'ciusu'=>'---');
+	        $fila[] = array('codv'=>'---', 'cliente'=>'---', 'fecha'=>'---', 'tipo'=>'---','total'=>'---', 'ciusu'=>'---', 'user'=>'---');
 	}
 
 ?>
@@ -74,7 +74,7 @@ if ($mes == 0) {
 				<?php foreach($fila as $a  => $valor){ ?>
 				<tr>
 					<td><?php echo $valor['codv']?></td>
-					<td><?php echo $valor['ciusu']?></td>
+					<td><?php echo $valor['user']?></td>
 					<td><?php echo $valor['cliente']?></td>
 					<td><?php echo date('d-m-Y', strtotime($valor['fecha']))?></td>
 					<td><?php echo $valor['tipo']?></td>

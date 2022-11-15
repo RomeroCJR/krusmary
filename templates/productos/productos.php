@@ -78,7 +78,7 @@
           <label for="precio">Precio (*)</label>
         </div>
         <div class="input-field col s12">
-          <input id="descripcion" name="descripcion" type="text" minlength="5" maxlength="50" class="validate" required>
+          <input id="descripcion" name="descripcion" type="text" minlength="5" maxlength="1000" class="validate" required>
           <label for="descripcion">Descripción </label>
         </div>
         <div class="input-field col s12">
@@ -127,7 +127,7 @@
           <label for="mod_precio">Precio (*)</label>
         </div>
         <div class="input-field col s12">
-          <input id="mod_descripcion" name="mod_descripcion" type="text" minlength="5" maxlength="100" class="validate" required>
+          <input id="mod_descripcion" name="mod_descripcion" type="text" minlength="5" maxlength="1000" class="validate" required>
           <label for="mod_descripcion">Descripción </label>
         </div>
         <div class="input-field col s12">
@@ -201,7 +201,7 @@
       <div class="col s12" >
         <h6 style="line-height: 0.3;"><p id="__nombre"></p></h6>
         <h6 style="line-height: 0.3;"><p id="__precio"></p></h6>
-        <h6 style="line-height: 0.3;"><p id="__descripcion"></p></h6>
+        <h6 style="line-height: 0.9;"><p id="__descripcion"></p></h6>
         
       </div>
     </div>
@@ -293,7 +293,7 @@ document.getElementById('form_mod_producto').addEventListener('submit', function
   .then(data => {
     if (data == '1') {
       $("#modal2").modal("close"); 
-      M.toast({html: "Datos de plato modificados."});
+      M.toast({html: "Datos de producto modificados."});
       $("#cuerpo").load("templates/productos/productos.php");
     }else{
       console.log(data);
