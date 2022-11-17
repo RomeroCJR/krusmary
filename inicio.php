@@ -7,6 +7,7 @@
     <meta name="theme-color" content="#ee6e73">
     <meta name="MobileOptimized" content="width">
     <meta name="HandheldFriendly" content="true">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/x-icon" href="img/64.png">
     <link rel="manifest" href="manifest.json">
 
