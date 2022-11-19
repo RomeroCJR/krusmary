@@ -96,24 +96,22 @@
 		<table id="tabla1">
 			<thead>
 				<tr>
-					<th class="center">Gasto (Bs.)</th>
-					<th class="center">Ventas (Bs.)</th>
-					<th class="center">Ingreso (Bs.)</th>
 					<th class="center">Fecha</th>
+					<th class="center">Gastos (Bs.)</th>
+					<th class="center">Ingresos (Bs.)</th>
+					<th class="center">Ganancia (Bs.)</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- ingreso, monto, fecha,  -->
 				<?php foreach($ingreso as $a): ?>
 
-
-								<tr>
-									<td class="center"><?php echo $a['gasto'] ?></td>
-									<td class="center"><?php echo $a['ingreso'] ?></td>
-									<td class="center"><?php echo (float)$a['ingreso'] - (float)$a['gasto']?></td>
-									<td class="center"><?php echo date("Y-m-d", strtotime($a['fecha']))?></td>
-								</tr>
-
+					<tr>
+						<td class="center"><?php echo date("Y-m-d", strtotime($a['fecha']))?></td>
+						<td class="center"><?php echo $a['gasto'] ?></td>
+						<td class="center"><?php echo $a['ingreso'] ?></td>
+						<td class="center"><?php echo (float)$a['ingreso'] - (float)$a['gasto']?></td>
+					</tr>
 
 			    <?php endforeach ?>
 			</tbody>
@@ -133,7 +131,7 @@ $(document).ready(function() {
 	}
 
 	$('#tabla1').dataTable({
-      "order": [[ 3, "desc" ]],
+      "order": [[ 0, "desc" ]],
         "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Lo siento, no se encontraron datos",

@@ -130,10 +130,26 @@ $(document).ready(function() {
 	        titleAttr:  'Imprimir',
 	        className:  'btn-flat blue',
 	        title: 		`<span style="font-size:30; line-height: 100%;">Reporte del ventas del periodo: <?php echo $_GET["ges"] ?> - ${per}</span> 
-						<p style="font-size:18; line-height: 25%;">Total ventas: <?php echo mysqli_num_rows($result) ?></p>
-						<p style="font-size:18; line-height: 25%;">Ventas locales: <?php echo $cant_local?></p>
-						<p style="font-size:18; line-height: 25%;">Ventas por pedido: <?php echo $cant_pedido?></p>
-						<p style="font-size:18; line-height: 25%;">Ingresos totales: <?php echo $ingreso_total ?> Bs.</p>`
+						<table style="width="200px";border: 1px solid black;border-collapse: collapse;">
+							<tr>
+								<th style="border: 2px solid black;border-collapse: collapse;">Total ventas:</th>
+								<td style="border: 2px solid black;border-collapse: collapse;"><?php echo mysqli_num_rows($result) ?></td>
+							</tr>
+							<tr>
+								<th style="border: 2px solid black;border-collapse: collapse;">Ventas locales:</th>
+								<td style="border: 2px solid black;border-collapse: collapse;"><?php echo $cant_local?></td>
+							</tr>
+							<tr>
+								<th style="border: 2px solid black;border-collapse: collapse;">Ventas por pedido:</th>
+								<td style="border: 2px solid black;border-collapse: collapse;"><?php echo $cant_pedido?></td>
+							</tr>
+							<tr>
+								<th style="border: 2px solid black;border-collapse: collapse;">Ingresos totales:</th>
+								<td style="border: 2px solid black;border-collapse: collapse;"><?php echo $ingreso_total ?></td>
+							</tr>
+						</table>
+
+						`
 	      }
 	    ]
 	    });

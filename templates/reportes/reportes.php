@@ -44,7 +44,7 @@
                 <option value="r_ventas.php" selected><b>Reportes de ventas</b></option>
                 <!-- <option value="r_compras.php" ><b>Reportes de pedidos</b></option> -->
                 <option value="r_productos.php"><b>Reporte de productos</b></option>
-                <option value="r_gastos.php"><b>Reporte de ingresos y gastos</b></option>
+                <option value="r_gastos.php"><b>Reporte de relación de ganancia</b></option>
                 <!-- <option value="r_le.php"><b>Reportes de Lider/Experta</b></option> -->
                 <!-- <option value="r_dev.php" ><b>Reportes de devoluciones</b></option> -->
               </select>
