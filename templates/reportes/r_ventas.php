@@ -56,16 +56,24 @@ if ($mes == 0) {
 	}
 </style>
 <title>reporte de compras</title>
-<h3 class="fuente">Reporte de ventas</h3><br>
+<div class="row">
+	<div class="col s8">
+		<h3 class="fuente">Reporte de ventas</h3><br>
+	</div>
+	<div class="col s4">
+		
+	</div>
+</div>
+
 <!-- <div class="row"> -->
 	<!-- <div class="col s12"> -->
 		<table id="tabla1" >
 			<thead>
 				<tr>
 					<th>Código</th>
+					<th>Fecha de <br>venta</th>
 					<th>Vendedor</th>
 					<th>Cliente</th>
-					<th>Fecha de <br>venta</th>
 					<th>Tipo de venta</th>
 					<th>Total (Bs.)</th>
 				</tr>
@@ -74,11 +82,11 @@ if ($mes == 0) {
 				<?php foreach($fila as $a  => $valor){ ?>
 				<tr>
 					<td><?php echo $valor['codv']?></td>
+					<td><?php echo date('d-m-Y', strtotime($valor['fecha']))?></td>
 					<td><?php echo $valor['user']?></td>
 					<td><?php echo $valor['cliente']?></td>
-					<td><?php echo date('d-m-Y', strtotime($valor['fecha']))?></td>
 					<td><?php echo $valor['tipo']?></td>
-					<td><?php echo $valor['total']	?></td>
+					<td class="total"><?php echo $valor['total']	?></td>
 				</tr>
 			    <?php } ?>
 			</tbody>
@@ -87,7 +95,12 @@ if ($mes == 0) {
 <!-- </div> -->
 
 <script>
-	    
+var totales = {
+	"total_ventas": '<?php echo mysqli_num_rows($result) ?>',
+	"ventas_locales": '<?php echo $cant_local?>',
+	"ventas_pedido": '<?php echo $cant_pedido?>',
+	"ingreso_total": '<?php echo $ingreso_total ?>'
+}
 $(document).ready(function() {
 	const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 	let per = months[parseInt('<?php echo $mes ?>')-1];
@@ -129,31 +142,47 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
 	        className:  'btn-flat blue',
-	        title: 		`<span style="font-size:30; line-height: 100%;">Reporte del ventas del periodo: <?php echo $_GET["ges"] ?> - ${per}</span> 
-						<table style="width="200px";border: 1px solid black;border-collapse: collapse;">
-							<tr>
-								<th style="border: 2px solid black;border-collapse: collapse;">Total ventas:</th>
-								<td style="border: 2px solid black;border-collapse: collapse;"><?php echo mysqli_num_rows($result) ?></td>
-							</tr>
-							<tr>
-								<th style="border: 2px solid black;border-collapse: collapse;">Ventas locales:</th>
-								<td style="border: 2px solid black;border-collapse: collapse;"><?php echo $cant_local?></td>
-							</tr>
-							<tr>
-								<th style="border: 2px solid black;border-collapse: collapse;">Ventas por pedido:</th>
-								<td style="border: 2px solid black;border-collapse: collapse;"><?php echo $cant_pedido?></td>
-							</tr>
-							<tr>
-								<th style="border: 2px solid black;border-collapse: collapse;">Ingresos totales:</th>
-								<td style="border: 2px solid black;border-collapse: collapse;"><?php echo $ingreso_total ?></td>
-							</tr>
-						</table>
-
+	        title: 		`<center><span style="font-size:30; line-height: 2.5em;">Reporte del ventas del periodo: <?php echo $_GET["ges"] ?> - ${per}</span></center> 
+						
+						<div style="width: 40%">
+							<table style="border: 1px solid black;border-collapse: collapse; line-height: 0.3em;">
+								<tr>
+									<th style="border: 1.5px solid black;border-collapse: collapse;">Total ventas:</th>
+									<td style="border: 1px solid black;border-collapse: collapse;"><?php echo mysqli_num_rows($result) ?></td>
+								</tr>
+								<tr>
+									<th style="border: 1.5px solid black;border-collapse: collapse;">Ventas locales:</th>
+									<td style="border: 1.5px solid black;border-collapse: collapse;"><?php echo $cant_local?></td>
+								</tr>
+								<tr>
+									<th style="border: 1.5px solid black;border-collapse: collapse;">Ventas por pedido:</th>
+									<td style="border: 1.5px solid black;border-collapse: collapse;"><?php echo $cant_pedido?></td>
+								</tr>
+								<tr>
+									<th style="border: 1.5px solid black;border-collapse: collapse;">Ingresos totales:</th>
+									<td style="border: 1.5px solid black;border-collapse: collapse;"><?php echo $ingreso_total ?></td>
+								</tr>
+							</table>
+						</div>
 						`
 	      }
 	    ]
 	    });
 })
+
+// document.querySelectorAll('input[type="search"]')[0].addEventListener('input', ()=> {
+// 	console.log(totales.ingreso_total);
+// 	total = 0;
+// 	let elems = document.querySelectorAll('.total');
+// 	elems.forEach(element => {
+// 		total += parseFloat(element.innerText);
+// 	});
+
+// 	console.log(total);
+// 	totales.ingreso_total = ""+total;
+// 	console.log(totales.ingreso_total);
+// })
+
 
 
 
