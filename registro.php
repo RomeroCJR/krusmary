@@ -107,27 +107,27 @@
 					<div class="col s12 m8 offset-m2">
 						<div class="input-field">
 							<i class="material-icons-outlined prefix">pin</i>
-							<input class="tam" type="text" id="cedula" name="cedula">
+							<input class="tam" type="text" id="cedula" name="cedula" minlength="7" maxlength="7" required>
 							<label for="cedula" class="tam">Cédula de identidad</label>
 						</div>
 						<div class="input-field">
 							<i class="material-icons-outlined prefix">face</i>
-							<input class="tam" type="text" id="nombre" name="nombre">
+							<input class="tam" type="text" id="nombre" name="nombre" required>
 							<label for="nombre" class="tam">Nombres</label>
 						</div>
 						<div class="input-field">
 							<i class="material-icons-outlined prefix">person</i>
-							<input class="tam" type="text" id="apellidos" name="apellidos">
+							<input class="tam" type="text" id="apellidos" name="apellidos" required>
 							<label for="apellidos" class="tam">Apellidos</label>
 						</div>
 						<div class="input-field">
 							<i class="material-icons-outlined prefix">call</i>
-							<input class="tam" type="text" id="telf" name="telf">
+							<input class="tam" type="text" id="telf" name="telf" minlength="8" maxlength="8" required>
 							<label for="telf" class="tam">Celular</label>
 						</div>
 						<div class="input-field">
 							<i class="material-icons-outlined prefix">lock</i>
-							<input class="tam" type="text" id="pass_registro" name="pass_registro">
+							<input class="tam" type="text" id="pass_registro" name="pass_registro" required>
 							<label for="pass_registro" class="tam">Contraseña</label>
 						</div>
 					</div>

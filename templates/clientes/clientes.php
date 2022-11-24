@@ -88,7 +88,7 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
           <label for="ap_paterno">Apellido paterno</label>
         </div>
         <div class="input-field col s12 m12">
-          <input id="ap_materno" name="ap_materno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" required>
+          <input id="ap_materno" name="ap_materno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" >
           <label for="ap_materno">Apellido materno</label>
         </div>
 
@@ -125,7 +125,7 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
           <label for="mod_ap_paterno">Apellido paterno</label>
         </div>
         <div class="input-field col s12 m12">
-          <input id="mod_ap_materno" name="mod_ap_materno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" required>
+          <input id="mod_ap_materno" name="mod_ap_materno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" >
           <label for="mod_ap_materno">Apellido materno</label>
         </div>
 

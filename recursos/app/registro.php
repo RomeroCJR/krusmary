@@ -22,9 +22,9 @@
     }
     
     if(mysqli_num_rows($result)>0){
-        $result = $conexion->query("UPDATE `cliente` SET `nombre_cliente`='".$nombre."',`ap_paterno_cliente`='".$ap_paterno."',`ap_materno_cliente`='".$ap_materno."',`nro_celular_cliente`='".$telf."',`clave_cliente`='".$pass."' WHERE ci_cliente = ".$ci);
+        $result = $conexion->query("UPDATE `cliente` SET `nombre_cliente`= UPPER('".$nombre."'),`ap_paterno_cliente`= UPPER('".$ap_paterno."'),`ap_materno_cliente`= UPPER('".$ap_materno."'),`nro_celular_cliente`='".$telf."',`clave_cliente`='".$pass."' WHERE ci_cliente = ".$ci);
     }else{
-        $result = $conexion->query("INSERT INTO `cliente`( `ci_cliente`, `nombre_cliente`, `ap_paterno_cliente`, `ap_materno_cliente`, `nro_celular_cliente`, `clave_cliente`) VALUES ('".$ci."','".$nombre."','".$ap_paterno."','".$ap_materno."','".$telf."','".$pass."')");
+        $result = $conexion->query("INSERT INTO `cliente`( `ci_cliente`, `nombre_cliente`, `ap_paterno_cliente`, `ap_materno_cliente`, `nro_celular_cliente`, `clave_cliente`) VALUES ('".$ci."', UPPER('".$nombre."'), UPPER('".$ap_paterno."'), UPPER('".$ap_materno."'),'".$telf."','".$pass."')");
     }
 
     if($result){

@@ -33,14 +33,14 @@ if(!empty($_GET['ci'])){
 	$result = $conexion->query("SELECT * FROM cliente WHERE ci_cliente = ".$ci);
 	// $rows = mysqli_num_rows($result);
 	if (!empty($result) AND mysqli_num_rows($result) < 1) {
-		$insertar_cli = $conexion->query("INSERT INTO cliente (ci_cliente, nombre_cliente, ap_paterno_cliente, ap_materno_cliente, nro_celular_cliente) VALUES (".$ci.", '".$nombre."', '".$apellido_p."', '".$apellido_m."', '".$telf."')");
+		$insertar_cli = $conexion->query("INSERT INTO cliente (ci_cliente, nombre_cliente, ap_paterno_cliente, ap_materno_cliente, nro_celular_cliente) VALUES (".$ci.", UPPER('".$nombre."'), UPPER('".$apellido_p."'), UPPER('".$apellido_m."'), '".$telf."')");
 		if ($insertar_cli) {
 			$id = mysqli_insert_id($conexion);
 		}else{
 			die(mysqli_error($conexion));
 		}
 	}else{
-		$update = $conexion->query('UPDATE cliente SET nombre_cliente = "'.$nombre.'", ap_paterno_cliente = "'.$apellido_p.'", ap_materno_cliente = "'.$apellido_m.'", nro_celular_cliente = "'.$telf.'" WHERE ci_cliente = '.$ci);
+		$update = $conexion->query('UPDATE cliente SET nombre_cliente = UPPER("'.$nombre.'"), ap_paterno_cliente = UPPER("'.$apellido_p.'"), ap_materno_cliente = UPPER("'.$apellido_m.'"), nro_celular_cliente = "'.$telf.'" WHERE ci_cliente = '.$ci);
 		if ($update) {
 			$res = $conexion->query("SELECT cod_cliente FROM cliente WHERE ci_cliente = ".$ci);
 			$res = mysqli_fetch_assoc($res);

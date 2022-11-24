@@ -200,7 +200,7 @@ $Busq = $conexion->query($Sql);
 
     <div id="modal_gasto" class="modal width-modal" >
       <div class="modal-content">
-        <center><h5 class="roboto">Gasto diario:</h5></center>
+        <center><h5 class="roboto">Nuevo Gasto:</h5></center>
         <p id="title_spend" class="roboto"></p>
         <div class="input-field">
           <input type="text" mame="gasto" maxlength="5" minlength="1" onkeypress="return checkIt(event)" id="gasto" value="" required>
@@ -212,6 +212,7 @@ $Busq = $conexion->query($Sql);
         </div>
       </div>
       <div class="modal-footer">
+        <a href="#!" class="waves-effect waves-light red btn modal-close left">Cancelar</a>
         <a href="#!" id="enviar_gasto" class="waves-effect waves-green btn">Aceptar</a>
       </div>
     </div>
@@ -240,7 +241,7 @@ $Busq = $conexion->query($Sql);
       
       
       $('.modal').modal();
-      $("#modal_gasto").modal({'dismissible':false});
+      // $("#modal_gasto").modal({'dismissible':false});
 
       // $.ajax({
       //   url: "recursos/stock/check_spend.php",

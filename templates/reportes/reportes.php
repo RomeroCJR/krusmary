@@ -47,6 +47,7 @@
                 <option value="r_gastos.php"><b>Reporte de relación de ganancia</b></option>
                 <!-- <option value="r_le.php"><b>Reportes de Lider/Experta</b></option> -->
                 <!-- <option value="r_dev.php" ><b>Reportes de devoluciones</b></option> -->
+                <option value="r_almacen.php"><b>Reporte de almacén</b></option>
               </select>
               <label><b>Seleccione el tipo de reporte</b></label>
           </div>
