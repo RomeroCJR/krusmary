@@ -63,7 +63,7 @@ $(document).ready(function() {
 	}
 
 	$('#tabla1').dataTable({
-      "order": [[ 0, "asc" ]],
+      "order": [[ 3, "desc" ]],
         "language": {
         "lengthMenu": "Mostrar _MENU_ registros por página",
         "zeroRecords": "Lo siento, no se encontraron datos",

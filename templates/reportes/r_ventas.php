@@ -112,7 +112,7 @@ if ($mes == 0) {
 
 <!-- <div class="row"> -->
 	<!-- <div class="col s12"> -->
-		<table id="tabla1" >
+		<table style="border-collapse: collapse; border: solid 3px;" id="tabla1" >
 			<thead>
 				<tr>
 					<th>Código</th>
@@ -123,9 +123,9 @@ if ($mes == 0) {
 					<th>Total (Bs.)</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody >
 				<?php foreach($fila as $a  => $valor){ ?>
-				<tr>
+				<tr >
 					<td><?php echo $valor['codv']?></td>
 					<td><?php echo date('d-m-Y', strtotime($valor['fecha']))?></td>
 					<td><?php echo $valor['user']?></td>
