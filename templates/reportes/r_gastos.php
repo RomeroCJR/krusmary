@@ -90,10 +90,10 @@
 </style>
 
 <title>reporte de ingresos y gastos</title>
-<h3 class="fuente">Reporte de ingresos y gastos</h3><br>
+<h3 class="fuente">Reporte de Relacion de Ganancia</h3><br>
 <div class="row">
 	<div class="col s11">
-		<table id="tabla1">
+		<table style="border-collapse: collapse; border: solid 3px;" id="tabla1">
 			<thead>
 				<tr>
 					<th class="center">Fecha</th>
@@ -164,12 +164,12 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
 	        className:  'btn-flat blue',
-	        title: 			`<span style="font-size:30; line-height: 100%;">Reporte de gastos del periodo: <?php echo $_GET["ges"] ?> - `+per+`</span> 
+	        title: 			`<span style="font-size:30; line-height: 100%;">Reporte de Relacion de Ganancia del periodo: <?php echo $_GET["ges"] ?> - `+per+`</span> 
 	        						<p style="font-size:20; font-weight: bold; line-height: 25%;">Totales:</p>
 	        						<p style="font-size:18; line-height: 25%;">Días: <?php echo mysqli_num_rows($ingresos) ?></p>
-	        						<p style="font-size:18; line-height: 25%;">Ventas: <?php echo $total ?> Bs.</p>
+	        						<p style="font-size:18; line-height: 25%;">Ingresos: <?php echo $total ?> Bs.</p>
 	        						<p style="font-size:18; line-height: 25%;">Gastos: <?php echo $total_g ?> Bs.</p>
-	        						<p style="font-size:18; line-height: 25%;">Ingresos: <?php echo $total_ing ?> Bs.</p>`
+	        						<p style="font-size:18; line-height: 25%;">Ganancias: <?php echo $total_ing ?> Bs.</p>`
 	      }
 	    ]
 	    });

@@ -19,10 +19,10 @@
 ?>
 		<div class="row" id="cards_row">
 			<div class="col s12 m12 l12 xl12">
-				<h5 class="ubuntu" >Nuestro catálogo de productos disponibles:</h5>
+				<h5 class="rubik" >Nuestro catálogo de productos disponibles:</h5>
 				<?php foreach ($result2 as $val): ?>
 				<div class="row">
-					<div class="col s12 center"><h4 class="ubuntu"><?php echo $val['nombre_categoria']; ?></h4></div>
+					<div class="col s12 center"><h4 class="lobster"><?php echo $val['nombre_categoria']; ?></h4></div>
 					<!-- <hr style="color:aquamarine"> -->
 					<?php foreach ($fila as $valor): ?>
 						<?php if($val['cod_categoria'] == $valor['cod_categoria']): ?>
@@ -30,7 +30,7 @@
 							<div class="col s6 m3" loading="lazy" onclick="cantidad_prod('<?php echo $valor['cod_producto'] ?>','<?php echo $valor['nombre_producto'] ?>','<?php echo $valor['precio_producto'] ?>','<?php echo $valor['foto_producto'] ?>', '<?php echo $valor['cantidad'] ?>', '<?php echo $valor['stock'] ?>', '<?php echo $valor['cod_categoria'] ?>')">
 								<div class="card">
 									<div class="card_title">
-										<span class="card-title ubuntu"><small><?php echo $valor['nombre_producto'] ?></small></span>
+										<span style="font-size: 20px" class="card-title lobster"><small><?php echo $valor['nombre_producto'] ?></small></span>
 									</div>
 									<div class="card-image" >
 										<img loading="lazy" class="img__card" src="<?php echo $valor['foto_producto'] ?>" >

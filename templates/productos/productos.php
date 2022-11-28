@@ -53,7 +53,7 @@
 
 
 
-<!-- Modal nuevo plato -->
+<!-- Modal nuevo producto-->
   <div id="modal1" class="modal roboto" style="width: 40%">
     <div class="modal-content">
       <h4>Nuevo producto</h4>
@@ -100,10 +100,10 @@
   </div>
 
 
-  <!-- Modal modificar plato -->
+  <!-- Modal modificar producto -->
   <div id="modal2" class="modal" style="width: 30%">
     <div class="modal-content">
-      <h5><b>Modificar plato</b></h5>
+      <h5><b>Modificar producto</b></h5>
       <form id="form_mod_producto" action="" method="POST" accept-charset="utf-8">
         
         <div class="file-field input-field col s12">
@@ -120,7 +120,7 @@
         <div class="input-field col s7">
           <input type="text" id="mod_codpro" name="mod_codpro" hidden>
           <input id="mod_nombre" name="mod_nombre" type="text" minlength="5" maxlength="25" class="validate" required>
-          <label for="mod_nombre">Nombre del plato (*)</label>
+          <label for="mod_nombre">Nombre del producto (*)</label>
         </div>
         <div class="input-field col s4 offset-s1">
           <input id="mod_precio" name="mod_precio" type="text" onkeypress="return checkIt(event)" class="validate" required>
@@ -145,7 +145,7 @@
     </div>
   </div>
 
-  <!-- Modal borrar plato -->
+  <!-- Modal borrar producto -->
   <div id="modal3" class="modal">
     <div class="modal-content">
       <input type="text" id="borr_codp" hidden>
@@ -165,18 +165,18 @@
     <table id="tabla1" class="content-table">
       <thead>
          <tr>
-            <th class="center">Foto</th>
-            <th class="center">Nombre</th>
+            <th width="5%" class="center">Foto</th>
+            <th width="15%" class="center">Nombre</th>
             <th class="center">Precio (Bs)</th>
             <th class="center">Stock</th> 
             <th class="center">Descripción</th>
-            <th class="center">Acciones</th>
+            <th width="20%" class="center">Acciones</th>
          </tr>          
       </thead>
       <tbody>
       	 <?php foreach($fila as $a  => $valor){ ?>
          <tr loadin="lazy">
-            <td class="center"><img loading="lazy" src="<?php echo $valor['foto_producto'] ?>" height="50px"></td>
+            <td class="center"><img loading="lazy" src="<?php echo $valor['foto_producto'] ?>" height="40px"></td>
             <td class="center"><?php echo $valor["nombre_producto"] ?></td>
             <td class="center"><?php echo $valor["precio_producto"] ?></td>
             <td class="center"><?php echo $valor["stock"] ?></td>

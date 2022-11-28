@@ -22,10 +22,10 @@
 </style>
 
 <title>reporte de PRODUCTOS</title>
-<h3 class="fuente">Reporte de productos</h3><br>
+<h3 class="fuente">Reporte de Almacen</h3><br>
 <div class="row">
 	<div class="col s11">
-		<table id="tabla1">
+		<table style="border-collapse: collapse; border: solid 3px;" id="tabla1">
 			<thead>
 				<tr>
 					<th>Código</th>
