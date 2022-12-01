@@ -5,11 +5,19 @@
 	if ($per == '0') {
 		$per = "";
 	}
+	$arr = '';
+	if(isset($_GET['arr'])){
+		$arr = $_GET['arr'];
+	}
+
+
 	// echo $per." ".$gestion;
 	$result = $conexion->query("SELECT a.cod_producto, a.nombre_producto, a.precio_producto, a.descripcion_producto, a.foto_producto, (SELECT IF (SUM(b.cant_producto)>0, SUM(b.cant_producto),0) FROM detalle_venta b, venta c WHERE a.cod_producto = b.cod_producto AND b.cod_venta = c.cod_venta AND c.fecha_venta LIKE '%".$gestion."-".$per."%' AND b.estado_det_venta = 1) as cantidad FROM producto a WHERE a.estado_producto = 1 GROUP BY a.cod_producto ORDER BY cantidad DESC");
-
 	$res = $result->fetch_all();
 	$total = 0;
+
+	$res2 = $conexion->query('SELECT * FROM categoria WHERE estado_categoria = 1');
+	$fila2 = $res2->fetch_all(MYSQLI_ASSOC);
 ?>
 <style>
 	@media print{
@@ -20,7 +28,31 @@
 </style>
 
 <title>reporte de PRODUCTOS</title>
-<h3 class="fuente">Reporte de productos</h3><br>
+<div class="row">
+	<div class="col s6">
+		<h3 class="fuente">Reporte de productos</h3>
+	</div>
+	<div class="col s4">
+		<br>
+
+			<div class="input-field col s12">
+				<select id="cat" multiple>
+					<option value="0" selected>Todas</option>
+					<?php foreach($fila2 as $a){ ?>
+						<option value="<?php echo $a['cod_categoria'];?>"><?php echo $a['nombre_categoria']; ?></option>	
+					<?php }?>
+				</select>
+				<label>Seleccione las categorías:</label>
+			</div>
+
+	</div>
+	<div class="col s2">
+		<br>
+		<a id="enviar_select" class="btn-large waves-effect waves-light">aceptar</a>
+	</div>
+</div>
+
+
 <div class="row">
 	<div class="col s11">
 		<table style="border-collapse: collapse; border: solid 3px;" id="tabla1">
@@ -54,7 +86,8 @@
 <script>
 	    
 $(document).ready(function() {
-
+	
+	$('select').formSelect();
 	const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 	let per = months[parseInt('<?php echo $per ?>')-1];
 
@@ -102,5 +135,26 @@ $(document).ready(function() {
 	      }
 	    ]
 	    });
-})
+
+
+});
+
+document.getElementById('enviar_select').addEventListener('click', function (e) {
+	const selectOption = document.querySelector("#cat");
+
+	const instance = M.FormSelect.getInstance(selectOption);
+	const selectedValues = instance.getSelectedValues();
+	
+	let cad = JSON.stringify(selectedValues);
+
+	let gestion = "<?php echo $_GET['ges']; ?>";
+	let per = "<?php echo $_GET['per']; ?>";
+	$("#cuerpo").load("templates/reportes/r_productos.php?ges="+gestion+"&per="+per+"&arr="+cad);
+
+
+});
+	
+    
+  
+
 </script>

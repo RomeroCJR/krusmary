@@ -72,10 +72,14 @@
 			</select>
 			<!-- <label>Selecciona el periodo</label> -->
 		</div>
-		<div class="col s9">
+		<div class="col s7">
 			<h5 class="rubik">Productos más vendidos para el periodo: <b><?php echo $per." ".$year ?></b></h5>
 		</div>	
+		<div class="col s2">
+			<br>	
+			<a id="ver_stock" class="btn-large waves-light waves-effect">VER STOCK</a>
 		</div>
+	</div>
 		<?php foreach ($result2 as $val): ?>
 
 		<div class="row">
@@ -115,11 +119,15 @@
 
 					    <div class="card-reveal">
 					      <span class="card-title grey-text text-darken-4"><?php echo $key[1]?><i class="material-icons right">close</i></span>
-					      <div class="input-field">
-					      	<input type="text" class="cod" value="<?php echo $key[0] ?>" hidden>
-					      	<input type="text" class="stock" onkeypress="return checkIt(event)" minlength="1" maxlength="3" name="stock" value="<?php echo $key[5]?>">
-					      	<label for="stock">Stock diario:</label>
-
+					      <div class="input-field row">
+							<div class="col s9">
+								<input type="text" class="cod" value="<?php echo $key[0] ?>" hidden>
+								<input type="text" class="stock" onkeypress="return checkIt(event)" minlength="1" maxlength="3" name="stock" value="<?php echo $key[5]?>">
+								<label for="stock">Stock diario:</label>
+							</div>
+							<div class="col s3">
+								<a class="set_stock btn-floating btn waves-effect waves-light">OK</a>
+							</div>
 					      </div>
 					      <div>
 					      		<span>Cantidad total vendida para el periodo <?php echo $per." ".$year?>: <b><?php echo $key[6]?></b></span>
@@ -140,14 +148,18 @@
 		M.updateTextFields();
 	})
 
-	$(".stock").on('input', function() {
-		let cant = this.value
+	$(".set_stock").on('click', function(e) {
+	 	let elem  = e.target.parentNode.parentNode.children[0].children[1];
+		let cant = elem.value
+		let id = elem.parentNode.children[0].value
 
-		let id = this.parentNode.children[0].value
+		// return console.log(cant, id);
+
 		fetch("recursos/stock/inicio.php?cant="+cant+"&id="+id)
 		.then(response => response.text())
 		.then(data => {
 			console.log(data);
+			M.toast({html: '<b>Stock modificado!</b>', displayLength: 2000});
 		})
 
 	})
@@ -165,4 +177,8 @@
 		$("#periodo").val()
 		$("#cuerpo").load("templates/inicio/inicio.php?mes="+actual+"&year="+year+"&per="+per+"&actual_mes="+actual_mes)
 	})
+
+	document.getElementById('ver_stock').addEventListener('click', function (e) {
+		$("#cuerpo").load('templates/inicio/ver_stock.php');
+	});;
 </script>

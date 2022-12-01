@@ -182,7 +182,7 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 $(document).ready(function() {
     $('#tabla1').dataTable({
       "order": [[ 0, "desc" ]],
-        "language": {
+      "language": {
         "lengthMenu": "Mostrar _MENU_",
         "zeroRecords": "Lo siento, no se encontraron datos",
         "info": "Página _PAGE_ de _PAGES_",
@@ -192,7 +192,10 @@ $(document).ready(function() {
           "next": "Siguiente",
           "previous": "Anterior"
         }
-       }
+      }
+      // pageLength : 5,
+//       lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+
     });
     $('.modal').modal();
     document.getElementById('div_regresar').hidden = true;
