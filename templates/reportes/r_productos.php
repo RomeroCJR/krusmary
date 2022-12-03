@@ -6,13 +6,23 @@
 		$per = "";
 	}
 	$arr = '';
+	$arr2; 
+	$cad = "";
 	if(isset($_GET['arr'])){
 		$arr = $_GET['arr'];
+
+		$arr2 = json_decode($arr);
+		$cad = "AND (";
+		foreach($arr2 as $x){
+			$cad = $cad." d.cod_categoria = ".$x." OR";
+		}
+		$cad = rtrim($cad, 'OR');
+		$cad = $cad.")";
 	}
 
-
+	// echo $cad;
 	// echo $per." ".$gestion;
-	$result = $conexion->query("SELECT a.cod_producto, a.nombre_producto, a.precio_producto, a.descripcion_producto, a.foto_producto, (SELECT IF (SUM(b.cant_producto)>0, SUM(b.cant_producto),0) FROM detalle_venta b, venta c WHERE a.cod_producto = b.cod_producto AND b.cod_venta = c.cod_venta AND c.fecha_venta LIKE '%".$gestion."-".$per."%' AND b.estado_det_venta = 1) as cantidad FROM producto a WHERE a.estado_producto = 1 GROUP BY a.cod_producto ORDER BY cantidad DESC");
+	$result = $conexion->query("SELECT a.cod_producto, a.nombre_producto, a.precio_producto, a.descripcion_producto, a.foto_producto, (SELECT IF (SUM(b.cant_producto)>0, SUM(b.cant_producto),0) FROM detalle_venta b, venta c WHERE a.cod_producto = b.cod_producto AND b.cod_venta = c.cod_venta AND c.fecha_venta LIKE '%".$gestion."-".$per."%' AND b.estado_det_venta = 1) as cantidad FROM producto a, categoria d WHERE a.estado_producto = 1 AND ( a.cod_categoria = d.cod_categoria ".$cad." ) GROUP BY a.cod_producto ORDER BY cantidad DESC");
 	$res = $result->fetch_all();
 	$total = 0;
 
@@ -37,9 +47,9 @@
 
 			<div class="input-field col s12">
 				<select id="cat" multiple>
-					<option value="0" selected>Todas</option>
+					<option disabled>Categorías</option>
 					<?php foreach($fila2 as $a){ ?>
-						<option value="<?php echo $a['cod_categoria'];?>"><?php echo $a['nombre_categoria']; ?></option>	
+						<option value="<?php echo $a['cod_categoria'];?>" <?php if(!isset($_GET['arr'])){echo 'selected';}elseif((in_array($a['cod_categoria'], $arr2))){echo 'selected';}?>><?php echo $a['nombre_categoria']; ?></option>	
 					<?php }?>
 				</select>
 				<label>Seleccione las categorías:</label>
@@ -48,7 +58,7 @@
 	</div>
 	<div class="col s2">
 		<br>
-		<a id="enviar_select" class="btn-large waves-effect waves-light">aceptar</a>
+		<a id="enviar_select" class="btn-large waves-effect waves-light"><b>aceptar</b></a>
 	</div>
 </div>
 
@@ -147,6 +157,7 @@ document.getElementById('enviar_select').addEventListener('click', function (e) 
 	
 	let cad = JSON.stringify(selectedValues);
 
+	// console.log(cad);
 	let gestion = "<?php echo $_GET['ges']; ?>";
 	let per = "<?php echo $_GET['per']; ?>";
 	$("#cuerpo").load("templates/reportes/r_productos.php?ges="+gestion+"&per="+per+"&arr="+cad);
