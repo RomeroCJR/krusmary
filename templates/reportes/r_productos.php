@@ -1,4 +1,5 @@
 <?php 
+
 	require("../../recursos/conexion.php");
 	$per = $_GET['per'];
 	$gestion = $_GET['ges'];
