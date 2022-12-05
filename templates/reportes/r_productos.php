@@ -9,7 +9,8 @@
 	$arr = '';
 	$arr2; 
 	$cad = "";
-	if(isset($_GET['arr'])){
+	
+	if(isset($_GET['arr']) && (count(json_decode($_GET['arr'])) > 0)){
 		$arr = $_GET['arr'];
 
 		$arr2 = json_decode($arr);
@@ -20,7 +21,7 @@
 		$cad = rtrim($cad, 'OR');
 		$cad = $cad.")";
 	}
-
+	
 	// echo $cad;
 	// echo $per." ".$gestion;
 	$result = $conexion->query("SELECT a.cod_producto, a.nombre_producto, a.precio_producto, a.descripcion_producto, a.foto_producto, (SELECT IF (SUM(b.cant_producto)>0, SUM(b.cant_producto),0) FROM detalle_venta b, venta c WHERE a.cod_producto = b.cod_producto AND b.cod_venta = c.cod_venta AND c.fecha_venta LIKE '%".$gestion."-".$per."%' AND b.estado_det_venta = 1) as cantidad FROM producto a, categoria d WHERE a.estado_producto = 1 AND ( a.cod_categoria = d.cod_categoria ".$cad." ) GROUP BY a.cod_producto ORDER BY cantidad DESC");
@@ -29,6 +30,8 @@
 
 	$res2 = $conexion->query('SELECT * FROM categoria WHERE estado_categoria = 1');
 	$fila2 = $res2->fetch_all(MYSQLI_ASSOC);
+
+	echo var_dump($fila2);
 ?>
 <style>
 	@media print{
