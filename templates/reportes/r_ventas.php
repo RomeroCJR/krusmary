@@ -3,8 +3,9 @@
 require("../../recursos/conexion.php");
 
 
-$gestion = $_GET['ges'];
-$mes = $_GET['per'];
+$ini = $_GET['ini'];
+$fin = $_GET['fin'];
+
 
 $check1 = "";
 $check2 = "";
@@ -36,12 +37,7 @@ if(isset($_GET['pedido'])){
 }
 
 
-
-if ($mes == 0) {
-	$result = $conexion->query("SELECT a.cod_venta, a.fecha_venta, a.total_venta, a.cod_usuario, c.ci_usuario, CONCAT(c.nombre_usuario,' ',c.ap_paterno_usuario) as user,IF((IFNULL((a.cod_pedido),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.nombre_cliente,' ',b.ap_paterno_cliente,' ', (SELECT IFNULL(b.ap_materno_cliente, ' '))) as cliente FROM venta a, cliente b, usuario c WHERE ".$local.$pedido." a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1 AND a.fecha_venta LIKE '".$gestion."%'");
-}else{
-	$result = $conexion->query("SELECT a.cod_venta, a.fecha_venta, a.total_venta, a.cod_usuario, c.ci_usuario, CONCAT(c.nombre_usuario,' ',c.ap_paterno_usuario) as user,IF((IFNULL((a.cod_pedido),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.nombre_cliente,' ',b.ap_paterno_cliente,' ', (SELECT IFNULL(b.ap_materno_cliente, ' '))) as cliente FROM venta a, cliente b, usuario c WHERE ".$local.$pedido." a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1 AND a.fecha_venta LIKE '".$gestion."-".$mes."%'");
-}
+	$result = $conexion->query("SELECT a.cod_venta, a.fecha_venta, a.total_venta, a.cod_usuario, c.ci_usuario, CONCAT(c.nombre_usuario,' ',c.ap_paterno_usuario) as user,IF((IFNULL((a.cod_pedido),'local')) = 'local', 'local', 'pedido') as Tipo, CONCAT(b.nombre_cliente,' ',b.ap_paterno_cliente,' ', (SELECT IFNULL(b.ap_materno_cliente, ' '))) as cliente FROM venta a, cliente b, usuario c WHERE ".$local.$pedido." a.cod_usuario = c.cod_usuario AND a.cod_cliente = b.cod_cliente AND a.estado_venta = 1 AND (a.fecha_venta BETWEEN '".$ini."' AND '".$fin."')");
 	$cant_local = 0;
 	$cant_pedido = 0;
 	$ingreso_total = 0;
@@ -148,10 +144,10 @@ var totales = {
 }
 $(document).ready(function() {
 	const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-	let per = months[parseInt('<?php echo $mes ?>')-1];
-	if (!per) {
-		per = "";
-	}
+	// let per = months[parseInt('<php echo $mes ?>')-1];
+	// if (!per) {
+	// 	per = "";
+	// }
 
 	$('#tabla1').dataTable({
       "order": [[ 0, "desc" ]],
@@ -173,7 +169,7 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/ms-excel--v1.png"/></i>',
 	        titleAttr:  'Exportar a Excel',
 	        className:  'btn-flat green',
-	        title: 		`Reporte de ventas del periodo: <?php echo $_GET["ges"] ?> \n
+	        title: 		`Reporte de ventas del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?> \n
 							Total ventas: <?php echo mysqli_num_rows($result) ?> 
 							Ventas locales: <?php echo $cant_local?> 
 							Ventas por pedido: <?php echo $cant_pedido?> 
@@ -185,7 +181,7 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/pdf-2--v1.png"/></i>',
 	        titleAttr:  'Exportar a PDF',
 	        className:  'btn-flat red',
-	        title: 		`Reporte de ventas del periodo: <?php echo $_GET["ges"] ?> \n
+	        title: 		`Reporte de ventas del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?> \n
 							Total ventas: <?php echo mysqli_num_rows($result) ?>\nVentas locales: <?php echo $cant_local?>\nVentas por pedido: <?php echo $cant_pedido?>\nIngresos totales: <?php echo $ingreso_total ?>	
 						`
 	      },
@@ -194,7 +190,7 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
 	        className:  'btn-flat blue',
-	        title: 		`<center><span style="font-size:30; line-height: 2.5em;">Reporte del ventas del periodo: <?php echo $_GET["ges"] ?> - ${per}</span></center> 
+	        title: 		`<center><span style="font-size:30; line-height: 2.5em;">Reporte del ventas del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?></span></center> 
 						
 						<div style="width: 40%">
 							<table style="border: 1px solid black;border-collapse: collapse; line-height: 0.3em;">
@@ -226,60 +222,43 @@ $(document).ready(function() {
 document.getElementsByClassName('checks')[0].addEventListener('click', function (e) {
 	var local = document.getElementById('local').checked;
 	var pedido = document.getElementById('pedido').checked;
-	var gestion = '<?php echo $gestion; ?>';
-	var mes = '<?php echo $mes; ?>';
+	let ini = `<?php echo $_GET['ini'];?>`;
+	let fin = `<?php echo $_GET['fin'];?>`;
 
 	if(local && pedido){
-		$("#cuerpo").load(`templates/reportes/r_ventas.php?ges=${gestion}&per=${mes}`);
+		$("#cuerpo").load(`templates/reportes/r_ventas.php?ini=${ini}&fin=${fin}`);
 	}
 	if(local && !pedido ){
-		$("#cuerpo").load(`templates/reportes/r_ventas.php?ges=${gestion}&per=${mes}&local=1`);
+		$("#cuerpo").load(`templates/reportes/r_ventas.php?ini=${ini}&fin=${fin}&local=1`);
 	}
 	if(!local && pedido){
-		$("#cuerpo").load(`templates/reportes/r_ventas.php?ges=${gestion}&per=${mes}&pedido=1`);
+		$("#cuerpo").load(`templates/reportes/r_ventas.php?ini=${ini}&fin=${fin}&pedido=1`);
 	}
 	if(!local && !pedido){
-		$("#cuerpo").load(`templates/reportes/r_ventas.php?ges=${gestion}&per=${mes}&pedido=1&local=1`);
+		$("#cuerpo").load(`templates/reportes/r_ventas.php?ini=${ini}&fin=${fin}&pedido=1&local=1`);
 	}
 
 });
 document.getElementsByClassName('checks')[1].addEventListener('click', function (e) {
 	var local = document.getElementById('local').checked;
 	var pedido = document.getElementById('pedido').checked;
-	var gestion = '<?php echo $gestion; ?>';
-	var mes = '<?php echo $mes; ?>';
+	let ini = `<?php echo $_GET['ini'];?>`;
+	let fin = `<?php echo $_GET['fin'];?>`;
 
 	if(local && pedido){
-		$("#cuerpo").load(`templates/reportes/r_ventas.php?ges=${gestion}&per=${mes}`);
+		$("#cuerpo").load(`templates/reportes/r_ventas.php?ini=${ini}&fin=${fin}`);
 	}
 	if(local && !pedido ){
-		$("#cuerpo").load(`templates/reportes/r_ventas.php?ges=${gestion}&per=${mes}&local=1`);
+		$("#cuerpo").load(`templates/reportes/r_ventas.php?ini=${ini}&fin=${fin}&local=1`);
 	}
 	if(!local && pedido){
-		$("#cuerpo").load(`templates/reportes/r_ventas.php?ges=${gestion}&per=${mes}&pedido=1`);
+		$("#cuerpo").load(`templates/reportes/r_ventas.php?ini=${ini}&fin=${fin}&pedido=1`);
 	}
 	if(!local && !pedido){
-		$("#cuerpo").load(`templates/reportes/r_ventas.php?ges=${gestion}&per=${mes}&pedido=1&local=1`);
+		$("#cuerpo").load(`templates/reportes/r_ventas.php?ini=${ini}&fin=${fin}&pedido=1&local=1`);
 	}
 
 });
-
-
-
-// document.querySelectorAll('input[type="search"]')[0].addEventListener('input', ()=> {
-// 	console.log(totales.ingreso_total);
-// 	total = 0;
-// 	let elems = document.querySelectorAll('.total');
-// 	elems.forEach(element => {
-// 		total += parseFloat(element.innerText);
-// 	});
-
-// 	console.log(total);
-// 	totales.ingreso_total = ""+total;
-// 	console.log(totales.ingreso_total);
-// })
-
-
 
 
 </script>

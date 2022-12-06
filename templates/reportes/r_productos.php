@@ -1,11 +1,10 @@
 <?php 
 
 	require("../../recursos/conexion.php");
-	$per = $_GET['per'];
-	$gestion = $_GET['ges'];
-	if ($per == '0') {
-		$per = "";
-	}
+	
+	$ini = $_GET['ini'];
+	$fin = $_GET['fin'];
+
 	$arr = '';
 	$arr2; 
 	$cad = "";
@@ -24,14 +23,13 @@
 	
 	// echo $cad;
 	// echo $per." ".$gestion;
-	$result = $conexion->query("SELECT a.cod_producto, a.nombre_producto, a.precio_producto, a.descripcion_producto, a.foto_producto, (SELECT IF (SUM(b.cant_producto)>0, SUM(b.cant_producto),0) FROM detalle_venta b, venta c WHERE a.cod_producto = b.cod_producto AND b.cod_venta = c.cod_venta AND c.fecha_venta LIKE '%".$gestion."-".$per."%' AND b.estado_det_venta = 1) as cantidad FROM producto a, categoria d WHERE a.estado_producto = 1 AND ( a.cod_categoria = d.cod_categoria ".$cad." ) GROUP BY a.cod_producto ORDER BY cantidad DESC");
+	$result = $conexion->query("SELECT a.cod_producto, a.nombre_producto, a.precio_producto, a.descripcion_producto, a.foto_producto, (SELECT IF (SUM(b.cant_producto)>0, SUM(b.cant_producto),0) FROM detalle_venta b, venta c WHERE a.cod_producto = b.cod_producto AND b.cod_venta = c.cod_venta AND (c.fecha_venta BETWEEN '".$ini."' AND '".$fin."') AND b.estado_det_venta = 1) as cantidad FROM producto a, categoria d WHERE a.estado_producto = 1 AND ( a.cod_categoria = d.cod_categoria ".$cad." ) GROUP BY a.cod_producto ORDER BY cantidad DESC");
 	$res = $result->fetch_all();
 	$total = 0;
 
 	$res2 = $conexion->query('SELECT * FROM categoria WHERE estado_categoria = 1');
 	$fila2 = $res2->fetch_all(MYSQLI_ASSOC);
 
-	echo var_dump($fila2);
 ?>
 <style>
 	@media print{
@@ -103,11 +101,11 @@ $(document).ready(function() {
 	
 	$('select').formSelect();
 	const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-	let per = months[parseInt('<?php echo $per ?>')-1];
+	// let per = months[parseInt('<php echo $per ?>')-1];
 
-	if (!per) {
-		per = ""
-	}
+	// if (!per) {
+	// 	per = ""
+	// }
 
 	$('#tabla1').dataTable({
       "order": [[ 5, "desc" ]],
@@ -129,21 +127,21 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/ms-excel--v1.png"/></i>',
 	        titleAttr:  'Exportar a Excel',
 	        className:  'btn-flat green',
-	        title: 			'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
+	        title: 		'Reporte de ventas del periodo: <?php echo $_GET["ini"]." - ".$_GET["fin"]; ?>'
 	      },
 	      {
 	        extend:     'pdfHtml5',
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/pdf-2--v1.png"/></i>',
 	        titleAttr:  'Exportar a PDF',
 	        className:  'btn-flat red',
-	        title: 			'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
+	        title: 		`Reporte de ventas del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?>`
 	      },
 	      {
 	        extend:     'print',
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
 	        className:  'btn-flat blue',
-	        title: 			`<span style="font-size:30; line-height: 100%;">Reporte de productos del periodo: <?php echo $_GET["ges"] ?> - `+per+`</span> 
+	        title: 			`<span style="font-size:30; line-height: 100%;">Reporte de productos del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?></span> 
 	        						<p style="font-size:18; line-height: 25%;">Total productos: <?php echo mysqli_num_rows($result) ?></p>
 	        						<p style="font-size:18; line-height: 25%;">Ingresos totales: <?php echo $total ?> Bs.</p>`
 	      }
@@ -162,9 +160,9 @@ document.getElementById('enviar_select').addEventListener('click', function (e) 
 	let cad = JSON.stringify(selectedValues);
 
 	// console.log(cad);
-	let gestion = "<?php echo $_GET['ges']; ?>";
-	let per = "<?php echo $_GET['per']; ?>";
-	$("#cuerpo").load("templates/reportes/r_productos.php?ges="+gestion+"&per="+per+"&arr="+cad);
+	let ini = `<?php echo $_GET['ini'];?>`;
+	let fin = `<?php echo $_GET['fin'];?>`;
+	$("#cuerpo").load("templates/reportes/r_productos.php?ini="+ini+"&fin="+fin+"&arr="+cad);
 
 
 });

@@ -1,10 +1,10 @@
 <?php 
 	require("../../recursos/conexion.php");
-	$per = $_GET['per'];
-	$gestion = $_GET['ges'];
-	if ($per == '0') {
-		$per = "";
-	}
+	// $per = $_GET['per'];
+	// $gestion = $_GET['ges'];
+	// if ($per == '0') {
+	// 	$per = "";
+	// }
 
     date_default_timezone_set("America/La_Paz");
 	$fecha = date("Y-m-d");
@@ -56,11 +56,11 @@
 $(document).ready(function() {
 
 	const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-	let per = months[parseInt('<?php echo $per ?>')-1];
+	// let per = months[parseInt('<php echo $per ?>')-1];
 
-	if (!per) {
-		per = ""
-	}
+	// if (!per) {
+	// 	per = ""
+	// }
 
 	$('#tabla1').dataTable({
       "order": [[ 3, "desc" ]],
@@ -82,14 +82,14 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/ms-excel--v1.png"/></i>',
 	        titleAttr:  'Exportar a Excel',
 	        className:  'btn-flat green',
-	        title: 			'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
+	        title: 			'Reporte de ventas del periodo: <?php echo $fecha; ?>'
 	      },
 	      {
 	        extend:     'pdfHtml5',
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/pdf-2--v1.png"/></i>',
 	        titleAttr:  'Exportar a PDF',
 	        className:  'btn-flat red',
-	        title: 			'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
+	        title: 			'Reporte de ventas del periodo: <?php echo $fecha; ?>'
 	      },
 	      {
 	        extend:     'print',
@@ -97,7 +97,7 @@ $(document).ready(function() {
 	        titleAttr:  'Imprimir',
 	        className:  'btn-flat blue',
 	        title: 			`<center><span style="font-size:30; line-height: 100%;">Reporte de almacén</span> </center>
-	        						<p style="font-size:18; line-height: 25%;">Fecha: <?php echo $fecha ?></p>`
+	        						<p style="font-size:18; line-height: 25%;">Fecha: <?php echo $fecha; ?></p>`
 	      }
 	    ]
 	    });

@@ -1,10 +1,7 @@
 <?php 
 	require("../../recursos/conexion.php");
-	$per = $_GET['per'];
-	$gestion = $_GET['ges'];
-	if ($per == '0') {
-		$per = "";
-	}
+	$ini = $_GET['ini'];
+	$fin = $_GET['fin'];
 	// SELECT SUM(a.total_venta) as ingreso, SUM(b.monto_caja) AS gasto , DATE(a.fecha_venta) FROM venta a, caja b WHERE b.fecha_caja LIKE '2022-%' AND DATE(a.fecha_venta) = DATE(b.fecha_caja) AND a.estado_venta = 1 AND b.estado_caja = 1 GROUP BY DATE(a.fecha_caja)
 	// $result = $conexion->query("SELECT SUM(a.Total)as ingreso, a.Fecha FROM venta a WHERE a.Fecha LIKE '".$gestion."-".$per."%' AND a.Estado = 1 GROUP BY a.Fecha");
 	// $result = $result->fetch_all();
@@ -12,11 +9,13 @@
 	// $res = $conexion->query("SELECT b.Monto, b.Fecha FROM gastos b WHERE b.Fecha LIKE '".$gestion."-".$per."%' AND b.Estado = 1 GROUP BY b.Fecha");
 	// $res = $res->fetch_all();
 	//consulta de ingresos
-	$ingresos = $conexion->query("SELECT SUM(a.total_venta) AS ingreso, DATE(a.fecha_venta) as fecha FROM venta a WHERE a.fecha_venta LIKE '".$gestion."-".$per."%' AND a.estado_venta = 1 GROUP BY DATE(a.fecha_venta)");
+	$ingresos = $conexion->query("SELECT SUM(a.total_venta) AS ingreso, DATE(a.fecha_venta) as fecha FROM venta a WHERE (a.fecha_venta BETWEEN '".$ini."' AND '".$fin."') AND a.estado_venta = 1 GROUP BY DATE(a.fecha_venta)");
 	$ingreso = $ingresos->fetch_all(MYSQLI_ASSOC);
+
+
 	//consulta de gastos
-	$gastos = $conexion->query("SELECT SUM(a.monto_caja) AS gasto, DATE(a.fecha_caja) as fecha FROM caja a WHERE a.fecha_caja LIKE '".$gestion."-".$per."%' AND a.estado_caja = 1 GROUP BY DATE(a.fecha_caja)");
-	$gastos = $gastos->fetch_all(MYSQLI_ASSOC);
+	$gastos_ = $conexion->query("SELECT SUM(a.monto_caja) AS gasto, DATE(a.fecha_caja) as fecha FROM caja a WHERE (a.fecha_caja BETWEEN '".$ini."' AND '".$fin."') AND a.estado_caja = 1 GROUP BY DATE(a.fecha_caja)");
+	$gastos = $gastos_->fetch_all(MYSQLI_ASSOC);
 	// $result = $conexion->query("SELECT * FROM caja b WHERE b.fecha_caja LIKE '".$gestion."-".$per."%' AND b.estado_caja = 1 GROUP BY b.fecha_caja");
 	// $res = $result->fetch_all();
 
@@ -24,33 +23,40 @@
 	// $res2 = $result2->fetch_all();
 	// $total_venta = $res2[0][0];
 	foreach($ingreso as $key => $a){
-		foreach($gastos as $b){
-			if($a['fecha'] == $b['fecha']){
-				$ingreso[$key]['gasto'] =  $b['gasto'];
-			}else{
-				// $ingresos[$key]['fecha'] = $b['fecha'];
-				if(!isset($ingreso[$key]['gasto'])){
-					$ingreso[$key]['gasto'] = 0;
+		if(mysqli_num_rows($gastos_) > 0){
+			foreach($gastos as $b){
+				if($a['fecha'] == $b['fecha']){
+					$ingreso[$key]['gasto'] =  $b['gasto'];
+				}else{
+					// $ingresos[$key]['fecha'] = $b['fecha'];
+					if(!isset($ingreso[$key]['gasto'])){
+						$ingreso[$key]['gasto'] = 0;
+					}
 				}
 			}
+		}else{
+			$ingreso[$key]['gasto'] = 0;
 		}
 	}
+
 	$x = true;
-	foreach($gastos as $key => $a){
-		foreach($ingreso as $b){
-			if($a['fecha'] == $b['fecha']){
-				$x = false;
-				// $ingresos[$key]['gasto'] =  $b['gasto'];
+	if(mysqli_num_rows($gastos_)>0){
+		foreach($gastos as $key => $a){
+			foreach($ingreso as $b){
+				if($a['fecha'] == $b['fecha']){
+					$x = false;
+					// $ingresos[$key]['gasto'] =  $b['gasto'];
+				}
 			}
-		}
-		if($x){
-			$arr = array(
-				"ingreso" => 0,
-				"gasto" => $a['gasto'],
-				"fecha" => $a['fecha']
-			);
-			array_push($ingreso, $arr);
-			$x = false;
+			if($x){
+				$arr = array(
+					"ingreso" => 0,
+					"gasto" => $a['gasto'],
+					"fecha" => $a['fecha']
+				);
+				array_push($ingreso, $arr);
+				$x = false;
+			}
 		}
 	}
 
@@ -124,11 +130,11 @@
 $(document).ready(function() {
 
 	const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-	let per = months[parseInt('<?php echo $per ?>')-1];
+	// let per = months[parseInt('<php echo $per ?>')-1];
 
-	if (!per) {
-		per = ""
-	}
+	// if (!per) {
+	// 	per = ""
+	// }
 
 	$('#tabla1').dataTable({
       "order": [[ 0, "desc" ]],
@@ -150,21 +156,21 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/ms-excel--v1.png"/></i>',
 	        titleAttr:  'Exportar a Excel',
 	        className:  'btn-flat green',
-	        title: 			'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
+	        title: 		'Reporte de ventas del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?>'
 	      },
 	      {
 	        extend:     'pdfHtml5',
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/pdf-2--v1.png"/></i>',
 	        titleAttr:  'Exportar a PDF',
 	        className:  'btn-flat red',
-	        title: 			'Reporte de ventas del periodo: <?php echo $_GET["ges"] ?>'
+	        title: 		'Reporte de ventas del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?>'
 	      },
 	      {
 	        extend:     'print',
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
 	        className:  'btn-flat blue',
-	        title: 			`<span style="font-size:30; line-height: 100%;">Reporte de Relacion de Ganancia del periodo: <?php echo $_GET["ges"] ?> - `+per+`</span> 
+	        title: 			`<span style="font-size:30; line-height: 100%;">Reporte de Relacion de Ganancia del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?></span> 
 	        						<p style="font-size:20; font-weight: bold; line-height: 25%;">Totales:</p>
 	        						<p style="font-size:18; line-height: 25%;">Días: <?php echo mysqli_num_rows($ingresos) ?></p>
 	        						<p style="font-size:18; line-height: 25%;">Ingresos: <?php echo $total ?> Bs.</p>

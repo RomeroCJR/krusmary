@@ -53,11 +53,9 @@
           </div>
       </div>
 
-      <div class="col s12">
-        <!-- <form action="recursos/redireccionador.php" method="post" class="col s12" id="ffecha"> -->
+      <!-- <div class="col s12">
             <div class="input-field">
                 <select name="gestion" id="gestion">
-                  <!-- <option value="2021"  ''><b>2021</b></option> -->
                   <option value="2022"  <?php if(date("Y") == "2022"){echo "selected";} ?>><b>2022</b></option>
                   <option value="2023"  <?php if(date("Y") == "2023"){echo "selected";} ?>><b>2023</b></option>
                   <option value="2024"  <?php if(date("Y") == "2024"){echo "selected";} ?>><b>2024</b></option>
@@ -66,11 +64,9 @@
                 </select>
                 <label><b>Seleccione la gestión</b></label>
             </div>
-            <!-- <input type="text" name="mes" id="mes" value="" hidden> -->
-        <!-- </form> -->
-      </div>
+      </div> -->
 
-      <div class="col s12">
+      <!-- <div class="col s12">
             <div class="input-field">
                 <select name="mes" id="mes">
                   <option value="0" selected>Reporte anual</option>
@@ -89,6 +85,21 @@
                 </select>
                 <label><b>Seleccione el mes</b></label>
             </div>
+      </div> -->
+      <div id="date_picker">
+        <div class="col s5">
+          <div class="input-field">
+            <input id="fecha_ini" type="date" required>
+          </div>
+        </div>
+        <div class="col s2 center" style="height:80px;line-height: 80px;text-align: center;" >
+          <span><i class="material-icons">arrow_back_ios</i></span>
+        </div>
+        <div class="col s5">
+          <div class="input-field">
+            <input id="fecha_fin" type="date" required>
+          </div>
+        </div>
       </div>
 
       <div class="col s12">
@@ -182,23 +193,50 @@ mensaje.hide();
   $(document).ready(function() {
     // $('select').material_select();
     $('select').formSelect();
+    $('.datepicker').datepicker();
+    $('.timepicker').timepicker();
   });
 
 //reporte por periodo y gestión
-function reporte(periodo) {
-   gestion = document.getElementById('gestion').value
-   tipo = document.getElementById('tipo_reporte').value
-   console.log("templates/reportes/"+tipo+"?ges="+gestion+"&per="+periodo)
-   $("#cuerpo").load("templates/reportes/"+tipo+"?ges="+gestion+"&per="+periodo)
-}
+// function reporte(periodo) {
+//    gestion = document.getElementById('gestion').value
+//    tipo = document.getElementById('tipo_reporte').value
+//    console.log("templates/reportes/"+tipo+"?ges="+gestion+"&per="+periodo)
+//    $("#cuerpo").load("templates/reportes/"+tipo+"?ges="+gestion+"&per="+periodo)
+// }
 //reporte anual
+document.getElementById('tipo_reporte').addEventListener('change', function (e) {
+  if(e.target.value == 'r_almacen.php'){
+    document.getElementById('date_picker').hidden = true;
+  }else{
+    document.getElementById('date_picker').hidden = false;
+  }
+});
+
 function reporte_ges(){
-  let per = $("#mes").val()
-  gestion = document.getElementById('gestion').value
-  tipo = document.getElementById('tipo_reporte').value
+  // let per = $("#mes").val()
+  let tipo = document.getElementById('tipo_reporte').value
+  if(tipo == 'r_almacen.php'){
+    return $("#cuerpo").load("templates/reportes/"+tipo);
+  }
+
+  let ini = document.getElementById('fecha_ini').value
+  let fin = document.getElementById('fecha_fin').value
+  if(!ini || !fin){
+    return M.toast({html: '<b>Ingrese una fecha inicial y fecha final válidas.</b>', displayLength: 3000});
+  }
+  _ini = new Date(ini);
+  _fin = new Date(fin);
+  if(_fin.getTime() < _ini.getTime()){
+    return M.toast({html: '<b>La fecha final debe ser mayor a la fecha inicial.</b>', displayLength: 3000});
+  }
+
+  // gestion = document.getElementById('gestion').value
+  
 
   // console.log(per, gestion, tipo)
-  $("#cuerpo").load("templates/reportes/"+tipo+"?ges="+gestion+"&per="+per)
+  // $("#cuerpo").load("templates/reportes/"+tipo+"?ges="+gestion+"&ini="+ini+"&fin="+fin);
+  $("#cuerpo").load("templates/reportes/"+tipo+"?ini="+ini+"&fin="+fin);
 }
 
 </script>
