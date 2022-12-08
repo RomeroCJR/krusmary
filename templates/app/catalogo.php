@@ -400,7 +400,11 @@
 		// if (dir.length < 5) {
 		// 	return M.toast({html: 'Escribe una dirección válida.'})
 		// }
-
+		let _date = document.getElementById('fecha').value;
+		let _time = document.getElementById('hora').value;
+		_date = new Date(_date);
+		_date = ("0" + (_date.getDate() + 1)).slice(-2)+"-"+("0" + (_date.getMonth() + 1)).slice(-2)+"-"+_date.getFullYear();
+		// return console.log(_date);
 		let cod_cliente = "<?php echo $_SESSION['cod_cliente']; ?>";
 		var formData = new FormData(document.getElementById('form_pedido')); //esto debe ser tomado desde formulario
 		formData.append('cod_cliente', cod_cliente);
@@ -437,7 +441,7 @@
 		let detalle = "";
 		reg_pedidos.forEach(function(x) {
             // console.log(x);
-			detalle = detalle+'*'+x[1]+'* x```'+x[2]+'``` %0A';
+			detalle = detalle+' '+x[1]+' x```'+x[2]+'``` %0A';
 			// *${x[0]}*-${x[1]} *x${x[2]}*%0A
 		})
         // return console.log(cliente);
@@ -448,7 +452,7 @@
 			.then(data => {
 				// return console.log(data)
 				if (data == '1') {
-                    let texto = `*Hola, me llamo:*%0A${cliente}%0A*Quiero realizar un pedido:*%0A${detalle}*Monto a pagar:* ${subtotal} Bs.%0A`;
+                    let texto = `*Hola, me llamo:*%0A${cliente}%0A*Quiero realizar un pedido:*%0A${detalle}*Monto a pagar:* ${subtotal} Bs.%0A*Para recoger el día*: ${_date}%0A*A horas:* ${_time}`;
 					M.toast({html:'<span style="color: #2ecc71">Pedido realizado, puedes ver tu pedido en la sección de Mi pedido</span>', displayLength: 5000, classes: 'rounded'})
 					$("#modal_cliente").modal('close')
 					document.getElementById('menu_triger').hidden = false
