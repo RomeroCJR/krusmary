@@ -2,8 +2,8 @@
 require('../conexion.php');
 define ('SITE_ROOT', realpath(dirname(__FILE__)));
 $ci = $_POST['ci'];
-$nombre = $_POST['nombre'];
-$apellido_p = $_POST['apellido_p'];
+$nombre = strtoupper($_POST['nombre']);
+$apellido_p = strtoupper($_POST['apellido_p']);
 $apellido_m = $_POST['apellido_m'];
 $telefono = $_POST['telefono'];
 $email = $_POST['email'];
@@ -11,6 +11,9 @@ $rol = $_POST['rol'];
 $login = $_POST['login'];
 $password = $_POST['passw'];
 
+if(isset($_POST['apellido_m'])){
+	$apellido_m = strtoupper($apellido_m);
+}
 
 $cVU = "SELECT COUNT(*) as conteo FROM usuario WHERE ci_usuario = ".$ci;
 $rVU = mysqli_query($conexion, $cVU) or die(mysqli_error($conexion));

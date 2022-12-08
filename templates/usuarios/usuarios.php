@@ -124,7 +124,7 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
         </div>
         <div class="input-field col s12">
           <input id="apellido_m" name="apellido_m" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="25" class="validate" >
-          <label for="apellido_m">Apellido materno (*)</label>
+          <label for="apellido_m">Apellido materno</label>
         </div>
 
         <div class="input-field col s12">
@@ -183,7 +183,7 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
         </div>
 
         <div class="input-field col s12">
-          <input id="mod_ap_materno" name="mod_ap_materno" type="text" class="validate" required>
+          <input id="mod_ap_materno" name="mod_ap_materno" type="text" class="validate" >
           <label for="mod_ap_materno">Apellido materno </label>
         </div>
         <div class="input-field col s12">
@@ -240,17 +240,34 @@ $fila2 = $Busq2->fetch_all(MYSQLI_ASSOC);
 <!-- <div id="modal3" class="modal modal-fixed-footer col m12 s8 offset-s2 l4 offset-l4"> -->
   <div class="modal width_modal_ver" id="modal3">
   <div class="modal-content">
-
-    <div class="row">
-      <div class="col s12">
-        <h6><p id="__ci"></p></h6>
-        <h6><p id="__nombre"></p></h6>
-        <h6><p id="__ap"></p></h6>
-        <h6><p id="__telf"></p></h6>
-        <h6><p id="__email"></p></h6>
-        <h6><p id="__rol"></p></h6>
-      </div>
-    </div>
+    <h4>Ver Usuario</h4><br>
+    <table class="det rubik z-depth-4">
+			<tr>
+				<th>CI: </th>
+				<td><span id="__ci"></span></td>
+			</tr>
+			<tr>
+				<th>Nombre: </th>
+				<td><span id="__nombre"></span></td>
+			</tr>
+      <tr>
+				<th>Apellidos: </th>
+				<td><span id="__ap"></span></td>
+			</tr>
+      <tr>
+				<th>Celular: </th>
+				<td><span id="__telf"></span></td>
+			</tr>
+      <tr>
+				<th>Email: </th>
+				<td><span id="__email"></span></td>
+			</tr>
+      <tr>
+				<th>Rol: </th>
+				<td><span id="__rol"></span></td>
+			</tr>
+		</table> 
+      
     
   </div>
   <div class="modal-footer">
@@ -380,12 +397,12 @@ document.getElementById('form_mod_usuario').addEventListener('submit', function(
 
 function vusu (ci, nombre, apellidos, telefono, email, rol) {
 
-      $("#__ci").html(`<b>Cédula: </b>${ci}`);
-      $("#__nombre").html(`<b>Nombre: </b>${nombre}`);
-      $("#__ap").html(`<b>Apellidos: </b>${apellidos}`);
-      $("#__email").html(`<b>Email: </b>${email}`);
-      $("#__telf").html(`<b>Teléfono: </b>${telefono}`);
-      $("#__rol").html(`<b>ROL: </b>${rol}`);
+      $("#__ci").html(`${ci}`);
+      $("#__nombre").html(`${nombre}`);
+      $("#__ap").html(`${apellidos}`);
+      $("#__email").html(`${email}`);
+      $("#__telf").html(`${telefono}`);
+      $("#__rol").html(`${rol}`);
   $("#modal3").modal('open');
 }
 

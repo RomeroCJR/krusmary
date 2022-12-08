@@ -89,14 +89,14 @@ $(document).ready(function() {
 	        text:       '<i class="material-icons-outlined"><img src="https://img.icons8.com/material/24/000000/pdf-2--v1.png"/></i>',
 	        titleAttr:  'Exportar a PDF',
 	        className:  'btn-flat red',
-	        title: 			'Reporte de ventas del periodo: <?php echo $fecha; ?>'
+	        title: 		'Reporte de ventas del periodo: <?php echo $fecha; ?>'
 	      },
 	      {
 	        extend:     'print',
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
 	        className:  'btn-flat blue',
-	        title: 			`<center><span style="font-size:30; line-height: 100%;">Reporte de almacén</span> </center>
+	        title: 		`<center><span style="font-size:30; line-height: 100%;">Reporte de almacén</span> </center>
 	        						<p style="font-size:18; line-height: 25%;">Fecha: <?php echo $fecha; ?></p>`
 	      }
 	    ]

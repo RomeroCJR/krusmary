@@ -155,9 +155,9 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
         <p>
           <span id="reg_total"></span>
         </p>
-        <p>
+        <p hidden>
           <label>
-            <input type="checkbox" id="datos_cliente"/>
+            <input type="checkbox" id="datos_cliente" checked/>
             <span>Registrar datos de cliente</span>
           </label>
         </p>
@@ -176,7 +176,7 @@ $fila3 = $Busq3->fetch_all(MYSQLI_ASSOC);
         </form>
       </div> -->
 
-      <div id="form_registro_venta_fisica" class="" hidden>
+      <div id="form_registro_venta_fisica" class="" >
         <form >
           <div class="row">
             <div class="input-field col s12">

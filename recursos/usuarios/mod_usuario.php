@@ -4,8 +4,8 @@
 	$id = $_POST['mod_id'];
 	$old_ci = $_POST['old_ci'];
 	$ci = $_POST['mod_ci'];
-	$nombre = $_POST['mod_nombre'];
-	$ap_paterno = $_POST['mod_ap_paterno'];
+	$nombre = strtoupper($_POST['mod_nombre']);
+	$ap_paterno = strtoupper($_POST['mod_ap_paterno']);
 	$ap_materno = $_POST['mod_ap_materno'];
 	$telefono = $_POST['mod_telefono'];
 	$email = $_POST['mod_email'];
@@ -13,6 +13,9 @@
 	$login = $_POST['mod_login'];
 	$password = $_POST['mod_passw'];
 
+	if(isset($_POST['mod_ap_materno'])){
+		$ap_materno = strtoupper($ap_materno);
+	}
 
 	if($ci != $old_ci){
 		$res_vu = $conexion->query("SELECT * FROM usuario WHERE ci_usuario = ".$ci);

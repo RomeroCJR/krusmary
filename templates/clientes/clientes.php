@@ -77,15 +77,15 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
       <form id="form_nuevo_cliente" accept-charset="utf-8">
         <div class="input-field col s12 m12">
           <input id="ci" name="ci" type="text" onKeyPress="return checkIt(event)" onpaste="return false" class="validate" minlength="7" maxlength="7" required>
-          <label for="ci"># Cédula</label>
+          <label for="ci"># Cédula (*)</label>
         </div>
         <div class="input-field col s12 m12">
           <input id="nombre" name="nombre" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" required>
-          <label for="nombre">Nombre</label>
+          <label for="nombre">Nombre (*)</label>
         </div>
         <div class="input-field col s12 m12">
           <input id="ap_paterno" name="ap_paterno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" required>
-          <label for="ap_paterno">Apellido paterno</label>
+          <label for="ap_paterno">Apellido paterno (*)</label>
         </div>
         <div class="input-field col s12 m12">
           <input id="ap_materno" name="ap_materno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" >
@@ -114,15 +114,15 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
         <div class="input-field col s12 m12">
           <input type="text" id="mod_id" name="mod_id" hidden>
           <input id="mod_ci" name="mod_ci" type="text" onKeyPress="return checkIt(event)" onpaste="return false" class="validate" minlength="7" maxlength="7" required>
-          <label for="mod_ci"># Cédula</label>
+          <label for="mod_ci"># Cédula (*)</label>
         </div>
         <div class="input-field col s12 m12">
           <input id="mod_nombre" name="mod_nombre" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" required>
-          <label for="mod_nombre">Nombre</label>
+          <label for="mod_nombre">Nombre (*)</label>
         </div>
         <div class="input-field col s12 m12">
           <input id="mod_ap_paterno" name="mod_ap_paterno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" required>
-          <label for="mod_ap_paterno">Apellido paterno</label>
+          <label for="mod_ap_paterno">Apellido paterno (*)</label>
         </div>
         <div class="input-field col s12 m12">
           <input id="mod_ap_materno" name="mod_ap_materno" type="text" onKeyPress="return checkText(event)" minlength="3" maxlength="17" onpaste="return false" class="validate" >
@@ -147,15 +147,27 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
 
 <div class="modal width_modal_ver" id="modal4" style="width:35%">
   <div class="modal-content">
-    <h4>Ver cliente</h4>
-      <div class="row">
-        <div class="col s12">
-          <h6><p id="__ci"></p></h6>
-          <h6><p id="__nombre"></p></h6>
-          <h6><p id="__ap"></p></h6>
-          <h6><p id="__telf"></p></h6>
-        </div>
-      </div>
+    <h4>Ver cliente</h4><br>
+      <table class="det rubik z-depth-4">
+        <tr>
+          <th>CI: </th>
+          <td><span id="__ci"></span></td>
+        </tr>
+        <tr>
+          <th>Nombre: </th>
+          <td><span id="__nombre"></span></td>
+        </tr>
+        <tr>
+          <th>Apellidos: </th>
+          <td><span id="__ap"></span></td>
+        </tr>
+        <tr>
+          <th>Celular: </th>
+          <td><span id="__telf"></span></td>
+        </tr>
+      </table>
+
+
     </div>
     <div class="modal-footer">
       <a class="waves-effect modal-action modal-close waves-light btn right">Aceptar</a>
@@ -279,10 +291,10 @@ function checkIt(evt) {
 
 function vcli(ci, nombre, apellidos, telefono) {
 
-  $("#__ci").html(`<b>Cédula: </b>${ci}`);
-  $("#__nombre").html(`<b>Nombre: </b>${nombre}`);
-  $("#__ap").html(`<b>Apellidos: </b>${apellidos}`);
-  $("#__telf").html(`<b>Teléfono: </b>${telefono}`);
+  $("#__ci").html(`${ci}`);
+  $("#__nombre").html(`${nombre}`);
+  $("#__ap").html(`${apellidos}`);
+  $("#__telf").html(`${telefono}`);
   $("#modal4").modal('open');
 }
 

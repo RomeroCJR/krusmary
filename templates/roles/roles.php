@@ -17,7 +17,10 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
   table.highlight > tbody > tr:hover {
     background-color: #a0aaf0 !important;
   }
-
+  .det{
+		/*border: 3px solid black;*/
+		background-color: white;
+	}
 </style>
    <div class="row" style="margin-top:20px;">
       <div class="col s4">
@@ -42,13 +45,16 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
         	 <?php foreach($fila as $a  => $valor){ ?>
            <tr>
               
-              <td align="center"><?php echo $valor["cod"]?></td>
-              <td align="center"><?php echo $valor["nombre"] ?></td>
-              <td align="center"><?php echo $valor["des"] ?></td>
+               <td align="center"><?php echo $valor["cod"]?></td>
+               <td align="center"><?php echo $valor["nombre"] ?></td>
+               <td align="center"><?php echo $valor["des"] ?></td>
 
-              <td><a href="#" onclick="mod_rol(`<?php echo $valor['cod']?>`, `<?php echo $valor['nombre']?>`, `<?php echo $valor['des']?>`)" class="btn-floating btn-small"><i class="material-icons">build</i></a>
-  	          <!-- <a href="#"><i class="material-icons">delete</i></a> -->
-  	          <!-- <a href="#" class="btn-floating btn-small"><i class="material-icons">search</i></a></td> -->
+               <td>
+                  <a href="#" onclick="mod_rol(`<?php echo $valor['cod']?>`, `<?php echo $valor['nombre']?>`, `<?php echo $valor['des']?>`)" class="btn-floating btn-small"><i class="material-icons">build</i></a>
+                  <a href="#" onclick="ver_rol(`<?php echo $valor['nombre']?>`, `<?php echo $valor['des']?>`,)"class="btn-floating btn-small"><i class="material-icons">search</i></a>
+               </td>
+               <!-- <a href="#"><i class="material-icons">delete</i></a> -->
+               <!-- <a href="#" class="btn-floating btn-small"><i class="material-icons">search</i></a></td> -->
            </tr>
            <?php } ?>	
         </tbody>
@@ -104,6 +110,32 @@ $fila = $Busq->fetch_all(MYSQLI_ASSOC);
   </div>
 </div>
 
+<!-- Modal ver  -->
+<div id="modal3" class="modal">
+  <div class="modal-content">
+    <h4>Ver Rol</h4>
+    <div class="">
+		<table class="det rubik z-depth-4">
+			<tr>
+				<th>Nombre: </th>
+				<td><span id="ver_nombre"></span></td>
+			</tr>
+			<tr>
+				<th>Descripción: </th>
+				<td><span id="ver_desc"></span></td>
+			</tr>
+		</table>
+		<!-- <p class="rubik">Estado del pedido: <span id="actped"></span></p> -->
+		<!-- <span id="fecha_ped"></span> -->
+
+	</div>
+  </div>
+  <div class="modal-footer">
+    <!-- <a href="#!" class=" modal-action modal-close waves-effect waves-red btn-flat">Disagree</a> -->
+    <a href="#!" class="btn modal-action modal-close waves-effect waves-green">Aceptar</a>
+  </div>
+</div>
+
 <script>
 $(document).ready(function() {
    $('#tabla1').dataTable({
@@ -145,6 +177,11 @@ function mod_rol(id, nombre, des) {
    document.getElementById('mod_id').value = id;
    M.updateTextFields();
    $("#modal2").modal('open');
+}
+function ver_rol(nombre, des) {
+   document.getElementById('ver_nombre').innerHTML = nombre;
+   document.getElementById('ver_desc').innerHTML = des;
+   $("#modal3").modal('open');
 }
 
 document.getElementById('form_mod_rol').addEventListener('submit', function (e) {

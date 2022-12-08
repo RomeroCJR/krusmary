@@ -206,6 +206,9 @@
 					  </form>
 					</div>
 				</div>
+				<div class="row">
+					<small style="color:red">Para elaborar su pedido debe pasar por la repostería para cancelar un adelanto de al menos el 40% del monto total.</small>
+				</div>
 			</div>
 			<div class="modal-footer" id="footer_ubi">
 				<a href="#!" class="modal-close waves-effect waves-green btn red left">Cancelar</a>
@@ -441,7 +444,7 @@
 		let detalle = "";
 		reg_pedidos.forEach(function(x) {
             // console.log(x);
-			detalle = detalle+' '+x[1]+' x```'+x[2]+'``` %0A';
+			detalle = detalle+' '+x[1]+': ```'+x[2]+'```u. %0A';
 			// *${x[0]}*-${x[1]} *x${x[2]}*%0A
 		})
         // return console.log(cliente);
