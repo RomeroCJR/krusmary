@@ -81,6 +81,17 @@ if(isset($_GET['pedido'])){
 			padding-left:0px;
 		}
 	}
+	table.bordered {
+		border: 3px solid black;
+		border-right: 5px solid black !important;
+		border-bottom: 3px solid black !important;
+		border-collapse: collapse;
+	}
+	table.bordered td,
+	table.bordered th {
+		border: 2px solid black;
+	}
+
 </style>
 <title>reporte de compras</title>
 
@@ -189,26 +200,34 @@ $(document).ready(function() {
 	        extend:     'print',
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
+			customize: function (win) {
+				var logoUrl = window.location.origin + '/krusmary/img/logo.png';
+				// Personaliza la página de impresión
+				$(win.document.body)
+				.prepend('Repostería Krus-Mary <img src="'+logoUrl+'" alt="Logo" style="width: auto; max-height: 50px; float: right; margin: 0 0 0 10px;">')
+				.find('table')
+          		.addClass('bordered');				
+			},
 	        className:  'btn-flat blue',
-	        title: 		`<center><span style="font-size:30; line-height: 2.5em;">Reporte del ventas del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?></span></center> 
+	        title: 		`<center><span style="font-size:25; line-height: 2.5em;">Reporte del ventas del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?></span></center> 
 						
 						<div style="width: 40%">
-							<table style="border: 1px solid black;border-collapse: collapse; line-height: 0.3em;">
+							<table style="line-height: 0.3em;">
 								<tr>
-									<th style="border: 1.5px solid black;border-collapse: collapse;">Total ventas:</th>
-									<td style="border: 1px solid black;border-collapse: collapse;"><?php echo mysqli_num_rows($result) ?></td>
+									<th >Total ventas:</th>
+									<td ><?php echo mysqli_num_rows($result) ?></td>
 								</tr>
 								<tr>
-									<th style="border: 1.5px solid black;border-collapse: collapse;">Ventas locales:</th>
-									<td style="border: 1.5px solid black;border-collapse: collapse;"><?php echo $cant_local?></td>
+									<th >Ventas locales:</th>
+									<td ><?php echo $cant_local?></td>
 								</tr>
 								<tr>
-									<th style="border: 1.5px solid black;border-collapse: collapse;">Ventas por pedido:</th>
-									<td style="border: 1.5px solid black;border-collapse: collapse;"><?php echo $cant_pedido?></td>
+									<th >Ventas por pedido:</th>
+									<td ><?php echo $cant_pedido?></td>
 								</tr>
 								<tr>
-									<th style="border: 1.5px solid black;border-collapse: collapse;">Ingresos totales:</th>
-									<td style="border: 1.5px solid black;border-collapse: collapse;"><?php echo $ingreso_total ?></td>
+									<th >Ingresos totales:</th>
+									<td ><?php echo $ingreso_total ?></td>
 								</tr>
 							</table>
 						</div>

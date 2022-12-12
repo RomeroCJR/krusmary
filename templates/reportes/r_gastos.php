@@ -93,6 +93,16 @@
 			padding-left:0px;
 		}
 	}
+	table.bordered {
+		border: 3px solid black;
+		border-right: 5px solid black !important;
+		border-bottom: 3px solid black !important;
+		border-collapse: collapse;
+	}
+	table.bordered td,
+	table.bordered th {
+		border: 2px solid black;
+	}
 </style>
 
 <title>reporte de ingresos y gastos</title>
@@ -169,8 +179,16 @@ $(document).ready(function() {
 	        extend:     'print',
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
+			customize: function (win) {
+				var logoUrl = window.location.origin + '/krusmary/img/logo.png';
+				// Personaliza la página de impresión
+				$(win.document.body)
+				.prepend('Repostería Krus-Mary <img src="'+logoUrl+'" alt="Logo" style="width: auto; max-height: 50px; float: right; margin: 0 0 0 10px;">')
+				.find('table')
+          		.addClass('bordered');				
+			},
 	        className:  'btn-flat blue',
-	        title: 			`<span style="font-size:30; line-height: 100%;">Reporte de Relacion de Ganancia del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?></span> 
+	        title: 			`<span style="font-size:20; line-height: 100%;">Reporte de Relacion de Ganancia del periodo: <?php echo $_GET['ini'].' - '.$_GET['fin']; ?></span> 
 	        						<p style="font-size:20; font-weight: bold; line-height: 25%;">Totales:</p>
 	        						<p style="font-size:18; line-height: 25%;">Días: <?php echo mysqli_num_rows($ingresos) ?></p>
 	        						<p style="font-size:18; line-height: 25%;">Ingresos: <?php echo $total ?> Bs.</p>

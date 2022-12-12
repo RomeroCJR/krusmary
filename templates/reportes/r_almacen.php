@@ -19,6 +19,16 @@
 			padding-left:0px;
 		}
 	}
+	table.bordered {
+		border: 3px solid black;
+		border-right: 5px solid black !important;
+		border-bottom: 3px solid black !important;
+		border-collapse: collapse;
+	}
+	table.bordered td,
+	table.bordered th {
+		border: 2px solid black;
+	}
 </style>
 
 <title>reporte de PRODUCTOS</title>
@@ -95,6 +105,14 @@ $(document).ready(function() {
 	        extend:     'print',
 	        text:       '<i class="material-icons-outlined">print</i>',
 	        titleAttr:  'Imprimir',
+			customize: function (win) {
+				var logoUrl = window.location.origin + '/krusmary/img/logo.png';
+				// Personaliza la página de impresión
+				$(win.document.body)
+				.prepend('Repostería Krus-Mary <img src="'+logoUrl+'" alt="Logo" style="width: auto; max-height: 50px; float: right; margin: 0 0 0 10px;">')
+				.find('table')
+          		.addClass('bordered');				
+			},
 	        className:  'btn-flat blue',
 	        title: 		`<center><span style="font-size:30; line-height: 100%;">Reporte de almacén</span> </center>
 	        						<p style="font-size:18; line-height: 25%;">Fecha: <?php echo $fecha; ?></p>`
